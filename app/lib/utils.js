@@ -1,11 +1,19 @@
 
-export function table(arg) {
-    var ret = arg + 1;
-    return ret;
+export function Table(table) {
+
+    return {
+        size: getSize(table)
+    }
 }
 
-
-export function size(arg) {
-    var ret = arg - 1;
-    return ret;
+var getSize = function(table) {
+    var heading_size = table.heading.map(key => table.levels[key]).reduce((a, b) => {
+        if (a.length) return a.length * b.length;
+        else return a * b.length
+    });
+    var stub_size = table.stub.map(key => table.levels[key]).reduce((a, b) => {
+        if (a.length) return a.length * b.length;
+        else return a * b.length
+    });
+    return heading_size * stub_size;
 }

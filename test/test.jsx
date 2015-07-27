@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import React from 'react/addons';
 const TestUtils = React.addons.TestUtils;
-import {table, size} from '../app/lib/utils';
+import {Table} from '../app/lib/utils';
 
 var jsdom = require('mocha-jsdom');
 
@@ -11,9 +11,24 @@ function createComponent(component, props, ...children) {
     return shallowRenderer.getRenderOutput();
 }
 
-describe('table test', function() {
-    it('should return stuff', function() {
-        var ret = table(1);
-        expect(ret).to.equal(2);
+describe('test table', function() {
+
+    let testtable = {
+        heading: ['one', 'two', 'three'],
+        stub: ['first', 'second'],
+
+        levels: {
+            one: ['top heading 1', 'top heading 2'],
+            two: ['second heading 1', 'second heading 2', 'second heading 3'],
+            three: ['third heading 1', 'third heading 2'],
+            first: ['top row 1', 'top row 2'],
+            second: ['second row 1', 'second row 2', 'second row 3', 'second row 4']
+        }
+    }
+
+    it('should have 96 cells', function() {
+        var table = Table(testtable);
+        expect(table.size).to.equal(96);
     })
 });
+
