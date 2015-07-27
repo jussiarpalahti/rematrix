@@ -5,21 +5,11 @@ export default class App extends React.Component {
     return <table>
         <thead>
         <tr>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
+            <th colSpan="2" rowSpan="3" className="blank"></th>
+            <th colSpan="6"></th>
+            <th colSpan="6"></th>
         </tr>
         <tr>
-            <th colSpan="2"></th>
             <th colSpan="2"></th>
             <th colSpan="2"></th>
             <th colSpan="2"></th>
@@ -43,10 +33,8 @@ export default class App extends React.Component {
         </tr>
         </thead>
         <tbody>
-        <tr><th></th>
-            <th></th>
-            <th></th>
-            <th></th>
+        <tr>
+            <th rowSpan="4"></th>
             <th></th>
             <td></td>
             <td></td>
@@ -61,10 +49,7 @@ export default class App extends React.Component {
             <td></td>
             <td></td>
         </tr>
-        <tr><th></th>
-            <th></th>
-            <th></th>
-            <th></th>
+        <tr>
             <th></th>
             <td></td>
             <td></td>
@@ -77,11 +62,9 @@ export default class App extends React.Component {
             <td></td>
             <td></td>
             <td></td>
-            <td></td></tr>
-        <tr><th></th>
-            <th></th>
-            <th></th>
-            <th></th>
+            <td></td>
+        </tr>
+        <tr>
             <th></th>
             <td></td>
             <td></td>
@@ -94,11 +77,9 @@ export default class App extends React.Component {
             <td></td>
             <td></td>
             <td></td>
-            <td></td></tr>
-        <tr><th></th>
-            <th></th>
-            <th></th>
-            <th></th>
+            <td></td>
+        </tr>
+        <tr>
             <th></th>
             <td></td>
             <td></td>
@@ -111,28 +92,10 @@ export default class App extends React.Component {
             <td></td>
             <td></td>
             <td></td>
-            <td></td></tr>
-        <tr><th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
             <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td></tr>
-        <tr><th></th>
-            <th></th>
-            <th></th>
-            <th></th>
+        </tr>
+        <tr>
+            <th rowSpan="4"></th>
             <th></th>
             <td></td>
             <td></td>
@@ -145,11 +108,9 @@ export default class App extends React.Component {
             <td></td>
             <td></td>
             <td></td>
-            <td></td></tr>
-        <tr><th></th>
-            <th></th>
-            <th></th>
-            <th></th>
+            <td></td>
+        </tr>
+        <tr>
             <th></th>
             <td></td>
             <td></td>
@@ -162,11 +123,24 @@ export default class App extends React.Component {
             <td></td>
             <td></td>
             <td></td>
-            <td></td></tr>
-        <tr><th></th>
+            <td></td>
+        </tr>
+        <tr>
             <th></th>
-            <th></th>
-            <th></th>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
             <th></th>
             <td></td>
             <td></td>

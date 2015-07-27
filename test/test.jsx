@@ -109,14 +109,13 @@ describe('table view test', function () {
         expect(elems.length).to.equal(96);
     });
 
-    it('should have 7 th elements in the second tr of the table heading with colspan of 2', function () {
-        // one two cell spanning th for row headers and six for second level's headings
+    it('should have 6 th elements in the second tr of the table heading with colspan of 2', function () {
 
         var head = TestUtils.findRenderedDOMComponentWithTag(app, 'thead');
         var trs = TestUtils.scryRenderedDOMComponentsWithTag(head, 'tr');
         var column_headers = TestUtils.scryRenderedDOMComponentsWithTag(trs[1], 'th');
 
-        expect(column_headers.length).to.equal(7);
+        expect(column_headers.length).to.equal(6);
 
         expect(Number(column_headers[0].props.colSpan)).to.equal(2);
 
