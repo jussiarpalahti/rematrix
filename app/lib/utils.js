@@ -33,7 +33,7 @@ let getHops = function (table) {
         if (index == 0) {
             hops[key] = size;
         } else {
-            var level_below = table.levels[table.heading[index -1]]
+            let level_below = table.levels[table.heading[index -1]];
             hops[key] = level_below.length * size;
         }
         return hops[key];
@@ -43,7 +43,7 @@ let getHops = function (table) {
         if (index == 0) {
             hops[key] = size;
         } else {
-            var level_below = table.levels[table.stub[index -1]]
+            let level_below = table.levels[table.stub[index -1]];
             hops[key] = level_below.length * size;
         }
         return hops[key];
@@ -53,4 +53,19 @@ let getHops = function (table) {
     table.stub.reverse();
 
     return hops;
+};
+
+export function generate_headers (headers) {
+    /*
+    Always returns one header per call looping through
+    given list of headers
+     */
+
+    return function* f() {
+        while (true) {
+            for (var header of headers) {
+                yield header;
+            }
+        }
+    }();
 };

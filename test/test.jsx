@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import React from 'react/addons';
 const TestUtils = React.addons.TestUtils;
-import {Table} from '../app/lib/utils';
+import {Table, generate_headers} from '../app/lib/utils';
 
 var jsdom = require('mocha-jsdom');
 
@@ -11,7 +11,7 @@ function createComponent(component, props, ...children) {
     return shallowRenderer.getRenderOutput();
 }
 
-describe('test table', function() {
+describe('test table structure', function() {
 
     let testtable = {
         heading: ['one', 'two', 'three'],
@@ -50,3 +50,31 @@ describe('test table', function() {
 
 });
 
+describe('header generation', function () {
+
+    let first_set = ['second heading 1', 'second heading 2', 'second heading 3'];
+    let second_set = ['one', 'two'];
+
+    let first_gen = generate_headers(first_set);
+    let second_gen = generate_headers(second_set);
+
+    it('should yield correctly', function ()  {
+        var first = first_gen.next();
+        expect(first.value).to.equal(first_set[0]);
+
+        var second = first_gen.next();
+        expect(second.value).to.equal(first_set[1]);
+
+        var third = first_gen.next();
+        expect(third.value).to.equal(first_set[2]);
+
+    });
+
+    it('should keep on repeating its headers', function () {
+        for (var i=0; i<10; i++) {
+            var res = second_gen.next();
+        }
+        expect(res.value).to.equal(second_set[1]);
+    })
+
+});
