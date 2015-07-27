@@ -24,11 +24,20 @@ describe('test table', function() {
             first: ['top row 1', 'top row 2'],
             second: ['second row 1', 'second row 2', 'second row 3', 'second row 4']
         }
-    }
+    };
+
+    let table = Table(testtable);
+
+    it('should have 8 rows', function() {
+        expect(table.stub_size).to.equal(8);
+    });
+
+    it('should have 12 columns', function() {
+        expect(table.heading_size).to.equal(12);
+    });
 
     it('should have 96 cells', function() {
-        var table = Table(testtable);
         expect(table.size).to.equal(96);
-    })
+    });
 });
 
