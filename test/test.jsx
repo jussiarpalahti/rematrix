@@ -2,6 +2,7 @@ import { expect } from 'chai';
 import React from 'react/addons';
 const TestUtils = React.addons.TestUtils;
 import {Table, generate_headers} from '../app/lib/utils';
+import App from '../app/components/App';
 
 var jsdom = require('mocha-jsdom');
 
@@ -76,5 +77,49 @@ describe('header generation', function () {
         }
         expect(res.value).to.equal(second_set[1]);
     })
+
+});
+
+describe('table view test', function () {
+    var app;
+
+    jsdom();
+
+    before(function() {
+        app = TestUtils.renderIntoDocument(
+            <App />
+        );
+    });
+
+    it('should have 8 tr elements in table body', function () {
+        var body = TestUtils.findRenderedDOMComponentWithTag(app, 'tbody');
+        var tr = TestUtils.scryRenderedDOMComponentsWithTag(body, 'tr');
+        expect(tr.length).to.equal(8);
+    });
+
+    it('should have 12 td elements in first tr of the table body', function () {
+        var body = TestUtils.findRenderedDOMComponentWithTag(app, 'tbody');
+        var tr = TestUtils.scryRenderedDOMComponentsWithTag(body, 'tr');
+        var columns = TestUtils.scryRenderedDOMComponentsWithTag(tr[0], 'td');
+        expect(columns.length).to.equal(12);
+    });
+
+    it('should have 96 td elements in the whole table', function () {
+        var elems = TestUtils.scryRenderedDOMComponentsWithTag(app, 'td');
+        expect(elems.length).to.equal(96);
+    });
+
+    it('should have 7 th elements in the second tr of the table heading with colspan of 2', function () {
+        // one two cell spanning th for row headers and six for second level's headings
+
+        var head = TestUtils.findRenderedDOMComponentWithTag(app, 'thead');
+        var trs = TestUtils.scryRenderedDOMComponentsWithTag(head, 'tr');
+        var column_headers = TestUtils.scryRenderedDOMComponentsWithTag(trs[1], 'th');
+
+        expect(column_headers.length).to.equal(7);
+
+        expect(Number(column_headers[0].props.colSpan)).to.equal(2);
+
+    });
 
 });
