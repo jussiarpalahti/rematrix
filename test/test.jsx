@@ -39,5 +39,14 @@ describe('test table', function() {
     it('should have 96 cells', function() {
         expect(table.size).to.equal(96);
     });
+
+    it('should have length of 6 cells for one first level column header', function() {
+        expect(table.hops.one).to.equal(6);
+    });
+
+    it('should have length of 4 cells for one first level row header', function() {
+        expect(table.hops.one).to.equal(6);
+    });
+
 });
 
