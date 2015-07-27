@@ -25,7 +25,7 @@ var common = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      title: 'Kanban app'
+      title: 'React table viewer'
     })
   ]
 };
