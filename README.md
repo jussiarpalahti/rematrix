@@ -14,3 +14,10 @@ NOTE: installation requires io.js version of Node due to jsdom requirements
 
  * npm build
 
+## Run tests
+
+```
+node_modules/mocha/bin/mocha  test/*.jsx --require babel/register
+```
+
+Or just mocha depending on your $PATH settings.
