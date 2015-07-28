@@ -91,7 +91,7 @@ export default class MatrixTable extends React.Component {
 
 let get_span_headings = function (index, table, checks) {
     return checks.map((check) => {
-        var heading = check(index + 1);
+        var heading = check(index);
         if (heading) {
             return <th rowSpan={heading.hop}>{heading.header}</th>
         } else {

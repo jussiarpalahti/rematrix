@@ -138,7 +138,6 @@ let calculate_top_hopper = function (headers, hop) {
 };
 
 let calculate_middle_hopper = function (headers, hop, size) {
-    console.log("size?", size)
     let header_gen = generate_headers(headers);
     let hopper = [];
     let place = 0;

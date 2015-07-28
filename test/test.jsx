@@ -146,24 +146,24 @@ describe('object table view test', function () {
         },
         hopper : {
             one: [
-                {header : 'top heading 1', place: 1},
-                {header : 'top heading 2', place: 7}
+                {header : 'top heading 1', place: 0},
+                {header : 'top heading 2', place: 6}
             ],
             two: [
-                {header : 'second heading 1', place: 1},
-                {header : 'second heading 2', place: 3},
-                {header : 'second heading 3', place: 5},
-                {header : 'second heading 1', place: 7},
-                {header : 'second heading 2', place: 9},
-                {header : 'second heading 3', place: 11}
+                {header : 'second heading 1', place: 0},
+                {header : 'second heading 2', place: 2},
+                {header : 'second heading 3', place: 4},
+                {header : 'second heading 1', place: 6},
+                {header : 'second heading 2', place: 8},
+                {header : 'second heading 3', place: 10}
             ],
             three: [
-                {header : 'third heading 1', place: 1},
-                {header : 'third heading 2', place: 1}
+                {header : 'third heading 1', place: 0},
+                {header : 'third heading 2', place: 0}
             ],
             first: [
-                {header : 'top row 1', place: 1, hop: 4},
-                {header : 'top row 2', place: 5, hop: 4},
+                {header : 'top row 1', place: 0, hop: 4},
+                {header : 'top row 2', place: 4, hop: 4},
             ]
         }
     };
@@ -246,9 +246,9 @@ describe('hop calculation', function () {
     let heading_hopper = add_heading_hopper(testtable);
     let row_hopper = add_row_hopper(testtable);
 
-    it('should have placement of 7 for header 4 of column header 2', function () {
+    it('should have placement of 6 for header 4 of column header 2', function () {
         let target = heading_hopper['two'][3];
-        expect(target.place).to.equal(7);
+        expect(target.place).to.equal(6);
     });
 
     it('should have place 7 for header 4 of row 1', function () {
