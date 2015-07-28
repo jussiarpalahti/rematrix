@@ -241,19 +241,18 @@ describe('hop calculation', function () {
     };
 
     testtable.meta = Table(testtable);
-    console.log(testtable)
 
     let heading_hopper = add_heading_hopper(testtable);
     let row_hopper = add_row_hopper(testtable);
 
     it('should have placement of 6 for header 4 of column header 2', function () {
-        let target = heading_hopper['two'][3];
+        let target = heading_hopper['one'][1];
         expect(target.place).to.equal(6);
     });
 
-    it('should have place 7 for header 4 of row 1', function () {
-        let target = row_hopper['first'][2];
-        expect(target.place).to.equal(5);
+    it('should have place 7 for header 2 of row 1', function () {
+        let target = row_hopper['first'][1];
+        expect(target.place).to.equal(4);
     });
 
 });

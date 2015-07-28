@@ -106,7 +106,7 @@ export function add_heading_hopper(table) {
         table.levels[top_header],
         table.meta.hops[top_header]);
 
-    let low_header = table.heading[0];
+    let low_header = table.heading[table.stub.length -1];
     hopper[low_header] = calculate_low_hopper(
         table.levels[low_header],
         table.meta.hops[low_header],
@@ -116,9 +116,28 @@ export function add_heading_hopper(table) {
 }
 
 export function add_row_hopper(table) {
-    table.stub.map((key) => {
+    let hopper = {};
 
-    })
+    table.stub.slice(1, table.stub.length - 1).map((key) => {
+        let headers = table.levels[key];
+        hopper[key] = calculate_middle_hopper(
+            headers,
+            table.meta.hops[key],
+            table.meta.stub_size);
+    });
+
+    let top_header = table.stub[0];
+    hopper[top_header] = calculate_top_hopper(
+        table.levels[top_header],
+        table.meta.hops[top_header]);
+
+    let low_header = table.stub[table.stub.length -1];
+    hopper[low_header] = calculate_low_hopper(
+        table.levels[low_header],
+        table.meta.hops[low_header],
+        table.meta.stub_size);
+
+    return hopper;
 
 }
 
