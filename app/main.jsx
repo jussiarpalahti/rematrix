@@ -27,6 +27,18 @@ function main() {
             one: [
                 {header : 'top heading 1', place: 1},
                 {header : 'top heading 2', place: 7}
+            ],
+            two: [
+                {header : 'second heading 1', place: 1},
+                {header : 'second heading 2', place: 3},
+                {header : 'second heading 3', place: 5},
+                {header : 'second heading 1', place: 7},
+                {header : 'second heading 2', place: 9},
+                {header : 'second heading 3', place: 11}
+            ],
+            three: [
+                {header : 'third heading 1', place: 1},
+                {header : 'third heading 2', place: 1}
             ]
         }
     };
