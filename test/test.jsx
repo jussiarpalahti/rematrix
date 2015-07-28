@@ -2,7 +2,7 @@ import { expect } from 'chai';
 import React from 'react/addons';
 const TestUtils = React.addons.TestUtils;
 import {Table, generate_headers} from '../app/lib/utils';
-import App from '../app/components/App';
+import ManualTable from '../app/components/manual_table';
 
 var jsdom = require('mocha-jsdom');
 
@@ -80,38 +80,38 @@ describe('header generation', function () {
 
 });
 
-describe('table view test', function () {
-    var app;
+describe('manual table view test', function () {
+    var mable;
 
     jsdom();
 
     before(function() {
-        app = TestUtils.renderIntoDocument(
-            <App />
+        mable = TestUtils.renderIntoDocument(
+            <ManualTable />
         );
     });
 
     it('should have 8 tr elements in table body', function () {
-        var body = TestUtils.findRenderedDOMComponentWithTag(app, 'tbody');
+        var body = TestUtils.findRenderedDOMComponentWithTag(mable, 'tbody');
         var tr = TestUtils.scryRenderedDOMComponentsWithTag(body, 'tr');
         expect(tr.length).to.equal(8);
     });
 
     it('should have 12 td elements in first tr of the table body', function () {
-        var body = TestUtils.findRenderedDOMComponentWithTag(app, 'tbody');
+        var body = TestUtils.findRenderedDOMComponentWithTag(mable, 'tbody');
         var tr = TestUtils.scryRenderedDOMComponentsWithTag(body, 'tr');
         var columns = TestUtils.scryRenderedDOMComponentsWithTag(tr[0], 'td');
         expect(columns.length).to.equal(12);
     });
 
     it('should have 96 td elements in the whole table', function () {
-        var elems = TestUtils.scryRenderedDOMComponentsWithTag(app, 'td');
+        var elems = TestUtils.scryRenderedDOMComponentsWithTag(mable, 'td');
         expect(elems.length).to.equal(96);
     });
 
     it('should have 6 th elements in the second tr of the table heading with colspan of 2', function () {
 
-        var head = TestUtils.findRenderedDOMComponentWithTag(app, 'thead');
+        var head = TestUtils.findRenderedDOMComponentWithTag(mable, 'thead');
         var trs = TestUtils.scryRenderedDOMComponentsWithTag(head, 'tr');
         var column_headers = TestUtils.scryRenderedDOMComponentsWithTag(trs[1], 'th');
 

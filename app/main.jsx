@@ -1,5 +1,5 @@
 import React from 'react';
-import App from './components/App';
+import App from './components/manual_table';
 import './stylesheets/main.css';
 
 main();
