@@ -89,3 +89,78 @@ export function PositionChecker (positions) {
         }
     };
 };
+
+export function add_heading_hopper(table) {
+    let hopper = {};
+
+    table.heading.slice(1, table.heading.length - 1).map((key) => {
+        let headers = table.levels[key];
+        hopper[key] = calculate_middle_hopper(
+            headers,
+            table.meta.hops[key],
+            table.meta.heading_size);
+    });
+
+    let top_header = table.heading[0];
+    hopper[top_header] = calculate_top_hopper(
+        table.levels[top_header],
+        table.meta.hops[top_header]);
+
+    let low_header = table.heading[0];
+    hopper[low_header] = calculate_low_hopper(
+        table.levels[low_header],
+        table.meta.hops[low_header],
+        table.meta.heading_size);
+
+    return hopper;
+}
+
+export function add_row_hopper(table) {
+    table.stub.map((key) => {
+
+    })
+
+}
+
+let calculate_top_hopper = function (headers, hop) {
+    let hopper = [];
+    let place = 0;
+
+    headers.map((header) => {
+        hopper[hopper.length] = {
+            name: header,
+            place: place,
+            hop: hop
+        };
+        place += hop;
+    });
+    return hopper;
+};
+
+let calculate_middle_hopper = function (headers, hop, size) {
+    console.log("size?", size)
+    let header_gen = generate_headers(headers);
+    let hopper = [];
+    let place = 0;
+    for (var i=0; i < size; i++) {
+        hopper[hopper.length] = {
+            name: header_gen.next().value,
+            place: place,
+            hop: hop
+        };
+        place += hop;
+    }
+    return hopper;
+};
+
+let calculate_low_hopper = function (headers, hop, size) {
+    let header_gen = generate_headers(headers)
+    let hopper = [];
+    for (var i=0; i < size; i++) {
+        hopper[hopper.length] = {
+            name: header_gen.next().value,
+            hop: hop
+        };
+    }
+    return hopper;
+};

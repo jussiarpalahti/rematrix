@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import React from 'react/addons';
 const TestUtils = React.addons.TestUtils;
-import {Table, generate_headers} from '../app/lib/utils';
+import {Table, generate_headers, add_heading_hopper, add_row_hopper} from '../app/lib/utils';
 import ManualTable from '../app/components/manual_table';
 import MatrixTable from '../app/components/matrix_table';
 import lodash from 'lodash';
@@ -221,6 +221,39 @@ describe('object table view test', function () {
         var target = column_headers[7];
 
         expect(target.props.children).to.equal("second row 2");
+    });
+
+});
+
+describe('hop calculation', function () {
+
+    let testtable = {
+        heading: ['one', 'two', 'three'],
+        stub: ['first', 'second'],
+
+        levels: {
+            one: ['top heading 1', 'top heading 2'],
+            two: ['second heading 1', 'second heading 2', 'second heading 3'],
+            three: ['third heading 1', 'third heading 2'],
+            first: ['top row 1', 'top row 2'],
+            second: ['second row 1', 'second row 2', 'second row 3', 'second row 4']
+        }
+    };
+
+    testtable.meta = Table(testtable);
+    console.log(testtable)
+
+    let heading_hopper = add_heading_hopper(testtable);
+    let row_hopper = add_row_hopper(testtable);
+
+    it('should have placement of 7 for header 4 of column header 2', function () {
+        let target = heading_hopper['two'][3];
+        expect(target.place).to.equal(7);
+    });
+
+    it('should have place 7 for header 4 of row 1', function () {
+        let target = row_hopper['first'][2];
+        expect(target.place).to.equal(5);
     });
 
 });

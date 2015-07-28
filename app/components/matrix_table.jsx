@@ -11,9 +11,10 @@ export default class MatrixTable extends React.Component {
             hops: table.meta.hops[table.heading[0]]
         };
 
-        let first_heading = table.hopper[active_heading.name].map(function (heading, index) {
-            return (
-                <th colSpan={active_heading.hops} key={index}>{heading.header}</th>
+        let first_heading = table.hopper[active_heading.name].map(
+            function (heading, index) {
+                return (
+                    <th colSpan={active_heading.hops} key={index}>{heading.header}</th>
             );
         });
 
