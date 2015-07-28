@@ -3,6 +3,9 @@ import React from 'react/addons';
 const TestUtils = React.addons.TestUtils;
 import {Table, generate_headers} from '../app/lib/utils';
 import ManualTable from '../app/components/manual_table';
+import MatrixTable from '../app/components/matrix_table';
+import lodash from 'lodash';
+var _ = lodash;
 
 var jsdom = require('mocha-jsdom');
 
@@ -118,6 +121,73 @@ describe('manual table view test', function () {
         expect(column_headers.length).to.equal(6);
 
         expect(Number(column_headers[0].props.colSpan)).to.equal(2);
+
+    });
+
+});
+
+describe('object table view test', function () {
+    var otable;
+
+    jsdom();
+
+    let testtable = {
+        heading: ['one', 'two', 'three'],
+        stub: ['first', 'second'],
+
+        matrix: _.range(8).map((i) => [1,2,3,4,5,6,7,9,10,11,i+1]),
+
+        levels: {
+            one: ['top heading 1', 'top heading 2'],
+            two: ['second heading 1', 'second heading 2', 'second heading 3'],
+            three: ['third heading 1', 'third heading 2'],
+            first: ['top row 1', 'top row 2'],
+            second: ['second row 1', 'second row 2', 'second row 3', 'second row 4']
+        },
+        hopper : {
+            one: [
+                {header : 'top heading 1', place: 1},
+                {header : 'top heading 2', place: 7}
+            ]
+        }
+    };
+
+    testtable.meta = Table(testtable);
+    console.log(testtable);
+
+    before(function() {
+        otable = TestUtils.renderIntoDocument(
+            <MatrixTable table={testtable} />
+        );
+    });
+
+    it('should have 8 tr elements in table body', function () {
+        var body = TestUtils.findRenderedDOMComponentWithTag(otable, 'tbody');
+        var tr = TestUtils.scryRenderedDOMComponentsWithTag(body, 'tr');
+        expect(tr.length).to.equal(8);
+    });
+
+    it('should have 12 td elements in first tr of the table body', function () {
+        var body = TestUtils.findRenderedDOMComponentWithTag(otable, 'tbody');
+        var tr = TestUtils.scryRenderedDOMComponentsWithTag(body, 'tr');
+        var columns = TestUtils.scryRenderedDOMComponentsWithTag(tr[0], 'td');
+        expect(columns.length).to.equal(12);
+    });
+
+    it('should have 96 td elements in the whole table', function () {
+        var elems = TestUtils.scryRenderedDOMComponentsWithTag(otable, 'td');
+        expect(elems.length).to.equal(96);
+    });
+
+    it('should have 3 th elements in the first tr of the table heading with colspan of 6', function () {
+
+        var head = TestUtils.findRenderedDOMComponentWithTag(otable, 'thead');
+        var trs = TestUtils.scryRenderedDOMComponentsWithTag(head, 'tr');
+        var column_headers = TestUtils.scryRenderedDOMComponentsWithTag(trs[0], 'th');
+
+        expect(column_headers.length).to.equal(3);
+
+        expect(Number(column_headers[1].props.colSpan)).to.equal(6);
 
     });
 
