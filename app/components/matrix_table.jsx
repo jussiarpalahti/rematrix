@@ -35,11 +35,24 @@ export default class MatrixTable extends React.Component {
         let last_headers = table.levels[table.heading[table.heading.length -1]];
         let last_header_gen = generate_headers(last_headers);
         let last_heading = [];
-        for (var i=-1; i < table.matrix[0].length; i++) {
+        for (var i=0; i < table.matrix[0].length; i++) {
             last_heading[last_heading.length] = <th key={i}>{
                 last_header_gen.next().value
             }</th>
         }
+
+        let data = table.matrix.map((row, index) => {
+            let heading = (index == 0) ? <th rowSpan="8" colSpan="2" /> : null;
+
+            return <tr key={index}>{
+                [heading,
+                row.map((cell, cindex) => {
+                    return <td key={index + '_' + cindex}>
+                        {cell}
+                    </td>})
+                ]
+            }</tr>
+        });
 
         return <table>
             <thead>
@@ -56,7 +69,7 @@ export default class MatrixTable extends React.Component {
             </tr>
             </thead>
             <tbody>
-
+            {data}
             </tbody>
             </table>;
   }

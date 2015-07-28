@@ -135,7 +135,7 @@ describe('object table view test', function () {
         heading: ['one', 'two', 'three'],
         stub: ['first', 'second'],
 
-        matrix: _.range(8).map((i) => [1,2,3,4,5,6,7,9,10,11,i+1]),
+        matrix: _.range(8).map((i) => [1,2,3,4,5,6,7,8,9,10,11,i+1]),
 
         levels: {
             one: ['top heading 1', 'top heading 2'],
