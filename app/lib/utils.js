@@ -106,11 +106,11 @@ export function add_heading_hopper(table) {
         table.levels[top_header],
         table.meta.hops[top_header]);
 
-    let low_header = table.heading[table.stub.length -1];
-    hopper[low_header] = calculate_low_hopper(
-        table.levels[low_header],
-        table.meta.hops[low_header],
-        table.meta.heading_size);
+    //let low_header = table.heading[table.stub.length - 1];
+    //hopper[low_header] = calculate_low_hopper(
+    //    table.levels[low_header],
+    //    table.meta.hops[low_header],
+    //    table.meta.heading_size);
 
     return hopper;
 }
@@ -130,13 +130,13 @@ export function add_row_hopper(table) {
     hopper[top_header] = calculate_top_hopper(
         table.levels[top_header],
         table.meta.hops[top_header]);
-
-    let low_header = table.stub[table.stub.length -1];
-    hopper[low_header] = calculate_low_hopper(
-        table.levels[low_header],
-        table.meta.hops[low_header],
-        table.meta.stub_size);
-
+    //
+    //let low_header = table.stub[table.stub.length -1];
+    //hopper[low_header] = calculate_low_hopper(
+    //    table.levels[low_header],
+    //    table.meta.hops[low_header],
+    //    table.meta.stub_size);
+    //
     return hopper;
 
 }
@@ -147,7 +147,7 @@ let calculate_top_hopper = function (headers, hop) {
 
     headers.map((header) => {
         hopper[hopper.length] = {
-            name: header,
+            header: header,
             place: place,
             hop: hop
         };
@@ -162,7 +162,7 @@ let calculate_middle_hopper = function (headers, hop, size) {
     let place = 0;
     for (var i=0; i < size; i++) {
         hopper[hopper.length] = {
-            name: header_gen.next().value,
+            header: header_gen.next().value,
             place: place,
             hop: hop
         };
@@ -176,7 +176,7 @@ let calculate_low_hopper = function (headers, hop, size) {
     let hopper = [];
     for (var i=0; i < size; i++) {
         hopper[hopper.length] = {
-            name: header_gen.next().value,
+            header: header_gen.next().value,
             hop: hop
         };
     }
