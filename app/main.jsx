@@ -39,6 +39,10 @@ function main() {
             three: [
                 {header : 'third heading 1', place: 1},
                 {header : 'third heading 2', place: 1}
+            ],
+            first: [
+                {header : 'top row 1', place: 1, hop: 4},
+                {header : 'top row 2', place: 5, hop: 4},
             ]
         }
     };

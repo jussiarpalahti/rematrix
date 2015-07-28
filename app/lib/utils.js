@@ -69,3 +69,23 @@ export function generate_headers (headers) {
         }
     }();
 };
+
+export function PositionChecker (positions) {
+    /*
+     Returns a function where one item of the positions
+     list if the item's place field matches the position
+     given to this generated function
+     */
+    var index = 0;
+    return function f(pos) {
+        if (index >= positions.length) index = 0;
+
+        var header = positions[index];
+        if (header.place == pos) {
+            index += 1;
+            return header;
+        } else {
+            return null;
+        }
+    };
+};

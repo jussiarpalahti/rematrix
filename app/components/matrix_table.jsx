@@ -1,6 +1,6 @@
 
 import React from 'react';
-import {generate_headers} from '../lib/utils';
+import {generate_headers, PositionChecker} from '../lib/utils';
 
 export default class MatrixTable extends React.Component {
 
@@ -41,12 +41,25 @@ export default class MatrixTable extends React.Component {
             }</th>
         }
 
+
+        let checks = table.stub.slice(0, table.stub.length - 1).map((key, index) => {
+            return PositionChecker(table.hopper[key]);
+        });
+        let last_row_headers = table.levels[table.stub[table.stub.length -1]];
+        let last_rowheader_gen = generate_headers(last_row_headers);
+
         let data = table.matrix.map((row, index) => {
-            let heading = (index == 0) ? <th rowSpan="8" colSpan="2" /> : null;
+            let span_headings = get_span_headings(index, table, checks);
+
+            let low_heading = <th key={i}>{
+                last_rowheader_gen.next().value
+            }</th>;
+
 
             return <tr key={index}>{
-                [heading,
-                row.map((cell, cindex) => {
+                [span_headings,
+                 low_heading,
+                 row.map((cell, cindex) => {
                     return <td key={index + '_' + cindex}>
                         {cell}
                     </td>})
@@ -74,6 +87,17 @@ export default class MatrixTable extends React.Component {
             </table>;
   }
 }
+
+let get_span_headings = function (index, table, checks) {
+    return checks.map((check) => {
+        var heading = check(index + 1);
+        if (heading) {
+            return <th rowSpan={heading.hop}>{heading.header}</th>
+        } else {
+            return null;
+        }
+    })
+};
 
 /*
 

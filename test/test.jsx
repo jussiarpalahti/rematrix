@@ -160,6 +160,10 @@ describe('object table view test', function () {
             three: [
                 {header : 'third heading 1', place: 1},
                 {header : 'third heading 2', place: 1}
+            ],
+            first: [
+                {header : 'top row 1', place: 1, hop: 4},
+                {header : 'top row 2', place: 5, hop: 4},
             ]
         }
     };
@@ -214,9 +218,7 @@ describe('object table view test', function () {
 
         var body = TestUtils.findRenderedDOMComponentWithTag(otable, 'tbody');
         var column_headers = TestUtils.scryRenderedDOMComponentsWithTag(body, 'th');
-        var target = column_headers[12];
-        
-        console.log("target", target)
+        var target = column_headers[7];
 
         expect(target.props.children).to.equal("second row 2");
     });
