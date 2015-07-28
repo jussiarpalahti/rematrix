@@ -198,9 +198,27 @@ describe('object table view test', function () {
         var column_headers = TestUtils.scryRenderedDOMComponentsWithTag(trs[1], 'th');
 
         expect(column_headers.length).to.equal(6);
-
         expect(Number(column_headers[1].props.colSpan)).to.equal(2);
+    });
 
+    it('should have correct column header text in the third heading row\'s fifth th node', function () {
+
+        var head = TestUtils.findRenderedDOMComponentWithTag(otable, 'thead');
+        var trs = TestUtils.scryRenderedDOMComponentsWithTag(head, 'tr');
+        var column_headers = TestUtils.scryRenderedDOMComponentsWithTag(trs[2], 'th');
+        var target = column_headers[4];
+        expect(target.props.children).to.equal("third heading 1");
+    });
+
+    it('should have correct row header text in the sixth row\'s second th node', function () {
+
+        var body = TestUtils.findRenderedDOMComponentWithTag(otable, 'tbody');
+        var column_headers = TestUtils.scryRenderedDOMComponentsWithTag(body, 'th');
+        var target = column_headers[12];
+        
+        console.log("target", target)
+
+        expect(target.props.children).to.equal("second row 2");
     });
 
 });
