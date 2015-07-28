@@ -191,15 +191,15 @@ describe('object table view test', function () {
         expect(elems.length).to.equal(96);
     });
 
-    it('should have 3 th elements in the first tr of the table heading with colspan of 6', function () {
+    it('should have 6 th elements in the second tr of the table heading with colspan of 2', function () {
 
         var head = TestUtils.findRenderedDOMComponentWithTag(otable, 'thead');
         var trs = TestUtils.scryRenderedDOMComponentsWithTag(head, 'tr');
-        var column_headers = TestUtils.scryRenderedDOMComponentsWithTag(trs[0], 'th');
+        var column_headers = TestUtils.scryRenderedDOMComponentsWithTag(trs[1], 'th');
 
-        expect(column_headers.length).to.equal(3);
+        expect(column_headers.length).to.equal(6);
 
-        expect(Number(column_headers[1].props.colSpan)).to.equal(6);
+        expect(Number(column_headers[1].props.colSpan)).to.equal(2);
 
     });
 
