@@ -4,11 +4,8 @@ const TestUtils = React.addons.TestUtils;
 import {
     Table,
     generate_headers,
-    add_heading_hopper,
-    add_row_hopper,
-    calculate_low_hopper,
-    calculate_middle_hopper,
-    calculate_top_hopper} from '../app/lib/utils';
+    create_header_hopper
+} from '../app/lib/utils';
 import ManualTable from '../app/components/manual_table';
 import MatrixTable from '../app/components/matrix_table';
 import lodash from 'lodash';
@@ -232,168 +229,168 @@ describe('object table view test', function () {
 
 });
 
-describe('hop calculation', function () {
+//describe('hop calculation', function () {
+//
+//    let calc_table = {
+//        heading: ['one', 'two', 'three'],
+//        stub: ['first', 'second'],
+//
+//        matrix: _.range(8).map((i) => [1,2,3,4,5,6,7,8,9,10,11,i+1]),
+//
+//        levels: {
+//            one: ['top heading 1', 'top heading 2'],
+//            two: ['second heading 1', 'second heading 2', 'second heading 3'],
+//            three: ['third heading 1', 'third heading 2'],
+//            first: ['top row 1', 'top row 2'],
+//            second: ['second row 1', 'second row 2', 'second row 3', 'second row 4']
+//        }
+//    };
+//
+//    calc_table.meta = Table(calc_table);
+//    let heading_hopper = add_heading_hopper(calc_table);
+//    let row_hopper = add_row_hopper(calc_table);
+//
+//    calc_table.hopper = {
+//        one: heading_hopper['one'],
+//        two: heading_hopper['two'],
+//        first: row_hopper['first']
+//    };
+//
+//    let baseline_table = {
+//        heading: ['one', 'two', 'three'],
+//        stub: ['first', 'second'],
+//
+//        matrix: _.range(8).map((i) => [1,2,3,4,5,6,7,8,9,10,11,i+1]),
+//
+//        levels: {
+//            one: ['top heading 1', 'top heading 2'],
+//            two: ['second heading 1', 'second heading 2', 'second heading 3'],
+//            three: ['third heading 1', 'third heading 2'],
+//            first: ['top row 1', 'top row 2'],
+//            second: ['second row 1', 'second row 2', 'second row 3', 'second row 4']
+//        },
+//        hopper : {
+//            one: [
+//                {header : 'top heading 1', place: 0},
+//                {header : 'top heading 2', place: 6}
+//            ],
+//            two: [
+//                {header : 'second heading 1', place: 0},
+//                {header : 'second heading 2', place: 2},
+//                {header : 'second heading 3', place: 4},
+//                {header : 'second heading 1', place: 6},
+//                {header : 'second heading 2', place: 8},
+//                {header : 'second heading 3', place: 10}
+//            ],
+//            first: [
+//                {header : 'top row 1', place: 0, hop: 4},
+//                {header : 'top row 2', place: 4, hop: 4}
+//            ]
+//        }
+//    };
+//
+//    //it('calculated table should be identical to baseline table', function () {
+//    //    expect(calc_table).to.equal(baseline_table);
+//    //});
+//
+//    it('should have placement of 6 for header 4 of column header 2', function () {
+//        let target = calc_table.hopper['one'][1];
+//        expect(target.place).to.equal(6);
+//    });
+//
+//    it('should have place 7 for header 2 of row 1', function () {
+//        let target = calc_table.hopper['first'][1];
+//        expect(target.place).to.equal(4);
+//    });
+//
+//});
 
-    let calc_table = {
-        heading: ['one', 'two', 'three'],
-        stub: ['first', 'second'],
-
-        matrix: _.range(8).map((i) => [1,2,3,4,5,6,7,8,9,10,11,i+1]),
-
-        levels: {
-            one: ['top heading 1', 'top heading 2'],
-            two: ['second heading 1', 'second heading 2', 'second heading 3'],
-            three: ['third heading 1', 'third heading 2'],
-            first: ['top row 1', 'top row 2'],
-            second: ['second row 1', 'second row 2', 'second row 3', 'second row 4']
-        }
-    };
-
-    calc_table.meta = Table(calc_table);
-    let heading_hopper = add_heading_hopper(calc_table);
-    let row_hopper = add_row_hopper(calc_table);
-
-    calc_table.hopper = {
-        one: heading_hopper['one'],
-        two: heading_hopper['two'],
-        first: row_hopper['first']
-    };
-
-    let baseline_table = {
-        heading: ['one', 'two', 'three'],
-        stub: ['first', 'second'],
-
-        matrix: _.range(8).map((i) => [1,2,3,4,5,6,7,8,9,10,11,i+1]),
-
-        levels: {
-            one: ['top heading 1', 'top heading 2'],
-            two: ['second heading 1', 'second heading 2', 'second heading 3'],
-            three: ['third heading 1', 'third heading 2'],
-            first: ['top row 1', 'top row 2'],
-            second: ['second row 1', 'second row 2', 'second row 3', 'second row 4']
-        },
-        hopper : {
-            one: [
-                {header : 'top heading 1', place: 0},
-                {header : 'top heading 2', place: 6}
-            ],
-            two: [
-                {header : 'second heading 1', place: 0},
-                {header : 'second heading 2', place: 2},
-                {header : 'second heading 3', place: 4},
-                {header : 'second heading 1', place: 6},
-                {header : 'second heading 2', place: 8},
-                {header : 'second heading 3', place: 10}
-            ],
-            first: [
-                {header : 'top row 1', place: 0, hop: 4},
-                {header : 'top row 2', place: 4, hop: 4}
-            ]
-        }
-    };
-
-    //it('calculated table should be identical to baseline table', function () {
-    //    expect(calc_table).to.equal(baseline_table);
-    //});
-
-    it('should have placement of 6 for header 4 of column header 2', function () {
-        let target = calc_table.hopper['one'][1];
-        expect(target.place).to.equal(6);
-    });
-
-    it('should have place 7 for header 2 of row 1', function () {
-        let target = calc_table.hopper['first'][1];
-        expect(target.place).to.equal(4);
-    });
-
-});
-
-describe('calculated table view test', function () {
-    var otable;
-
-    jsdom();
-
-
-    let testtable = {
-        heading: ['one', 'two', 'three'],
-        stub: ['first', 'second'],
-
-        matrix: _.range(8).map((i) => [1,2,3,4,5,6,7,8,9,10,11,i+1]),
-
-        levels: {
-            one: ['top heading 1', 'top heading 2'],
-            two: ['second heading 1', 'second heading 2', 'second heading 3'],
-            three: ['third heading 1', 'third heading 2'],
-            first: ['top row 1', 'top row 2'],
-            second: ['second row 1', 'second row 2', 'second row 3', 'second row 4']
-        }
-    };
-
-    testtable.meta = Table(testtable);
-    let heading_hopper = add_heading_hopper(testtable);
-    let row_hopper = add_row_hopper(testtable);
-
-    testtable.hopper = {
-        one: heading_hopper['one'],
-        two: heading_hopper['two'],
-        three: heading_hopper['three'],
-        first: row_hopper['first']
-    };
-
-
-    before(function() {
-        otable = TestUtils.renderIntoDocument(
-            <MatrixTable table={testtable} />
-        );
-    });
-
-    it('should have 8 tr elements in table body', function () {
-        var body = TestUtils.findRenderedDOMComponentWithTag(otable, 'tbody');
-        var tr = TestUtils.scryRenderedDOMComponentsWithTag(body, 'tr');
-        expect(tr.length).to.equal(8);
-    });
-
-    it('should have 12 td elements in first tr of the table body', function () {
-        var body = TestUtils.findRenderedDOMComponentWithTag(otable, 'tbody');
-        var tr = TestUtils.scryRenderedDOMComponentsWithTag(body, 'tr');
-        var columns = TestUtils.scryRenderedDOMComponentsWithTag(tr[0], 'td');
-        expect(columns.length).to.equal(12);
-    });
-
-    it('should have 96 td elements in the whole table', function () {
-        var elems = TestUtils.scryRenderedDOMComponentsWithTag(otable, 'td');
-        expect(elems.length).to.equal(96);
-    });
-
-    it('should have 6 th elements in the second tr of the table heading with colspan of 2', function () {
-
-        var head = TestUtils.findRenderedDOMComponentWithTag(otable, 'thead');
-        var trs = TestUtils.scryRenderedDOMComponentsWithTag(head, 'tr');
-        var column_headers = TestUtils.scryRenderedDOMComponentsWithTag(trs[1], 'th');
-
-        expect(column_headers.length).to.equal(6);
-        expect(Number(column_headers[1].props.colSpan)).to.equal(2);
-    });
-
-    it('should have correct column header text in the third heading row\'s fifth th node', function () {
-
-        var head = TestUtils.findRenderedDOMComponentWithTag(otable, 'thead');
-        var trs = TestUtils.scryRenderedDOMComponentsWithTag(head, 'tr');
-        var column_headers = TestUtils.scryRenderedDOMComponentsWithTag(trs[2], 'th');
-        var target = column_headers[4];
-        expect(target.props.children).to.equal("third heading 1");
-    });
-
-    it('should have correct row header text in the sixth row\'s second th node', function () {
-
-        var body = TestUtils.findRenderedDOMComponentWithTag(otable, 'tbody');
-        var column_headers = TestUtils.scryRenderedDOMComponentsWithTag(body, 'th');
-        var target = column_headers[7];
-
-        expect(target.props.children).to.equal("second row 2");
-    });
-
-});
+//describe('calculated table view test', function () {
+//    var otable;
+//
+//    jsdom();
+//
+//
+//    let testtable = {
+//        heading: ['one', 'two', 'three'],
+//        stub: ['first', 'second'],
+//
+//        matrix: _.range(8).map((i) => [1,2,3,4,5,6,7,8,9,10,11,i+1]),
+//
+//        levels: {
+//            one: ['top heading 1', 'top heading 2'],
+//            two: ['second heading 1', 'second heading 2', 'second heading 3'],
+//            three: ['third heading 1', 'third heading 2'],
+//            first: ['top row 1', 'top row 2'],
+//            second: ['second row 1', 'second row 2', 'second row 3', 'second row 4']
+//        }
+//    };
+//
+//    testtable.meta = Table(testtable);
+//    let heading_hopper = add_heading_hopper(testtable);
+//    let row_hopper = add_row_hopper(testtable);
+//
+//    testtable.hopper = {
+//        one: heading_hopper['one'],
+//        two: heading_hopper['two'],
+//        three: heading_hopper['three'],
+//        first: row_hopper['first']
+//    };
+//
+//
+//    before(function() {
+//        otable = TestUtils.renderIntoDocument(
+//            <MatrixTable table={testtable} />
+//        );
+//    });
+//
+//    it('should have 8 tr elements in table body', function () {
+//        var body = TestUtils.findRenderedDOMComponentWithTag(otable, 'tbody');
+//        var tr = TestUtils.scryRenderedDOMComponentsWithTag(body, 'tr');
+//        expect(tr.length).to.equal(8);
+//    });
+//
+//    it('should have 12 td elements in first tr of the table body', function () {
+//        var body = TestUtils.findRenderedDOMComponentWithTag(otable, 'tbody');
+//        var tr = TestUtils.scryRenderedDOMComponentsWithTag(body, 'tr');
+//        var columns = TestUtils.scryRenderedDOMComponentsWithTag(tr[0], 'td');
+//        expect(columns.length).to.equal(12);
+//    });
+//
+//    it('should have 96 td elements in the whole table', function () {
+//        var elems = TestUtils.scryRenderedDOMComponentsWithTag(otable, 'td');
+//        expect(elems.length).to.equal(96);
+//    });
+//
+//    it('should have 6 th elements in the second tr of the table heading with colspan of 2', function () {
+//
+//        var head = TestUtils.findRenderedDOMComponentWithTag(otable, 'thead');
+//        var trs = TestUtils.scryRenderedDOMComponentsWithTag(head, 'tr');
+//        var column_headers = TestUtils.scryRenderedDOMComponentsWithTag(trs[1], 'th');
+//
+//        expect(column_headers.length).to.equal(6);
+//        expect(Number(column_headers[1].props.colSpan)).to.equal(2);
+//    });
+//
+//    it('should have correct column header text in the third heading row\'s fifth th node', function () {
+//
+//        var head = TestUtils.findRenderedDOMComponentWithTag(otable, 'thead');
+//        var trs = TestUtils.scryRenderedDOMComponentsWithTag(head, 'tr');
+//        var column_headers = TestUtils.scryRenderedDOMComponentsWithTag(trs[2], 'th');
+//        var target = column_headers[4];
+//        expect(target.props.children).to.equal("third heading 1");
+//    });
+//
+//    it('should have correct row header text in the sixth row\'s second th node', function () {
+//
+//        var body = TestUtils.findRenderedDOMComponentWithTag(otable, 'tbody');
+//        var column_headers = TestUtils.scryRenderedDOMComponentsWithTag(body, 'th');
+//        var target = column_headers[7];
+//
+//        expect(target.props.children).to.equal("second row 2");
+//    });
+//
+//});
 
 describe('hopper test', function () {
 
@@ -411,23 +408,27 @@ describe('hopper test', function () {
             second: ['second row 1', 'second row 2', 'second row 3', 'second row 4']
         }
     };
-
-    it('should match low level headers', function () {
-        let correct = [
-            {'header': 'third heading 1', 'hop': 1} ,
-            {'header': 'third heading 2', 'hop': 1} ,
-            {'header': 'third heading 1', 'hop': 1} ,
-            {'header': 'third heading 2', 'hop': 1} ,
-            {'header': 'third heading 1', 'hop': 1} ,
-            {'header': 'third heading 2', 'hop': 1} ,
-            {'header': 'third heading 1', 'hop': 1} ,
-            {'header': 'third heading 2', 'hop': 1}
-        ]
-        let resp = calculate_low_hopper(testtable.levels.three, 1, 8);
-        expect(resp).to.deep.include.members(correct);
-    });
+    testtable.meta = Table(testtable);
 
     it('should match middle level headers', function () {
+
+        let hopper = create_header_hopper(testtable.levels.two, 8, 2);
+        let first_answer = hopper();
+        let second_answer = hopper();
+        let third_answer = hopper();
+        for (var i=0; i<5; i++) { hopper(); } // move to the end position
+
+        expect(first_answer).to.equal('second heading 1');
+
+        expect(second_answer).to.equal(null);
+
+        expect(third_answer).to.equal('second heading 2');
+
+        expect(hopper).to.throw("Hopper limit exceeded 8");
+
+    });
+
+    it('should match low level headers', function () {
 
     });
 
@@ -435,3 +436,4 @@ describe('hopper test', function () {
 
     });
 });
+

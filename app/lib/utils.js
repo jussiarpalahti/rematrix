@@ -90,97 +90,63 @@ export function PositionChecker (positions) {
     };
 };
 
-export function add_heading_hopper(table) {
-    let hopper = {};
+export function create_header_hopper(headers, size, hop) {
+    /*
 
-    table.heading.slice(1, table.heading.length - 1).map((key) => {
-        let headers = table.levels[key];
-        hopper[key] = calculate_middle_hopper(
-            headers,
-            table.meta.hops[key],
-            table.meta.heading_size);
-    });
+    Returns a function which responds with one
+    item from headers list or null
+    for one loop or more
+    till all its loops are exhausted.
 
-    let top_header = table.heading[0];
-    hopper[top_header] = calculate_top_hopper(
-        table.levels[top_header],
-        table.meta.hops[top_header]);
+    Loop amount comes from how many times header
+    can appear in a size when one header takes
+    hop amount of space.
 
-    //let low_header = table.heading[table.stub.length - 1];
-    //hopper[low_header] = calculate_low_hopper(
-    //    table.levels[low_header],
-    //    table.meta.hops[low_header],
-    //    table.meta.heading_size);
+    Position starts at zero and null is returned when modulo hop
+    does not match it (meaning that modulo is zero when hop
+    position is met).
 
-    return hopper;
-}
+    It throws error if its closure variables exceed
+    given loop or size limit.
 
-export function add_row_hopper(table) {
-    let hopper = {};
+    header_hopper can be given a true value as an argument
+    which will reset its internal gauges to zero,
+    effectively restarting it.
 
-    table.stub.slice(1, table.stub.length - 1).map((key) => {
-        let headers = table.levels[key];
-        hopper[key] = calculate_middle_hopper(
-            headers,
-            table.meta.hops[key],
-            table.meta.stub_size);
-    });
+     */
 
-    let top_header = table.stub[0];
-    hopper[top_header] = calculate_top_hopper(
-        table.levels[top_header],
-        table.meta.hops[top_header]);
-    //
-    //let low_header = table.stub[table.stub.length -1];
-    //hopper[low_header] = calculate_low_hopper(
-    //    table.levels[low_header],
-    //    table.meta.hops[low_header],
-    //    table.meta.stub_size);
-    //
-    return hopper;
+    var index = 0;
+    var loops = size / (hop * headers.length);
+    var loop_index = 0;
+    var pos = 0;
 
-}
+    return function header_hopper(reset) {
 
-let calculate_top_hopper = function (headers, hop) {
-    let hopper = [];
-    let place = 0;
+        if (reset) {
+            index = 0;
+            loop_index = 0;
+            pos = 0;
+            return true;
+        }
 
-    headers.map((header) => {
-        hopper[hopper.length] = {
-            header: header,
-            place: place,
-            hop: hop
-        };
-        place += hop;
-    });
-    return hopper;
-};
+        if (loop_index >= loops) throw "Hopper exhausted" + loop_index;
 
-let calculate_middle_hopper = function (headers, hop, size) {
-    let header_gen = generate_headers(headers);
-    let hopper = [];
-    let place = 0;
-    for (var i=0; i < size; i++) {
-        hopper[hopper.length] = {
-            header: header_gen.next().value,
-            place: place,
-            hop: hop
-        };
-        place += hop;
+        else if (pos >= size) throw "Hopper limit exceeded " + pos;
+
+        else {
+            if (index >= headers.length) {
+                index = 0;
+                loop_index += 1;
+            }
+            if (pos % hop === 0) {
+                pos += 1;
+                index += 1;
+                return headers[index - 1];
+            }
+            else {
+                pos += 1;
+                return null;
+            }
+        }
     }
-    return hopper;
-};
-
-let calculate_low_hopper = function (headers, hop, size) {
-    let header_gen = generate_headers(headers)
-    let hopper = [];
-    for (var i=0; i < size; i++) {
-        hopper[hopper.length] = {
-            header: header_gen.next().value,
-            hop: hop
-        };
-    }
-    return hopper;
-};
-
-export {calculate_low_hopper, calculate_middle_hopper, calculate_top_hopper}
+}
