@@ -1,7 +1,14 @@
 import { expect } from 'chai';
 import React from 'react/addons';
 const TestUtils = React.addons.TestUtils;
-import {Table, generate_headers, add_heading_hopper, add_row_hopper} from '../app/lib/utils';
+import {
+    Table,
+    generate_headers,
+    add_heading_hopper,
+    add_row_hopper
+    calculate_low_hopper,
+    calculate_middle_hopper,
+    calculate_low_hopper} from '../app/lib/utils';
 import ManualTable from '../app/components/manual_table';
 import MatrixTable from '../app/components/matrix_table';
 import lodash from 'lodash';
@@ -249,7 +256,6 @@ describe('hop calculation', function () {
     calc_table.hopper = {
         one: heading_hopper['one'],
         two: heading_hopper['two'],
-        three: heading_hopper['three'],
         first: row_hopper['first']
     };
 
@@ -387,4 +393,10 @@ describe('calculated table view test', function () {
         expect(target.props.children).to.equal("second row 2");
     });
 
+});
+
+describe('hopper test', function () {
+    it('should match low level headers');
+    it('should match middle level headers');
+    it('should match top level headers');
 });
