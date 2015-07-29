@@ -148,3 +148,47 @@ export function create_header_hopper(headers, size, hop) {
         }
     }
 }
+
+export function get_cursor_position(table, keys) {
+    /*
+    Get cursor position for set of keys,
+    that is headings where the table should start when
+    viewport is moved from starting position in top left
+    corner of the table
+
+    TODO: make it work
+     */
+    let positions = {};
+    let key_pos = {};
+
+    for (let key in keys) {
+        key_pos[key] = table.levels[key].indexOf(keys[key]) + 1;
+    }
+
+    let cursor_pos = table.heading.reduce((cursor, heading, index) => {
+        let pos;
+        let hop = table.meta.hops[heading];
+
+        if (index === 0) {
+            pos = hop * (key_pos[heading] - 1) + 1;
+        } else {
+            pos = hop * (key_pos[heading] - 1);
+            if (pos === 0) pos = 1;
+        }
+
+        positions[heading] = {cursor: cursor + pos, pos: pos};
+
+        return cursor + pos;
+
+    }, 0);
+
+    let heading_span = {};
+    table.heading.map((heading) => {
+        heading_span[heading] = cursor_pos - positions[heading].cursor;
+    });
+
+    return [cursor_pos, positions, heading_span];
+}
+
+
+

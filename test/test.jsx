@@ -4,7 +4,8 @@ const TestUtils = React.addons.TestUtils;
 import {
     Table,
     generate_headers,
-    create_header_hopper
+    create_header_hopper,
+    get_cursor_position
 } from '../app/lib/utils';
 import ManualTable from '../app/components/manual_table';
 import MatrixTable from '../app/components/matrix_table';
@@ -288,3 +289,31 @@ describe('hopper test', function () {
     });
 });
 
+describe('cursor test', function () {
+    let testtable = {
+        heading: ['one', 'two', 'three'],
+        stub: ['first', 'second'],
+
+        matrix: _.range(8).map((i) => [1,2,3,4,5,6,7,8,9,10,11,i+1]),
+
+        levels: {
+            one: ['top heading 1', 'top heading 2'],
+            two: ['second heading 1', 'second heading 2', 'second heading 3'],
+            three: ['third heading 1', 'third heading 2'],
+            first: ['top row 1', 'top row 2'],
+            second: ['second row 1', 'second row 2', 'second row 3', 'second row 4']
+        }
+    };
+    testtable.meta = Table(testtable);
+
+    let cursor = {
+        one : 'top heading 2',
+        two : 'second heading 1',
+        three : 'third heading 2'
+    };
+
+    let test_pos = get_cursor_position(testtable, cursor);
+
+    console.log(test_pos);
+    
+});
