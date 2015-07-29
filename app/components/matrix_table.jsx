@@ -18,13 +18,13 @@ export default class MatrixTable extends React.Component {
             for (var i=0; i < table.meta.heading_size; i++) {
                 header = hopper();
                 if (header) {
-                    resp[resp.length] = <th colSpan={ table.meta.hops[heading] }>{header}</th>;
+                    resp[resp.length] = <th key={index + i} colSpan={ table.meta.hops[heading] }>{header}</th>;
                 }
             }
             if (index === 0) {
-                return <tr><th rowSpan={table.heading.length} colSpan={table.stub.length} />{resp}</tr>
+                return <tr key={index}><th rowSpan={table.heading.length} colSpan={table.stub.length} />{resp}</tr>
             } else {
-                return <tr>{resp}</tr>;
+                return <tr key={index}>{resp}</tr>;
             }
         });
 
