@@ -55,10 +55,7 @@ export default class MatrixTable extends React.Component {
 
         return <table>
             <thead>
-            <tr>
                 {column_headings}
-            </tr>
-
             </thead>
             <tbody>
             {data}
