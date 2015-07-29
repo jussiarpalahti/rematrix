@@ -429,7 +429,23 @@ describe('hopper test', function () {
     });
 
     it('should match low level headers', function () {
+        let hopper = create_header_hopper(testtable.levels.second, 12, 1);
+        let first_answer = hopper();
+        let second_answer = hopper();
+        let third_answer = hopper();
 
+        for (var i=0; i<8; i++) { hopper(); } // move to the end position
+
+        let final_answer = hopper();
+
+        expect(second_answer).to.equal("second row 2");
+
+        expect(third_answer).to.equal('second row 3');
+
+        expect(final_answer).to.equal('second row 4');
+
+        expect(hopper).to.throw("Hopper limit exceeded 12");
+        
     });
 
     it('should match top level headers', function () {
