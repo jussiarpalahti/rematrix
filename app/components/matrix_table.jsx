@@ -6,12 +6,14 @@ export default class MatrixTable extends React.Component {
 
     render() {
         let table = this.props.table;
+
+        // TODO: we reset since React Hot Loader regards hoppers as state to be preserved
+        for (let key in table.hopper) table.hopper[key](true);
+
         let column_heading = table.heading.map((heading, index) => {
             let header;
             let resp = [];
             let hopper = table.hopper[heading];
-
-            hopper(true); // TODO: we reset since React Hot Loader regards hoppers as state to be preserverd
 
             for (var i=0; i < table.meta.heading_size; i++) {
                 header = hopper();
@@ -21,16 +23,25 @@ export default class MatrixTable extends React.Component {
             }
             return resp;
         });
-        let data = table.matrix.map((row, index) => {
-            //let span_headings = get_span_headings(index, table, checks);
-            //
-            //let low_heading = <th key={i}>{
-            //    last_rowheader_gen.next().value
-            //}</th>;
 
+        let data = table.matrix.map((row, index) => {
+
+            let row_heading = table.stub.map((heading, index) => {
+                let header;
+                let hopper = table.hopper[heading];
+
+                header = hopper();
+                if (header) {
+                    return <th rowSpan={ table.meta.hops[heading] }>{header}</th>;
+                } else {
+                    return null;
+                }
+            });
 
             return <tr key={index}>{
-                [row.map((cell, cindex) => {
+                [
+                    row_heading,
+                    row.map((cell, cindex) => {
                         return <td key={index + '_' + cindex}>
                             {cell}
                         </td>})
