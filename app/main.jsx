@@ -4,7 +4,7 @@ import './stylesheets/main.css';
 import lodash from 'lodash';
 var _ = lodash;
 
-import {Table, generate_headers, add_heading_hopper, add_row_hopper} from '../app/lib/utils';
+import {Table, generate_headers, create_header_hopper} from '../app/lib/utils';
 
 main();
 
@@ -61,24 +61,20 @@ function main() {
     };
 
     calc_table.meta = Table(calc_table);
-    let heading_hopper = add_heading_hopper(calc_table);
-    let row_hopper = add_row_hopper(calc_table);
 
     calc_table.hopper = {
-        one: heading_hopper['one'],
-        two: heading_hopper['two'],
-        three: heading_hopper['three'],
-        first: row_hopper['first']
+        one: create_header_hopper(testtable.levels.one, testtable.meta.heading_size, testtable.meta.hops.one),
+        two: create_header_hopper(testtable.levels.two, testtable.meta.heading_size, testtable.meta.hops.two),
+        three: create_header_hopper(testtable.levels.three, testtable.meta.heading_size, testtable.meta.hops.three),
+        first: create_header_hopper(testtable.levels.first, testtable.meta.stub_size, testtable.meta.hops.first),
+        second: create_header_hopper(testtable.levels.second, testtable.meta.stub_size, testtable.meta.hops.second)
     };
-
-    console.log(calc_table)
 
     var app = document.createElement('div');
     document.body.appendChild(app);
 
     React.render(<div>
         <h1>React Table Viewer</h1>
-        <MatrixTable table={testtable} />
         <MatrixTable table={calc_table} />
         </div>, app);
 }
