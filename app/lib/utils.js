@@ -183,4 +183,4 @@ let calculate_low_hopper = function (headers, hop, size) {
     return hopper;
 };
 
-export {calculate_low_hopper, calculate_middle_hopper, calculate_low_hopper}
+export {calculate_low_hopper, calculate_middle_hopper, calculate_top_hopper}
