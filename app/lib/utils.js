@@ -129,9 +129,7 @@ export function create_header_hopper(headers, size, hop) {
             return true;
         }
 
-        if (loop_index >= loops) throw "Hopper exhausted" + loop_index;
-
-        else if (pos >= size) throw "Hopper limit exceeded " + pos;
+        if (pos >= size) throw "Hopper limit exceeded " + pos;
 
         else {
             if (index >= headers.length) {

@@ -445,11 +445,24 @@ describe('hopper test', function () {
         expect(final_answer).to.equal('second row 4');
 
         expect(hopper).to.throw("Hopper limit exceeded 12");
-        
+
     });
 
     it('should match top level headers', function () {
+        let hopper = create_header_hopper(testtable.levels.first, 12, 6);
+        let first_answer = hopper();
 
+        for (var i=0; i<5; i++) { hopper(); } // move to the end position
+
+        let second_answer = hopper();
+
+        for (var i=0; i<5; i++) { hopper(); } // move to the end position
+
+        expect(first_answer).to.equal("top row 1");
+
+        expect(second_answer).to.equal('top row 2');
+
+        expect(hopper).to.throw("Hopper limit exceeded 12");
     });
 });
 
