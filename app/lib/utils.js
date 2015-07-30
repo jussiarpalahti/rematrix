@@ -159,33 +159,39 @@ export function get_cursor_position(table, keys) {
     TODO: make it work
      */
     let positions = {};
-    let key_pos = {};
-
-    for (let key in keys) {
-        key_pos[key] = table.levels[key].indexOf(keys[key]) + 1;
-    }
+    let prev_pos;
+    let next_pos;
+    let place;
 
     let cursor_pos = table.heading.reduce((cursor, heading, index) => {
-        let pos;
         let hop = table.meta.hops[heading];
+        let key_pos = table.levels[heading].indexOf(keys[heading]);
 
-        if (index === 0) {
-            pos = hop * (key_pos[heading] - 1) + 1;
+        let prev_place = key_pos > 0 ? key_pos - 1 : 0;
+        let next_place = key_pos + 1;
+
+        if (hop > 1) {
+            prev_pos = hop * key_pos;
+            next_pos = hop * next_place;
         } else {
-            pos = hop * (key_pos[heading] - 1);
-            if (pos === 0) pos = 1;
+            prev_pos = key_pos;
         }
 
-        positions[heading] = {cursor: cursor + pos, pos: pos};
+        positions[heading] = {prev_pos : cursor + prev_pos, next_pos: cursor + next_pos};
 
-        return cursor + pos;
+        return cursor + prev_pos;
 
     }, 0);
 
+    //let heading_span = {};
+    //table.heading.map((heading) => {
+    //    heading_span[heading] = table.meta.hops[heading] - positions[heading];
+    //});
+
     let heading_span = {};
-    table.heading.map((heading) => {
-        heading_span[heading] = cursor_pos - positions[heading].cursor;
-    });
+    for (let key in positions) {
+        heading_span[key] = positions[key].next_pos - cursor_pos;
+    }
 
     return [cursor_pos, positions, heading_span];
 }

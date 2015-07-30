@@ -312,8 +312,35 @@ describe('cursor test', function () {
         three : 'third heading 2'
     };
 
-    let test_pos = get_cursor_position(testtable, cursor);
+    let cursor2 = {
+        one : 'top heading 2',
+        two : 'second heading 2',
+        three : 'third heading 1'
+    };
 
-    console.log(test_pos);
-    
+    let [cursor_pos, positions, heading_span] = get_cursor_position(testtable, cursor);
+    let [cursor_pos2, positions2, heading_span2] = get_cursor_position(testtable, cursor2);
+
+    console.log(cursor_pos, positions, heading_span);
+    console.log(cursor_pos2, positions2, heading_span2);
+
+    it('should have a cursor position of 7', function () {
+
+        expect(cursor_pos).to.equal(7);
+        expect(cursor_pos2).to.equal(8);
+
+    })
+
+    it('should have a correct span', function () {
+
+        expect(heading_span.one).to.equal(5);
+
+        expect(heading_span.two).to.equal(1);
+
+        expect(heading_span2.one).to.equal(4);
+
+        expect(heading_span2.two).to.equal(2);
+
+    });
+
 });
