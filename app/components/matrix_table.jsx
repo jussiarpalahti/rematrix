@@ -10,8 +10,6 @@ export default class MatrixTable extends React.Component {
         let table = this.props.table;
 
         // TODO: we reset since React Hot Loader regards hoppers as state to be preserved
-        //for (let key in table.hopper) table.hopper[key](true);
-
         _.forOwn(table.hopper, (hopper, key) => {
             hopper(true);
         });
