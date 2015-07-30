@@ -2,26 +2,18 @@
 import React from 'react';
 
 export default class App extends React.Component {
-  render() {
-    return <table>
-        <thead>
 
-        </thead>
-        <tbody>
+    render() {
 
-        </tbody>
-    </table>;
-  }
+      let menu_items = this.props.menu.map((item, index) => {
+          return <li key={index} className="pure-menu-item"><a href="#" className="pure-menu-link">{item}</a></li>
+      });
+
+      return <div className="pure-menu pure-menu-scrollable custom-restricted">
+        <a href="#" className="pure-menu-link pure-menu-heading">My first menu</a>
+        <ul className="pure-menu-list">
+            {menu_items}
+        </ul>
+      </div>;
+    }
 }
-
-/*
-
- {
- three: 1,
- two: 2,
- one: 6,
- second: 1,
- first: 4
- }
-
- */

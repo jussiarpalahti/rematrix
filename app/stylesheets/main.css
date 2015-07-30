@@ -11,3 +11,14 @@ th { background-color: #00A000;}
 
 th.blank { background-color: white;}
 */
+
+/*
+for Pure menus
+*/
+
+.custom-restricted {
+    height: 160px;
+    width: 150px;
+    border: 1px solid gray;
+    border-radius: 4px;
+}

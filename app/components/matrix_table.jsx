@@ -46,10 +46,11 @@ export default class MatrixTable extends React.Component {
                 }
             });
 
-            return <tr key={index}>{
+            return <tr className={(index % 2) != 0 ? "pure-table-odd" : ""} key={index}>{
                 [
                     row_heading,
                     row.map((cell, cindex) => {
+
                         return <td key={index + '_' + cindex}>
                             {cell}
                         </td>})
@@ -57,7 +58,7 @@ export default class MatrixTable extends React.Component {
             }</tr>
         });
 
-        return <table className="pure-table">
+        return <table className="pure-table pure-table-bordered">
             <thead>
                 {column_headings}
             </thead>

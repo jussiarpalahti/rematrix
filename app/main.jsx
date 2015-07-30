@@ -1,9 +1,10 @@
 
-import './stylesheets/main.css';
 import './stylesheets/pure/pure-min.css';
+import './stylesheets/main.css';
 
 import React from 'react';
 import MatrixTable from './components/matrix_table.jsx';
+import App from './components/App.jsx'
 
 import lodash from 'lodash';
 var _ = lodash;
@@ -81,6 +82,7 @@ function main() {
 
     React.render(<div>
         <h1>React Table Viewer</h1>
+        <App menu={['eka', 'toka', 'kolmas']} />
         <MatrixTable table={realtable} />
     </div>, app);
 }
@@ -384,9 +386,7 @@ function real_table() {
         ],
             "Ikä": [
             "Väestö yhteensä",
-            "0-vuotiaat",
             "1-vuotiaat",
-            "2-vuotiaat"
         ],
             "Sukupuoli": [
             "Molemmat sukupuolet",
@@ -401,6 +401,10 @@ function real_table() {
             "1980"]
         }
     };
+
+    table.matrix.forEach((item, index) => {
+        table.matrix[index] = item.slice(0, item.length - 6);
+    });
 
     table.meta = Table(table);
 
