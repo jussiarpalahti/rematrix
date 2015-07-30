@@ -199,5 +199,25 @@ export function get_cursor_position(table, keys) {
     return [cursor_pos, positions, heading_span];
 }
 
+export function toggle_header(table, heading, header) {
+    /*
+    First cut at hiding headers from a bigger table.
+    Assumes that always there are more headers than need to show.
 
+    Hidden headers are marked as null in their place at the table
+    structure.
+     */
 
+    //let index = orig_table.levels[heading].indexOf(header);
+
+    if (table.hidden_levels[heading] && table.hidden_levels[heading][header]) {
+        // if true, set the header null
+        table.hidden_levels[heading][header] = null;
+    }
+    else {
+        // else assume that header is reinstated
+        if (!table.hidden_levels[heading]) table.hidden_levels[heading] = {};
+
+        table.hidden_levels[heading][header] = true;
+    }
+}

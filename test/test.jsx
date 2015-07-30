@@ -5,7 +5,8 @@ import {
     Table,
     generate_headers,
     create_header_hopper,
-    get_cursor_position
+    get_cursor_position,
+    toggle_header
 } from '../app/lib/utils';
 import ManualTable from '../app/components/manual_table';
 import MatrixTable from '../app/components/matrix_table';
@@ -352,4 +353,25 @@ describe('cursor test', function () {
 
     });
 
+});
+
+describe('header hiding toggle', function () {
+
+    let testtable = {
+        hidden_levels: {}
+    };
+
+    it('should have toggled heading\'s state true', function () {
+
+        toggle_header(testtable, 'three', 'third heading 2');
+        expect(testtable.hidden_levels.three['third heading 2']).to.equal(true);
+
+    });
+
+    it('should have toggled heading\'s state to null', function () {
+
+        toggle_header(testtable, 'three', 'third heading 2');
+        expect(testtable.hidden_levels.three['third heading 2']).to.equal(null);
+
+    });
 });
