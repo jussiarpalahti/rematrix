@@ -9,11 +9,11 @@ export default class App extends React.Component {
           return <li key={index} className="pure-menu-item"><a href="#" className="pure-menu-link">{item}</a></li>
       });
 
-      return <div className="pure-menu pure-menu-scrollable custom-restricted">
-        <a href="#" className="pure-menu-link pure-menu-heading">My first menu</a>
+      return <div className="header_menu"><div className="pure-menu pure-menu-scrollable custom-restricted">
+        <a href="#" className="pure-menu-link pure-menu-heading">{this.props.name}</a>
         <ul className="pure-menu-list">
             {menu_items}
         </ul>
-      </div>;
+      </div></div>;
     }
 }

@@ -82,7 +82,10 @@ function main() {
 
     React.render(<div>
         <h1>React Table Viewer</h1>
-        <App menu={['eka', 'toka', 'kolmas']} />
+        <App menu={realtable.levels.Alue} name="Alue" />
+        <App menu={realtable.levels['Ikä']} name="Ikä" />
+        <App menu={realtable.levels.Sukupuoli} name="Sukupuoli" />
+        <App menu={realtable.levels.Vuosi} name="Vuosi" />
         <MatrixTable table={realtable} />
     </div>, app);
 }
@@ -384,16 +387,16 @@ function real_table() {
             "Vantaa",
             "Kauniainen"
         ],
-            "Ikä": [
+        "Ikä": [
             "Väestö yhteensä",
             "1-vuotiaat",
         ],
-            "Sukupuoli": [
+        "Sukupuoli": [
             "Molemmat sukupuolet",
             "Miehet",
             "Naiset"
         ],
-            "Vuosi": [
+        "Vuosi": [
             "1976",
             "1977",
             "1978",
