@@ -1,3 +1,5 @@
+import lodash from 'lodash';
+var _ = lodash;
 
 import React from 'react';
 import {generate_headers, PositionChecker} from '../lib/utils';
@@ -8,7 +10,11 @@ export default class MatrixTable extends React.Component {
         let table = this.props.table;
 
         // TODO: we reset since React Hot Loader regards hoppers as state to be preserved
-        for (let key in table.hopper) table.hopper[key](true);
+        //for (let key in table.hopper) table.hopper[key](true);
+
+        _.forOwn(table.hopper, (hopper, key) => {
+            hopper(true);
+        });
 
         let column_headings = table.heading.map((heading, index) => {
             let header;

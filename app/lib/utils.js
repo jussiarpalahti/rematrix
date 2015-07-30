@@ -1,3 +1,5 @@
+import lodash from 'lodash';
+var _ = lodash;
 
 export function Table(table) {
     var resp = getSize(table);
@@ -189,9 +191,10 @@ export function get_cursor_position(table, keys) {
     //});
 
     let heading_span = {};
-    for (let key in positions) {
-        heading_span[key] = positions[key].next_pos - cursor_pos;
-    }
+
+    _.forOwn(positions, function(position, key) {
+        heading_span[key] = position.next_pos - cursor_pos;}
+    );
 
     return [cursor_pos, positions, heading_span];
 }
