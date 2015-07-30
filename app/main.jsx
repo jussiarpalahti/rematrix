@@ -1,6 +1,10 @@
+
+import './stylesheets/main.css';
+import './stylesheets/pure/pure-min.css';
+
 import React from 'react';
 import MatrixTable from './components/matrix_table.jsx';
-import './stylesheets/main.css';
+
 import lodash from 'lodash';
 var _ = lodash;
 

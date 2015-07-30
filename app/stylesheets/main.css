@@ -1,4 +1,6 @@
 
+/*
+Blocked ugly basic styles
 tr, th, td, table {
 	border: 1px solid green;
 }
@@ -8,3 +10,4 @@ th, td { width: 2em; height: 1em;}
 th { background-color: #00A000;}
 
 th.blank { background-color: white;}
+*/
