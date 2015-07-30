@@ -221,3 +221,15 @@ export function toggle_header(table, heading, header) {
         table.hidden_levels[heading][header] = true;
     }
 }
+
+export function remove_hidden_from_table(table, hidden) {
+    let is_stub;
+    let is_heading;
+
+    _.forOwn(hidden, (hidden_headers, heading) => {
+        // TODO: change this to use filter
+        let args = hidden_headers;
+        args.unshift(table.levels[heading]);
+        table.levels[heading] = _.without.apply(this, args);
+    });
+}

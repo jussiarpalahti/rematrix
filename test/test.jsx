@@ -6,7 +6,8 @@ import {
     generate_headers,
     create_header_hopper,
     get_cursor_position,
-    toggle_header
+    toggle_header,
+    remove_hidden_from_table
 } from '../app/lib/utils';
 import ManualTable from '../app/components/manual_table';
 import MatrixTable from '../app/components/matrix_table';
@@ -372,6 +373,39 @@ describe('header hiding toggle', function () {
 
         toggle_header(testtable, 'three', 'third heading 2');
         expect(testtable.hidden_levels.three['third heading 2']).to.equal(null);
+
+    });
+});
+
+describe('remove data and headers from table', function () {
+
+    let testtable = {
+        heading: ['one', 'two', 'three'],
+        stub: ['first', 'second'],
+
+        matrix: _.range(8).map((i) => [1,2,3,4,5,6,7,8,9,10,11,i+1]),
+
+        levels: {
+            one: ['top heading 1', 'top heading 2'],
+            two: ['second heading 1', 'second heading 2', 'second heading 3'],
+            three: ['third heading 1', 'third heading 2'],
+            first: ['top row 1', 'top row 2'],
+            second: ['second row 1', 'second row 2', 'second row 3', 'second row 4']
+        }
+    };
+    testtable.meta = Table(testtable);
+
+    remove_hidden_from_table(testtable, {three: ['third heading 2']});
+
+    it('should be no "third heading 2" in level three heading', function () {
+
+        expect(testtable.levels.three[1]).to.equal(undefined);
+
+    });
+
+    it('should be "third heading 1" in level three heading\'s first position', function () {
+
+        expect(testtable.levels.three[0]).to.equal('third heading 1');
 
     });
 });

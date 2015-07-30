@@ -76,6 +76,11 @@ function main() {
     };
 
     let realtable = real_table();
+    let copy_table = real_table();
+
+    let update_table = (heading, header) => {
+
+    };
 
     var app = document.createElement('div');
     document.body.appendChild(app);
@@ -389,7 +394,9 @@ function real_table() {
         ],
         "Ikä": [
             "Väestö yhteensä",
+            "0-vuotiaat",
             "1-vuotiaat",
+            "2-vuotiaat"
         ],
         "Sukupuoli": [
             "Molemmat sukupuolet",
@@ -404,10 +411,6 @@ function real_table() {
             "1980"]
         }
     };
-
-    table.matrix.forEach((item, index) => {
-        table.matrix[index] = item.slice(0, item.length - 6);
-    });
 
     table.meta = Table(table);
 
