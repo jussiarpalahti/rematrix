@@ -459,10 +459,8 @@ describe('matrix header generation', function () {
         second: create_header_hopper(testtable.levels.second, testtable.meta.stub_size, testtable.meta.hops.second)
     };
 
-    let headers = generate_matrix_headers(testtable, testtable.stub, testtable.meta.stub_size);
-
-    it('header objects should have correct headers and hop settings', function () {
-
+    it('stub header objects should have correct headers and hop settings', function () {
+        let headers = generate_matrix_headers(testtable, testtable.stub, testtable.meta.stub_size);
         expect(headers[0].first.header).to.equal('top row 1');
         expect(headers[0].first.hop).to.equal(4);
         expect(headers[1].second.header).to.equal('second row 2');
@@ -470,6 +468,17 @@ describe('matrix header generation', function () {
 
         expect(headers[4].first.header).to.equal('top row 2');
         expect(headers[4].first.hop).to.equal(4);
-   });
+    });
+
+    it('heading header objects should have correct headers and hop settings', function () {
+        let headers = generate_matrix_headers(testtable, testtable.heading, testtable.meta.heading_size);
+        expect(headers[0].two.header).to.equal('second heading 1');
+        expect(headers[0].two.hop).to.equal(2);
+        expect(headers[1].three.header).to.equal('third heading 2');
+        expect(headers[1].two.hop).to.equal(null);
+
+        expect(headers[7].one.header).to.equal('top heading 2');
+        expect(headers[7].three.hop).to.equal(1);
+    });
 
 });
