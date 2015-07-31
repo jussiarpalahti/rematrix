@@ -76,6 +76,11 @@ export class HeaderTable extends React.Component {
 
         let column_headings = table.heading_headers.map((header, index) => {
             return table.heading.map((heading) => {
+
+                if (table.heading_hider(header)) {
+                        return;
+                }
+
                 if (header.hop[heading]) {
                     return <th key={index} colSpan={header.hop[heading]}>
                         {header[heading]}</th>;
@@ -117,10 +122,15 @@ export class HeaderTable extends React.Component {
                 [
                     row_headings,
                     row.map((cell, cindex) => {
-
-                        return <td key={index + '_' + cindex}>
-                            {cell}
-                        </td>})
+                        let column_header = table.heading_headers[cindex];
+                        if (table.heading_hider(column_header)) {
+                            return null;
+                        } else {
+                            return <td key={index + '_' + cindex}>
+                                {cell}
+                            </td>
+                        }
+                    })
                 ]
             }</tr>
         });

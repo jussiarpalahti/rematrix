@@ -10,7 +10,7 @@ import lodash from 'lodash';
 var _ = lodash;
 
 import {Table, generate_headers, create_header_hopper} from '../app/lib/utils';
-import {generate_matrix_headers} from '../app/lib/matrix_header';
+import {generate_matrix_headers, generate_hidden_check} from '../app/lib/matrix_header';
 
 main();
 
@@ -80,7 +80,11 @@ function main() {
 
     calc_table.row_headers = generate_matrix_headers(calc_table, calc_table.stub, calc_table.meta.stub_size);
     calc_table.heading_headers = generate_matrix_headers(calc_table, calc_table.heading, calc_table.meta.heading_size);
-    //console.log(calc_table)
+
+    let hiding_query = [{'one': 'top heading 1'}];
+
+    calc_table.heading_hider = generate_hidden_check(calc_table.heading_headers, hiding_query);
+
     var app = document.createElement('div');
     document.body.appendChild(app);
 
