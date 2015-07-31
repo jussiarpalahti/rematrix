@@ -13,7 +13,7 @@ import {
 
 import {generate_matrix_headers} from '../app/lib/matrix_header';
 import ManualTable from '../app/components/manual_table';
-import MatrixTable from '../app/components/matrix_table';
+import {MatrixTable} from '../app/components/matrix_table';
 import lodash from 'lodash';
 var _ = lodash;
 
@@ -472,13 +472,15 @@ describe('matrix header generation', function () {
 
     it('heading header objects should have correct headers and hop settings', function () {
         let headers = generate_matrix_headers(testtable, testtable.heading, testtable.meta.heading_size);
+
         expect(headers[0].two.header).to.equal('second heading 1');
         expect(headers[0].two.hop).to.equal(2);
         expect(headers[1].three.header).to.equal('third heading 2');
         expect(headers[1].two.hop).to.equal(null);
 
-        expect(headers[7].one.header).to.equal('top heading 2');
-        expect(headers[7].three.hop).to.equal(1);
+        expect(headers[6].one.header).to.equal('top heading 2');
+        expect(headers[6].one.hop).to.equal(6);
+        expect(headers[6].three.hop).to.equal(1);
     });
 
 });

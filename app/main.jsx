@@ -3,13 +3,14 @@ import './stylesheets/pure/pure-min.css';
 import './stylesheets/main.css';
 
 import React from 'react';
-import MatrixTable from './components/matrix_table.jsx';
+import {MatrixTable, HeaderTable} from './components/matrix_table.jsx';
 import App from './components/App.jsx'
 
 import lodash from 'lodash';
 var _ = lodash;
 
 import {Table, generate_headers, create_header_hopper} from '../app/lib/utils';
+import {generate_matrix_headers} from '../app/lib/matrix_header';
 
 main();
 
@@ -75,23 +76,22 @@ function main() {
         second: create_header_hopper(testtable.levels.second, testtable.meta.stub_size, testtable.meta.hops.second)
     };
 
-    let realtable = real_table();
-    let copy_table = real_table();
+    //let realtable = real_table();
 
-    let update_table = (heading, header) => {
-
-    };
-
+    calc_table.row_headers = generate_matrix_headers(calc_table, calc_table.stub, calc_table.meta.stub_size);
+    calc_table.heading_headers = generate_matrix_headers(calc_table, calc_table.heading, calc_table.meta.heading_size);
+    //console.log(calc_table)
     var app = document.createElement('div');
     document.body.appendChild(app);
 
     React.render(<div>
         <h1>React Table Viewer</h1>
-        <App menu={realtable.levels.Alue} name="Alue" />
-        <App menu={realtable.levels['Ikä']} name="Ikä" />
-        <App menu={realtable.levels.Sukupuoli} name="Sukupuoli" />
-        <App menu={realtable.levels.Vuosi} name="Vuosi" />
-        <MatrixTable table={realtable} />
+        <App menu={calc_table.levels.one} name="Alue" />
+        <App menu={calc_table.levels.two} name="Ikä" />
+        <App menu={calc_table.levels.three} name="Sukupuoli" />
+        <App menu={calc_table.levels.first} name="Vuosi" />
+        <MatrixTable table={calc_table} />
+        <HeaderTable table={calc_table} />
     </div>, app);
 }
 
