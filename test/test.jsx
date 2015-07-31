@@ -7,7 +7,8 @@ import {
     create_header_hopper,
     get_cursor_position,
     toggle_header,
-    remove_hidden_from_table
+    remove_hidden_from_table,
+    remove_hidden_from_matrix
 } from '../app/lib/utils';
 import ManualTable from '../app/components/manual_table';
 import MatrixTable from '../app/components/matrix_table';
@@ -409,3 +410,22 @@ describe('remove data and headers from table', function () {
 
     });
 });
+
+describe('remove data from matrix', function () {
+
+        let matrix = _.range(8).map((i) => [1,2,3,4,5,6,7,8,9,10,11,i+1]);
+
+        let hidden = {
+            row: [2, 6],
+            column: [1, 7, 9]
+        };
+
+        it('should have less rows and columns', function () {
+            let unmatrix = remove_hidden_from_matrix(matrix, hidden);
+            expect(unmatrix.length).to.equal(6);
+
+            expect(unmatrix[0].length).to.equal(9);
+
+        })
+    }
+);

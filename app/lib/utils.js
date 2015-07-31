@@ -233,3 +233,19 @@ export function remove_hidden_from_table(table, hidden) {
         table.levels[heading] = _.without.apply(this, args);
     });
 }
+
+export function remove_hidden_from_matrix(matrix, hidden) {
+    /*
+    Generates new matrix based on row and column indexes
+     */
+
+    let is_hidden_column = (value, index) => {
+        return hidden.column.indexOf(index) === -1;
+    };
+
+    let is_hidden_row = (row, index) => {
+        if (hidden.row.indexOf(index) === -1) return _.filter(row, is_hidden_column);
+    };
+
+    return _.filter(_.map(matrix, is_hidden_row));
+}
