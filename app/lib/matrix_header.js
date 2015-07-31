@@ -52,14 +52,17 @@ export function generate_hidden_check(headers, hiding_queries) {
     values set for any necessary headings:
         [{level1: value1}, {level2: value2}]
     Query is all inclusive, all matching objects are removed
+
+    TODO: find out why trying to add to an array during reduce fails
     */
-    let hidden_headers = hiding_queries.reduce((hidden_headers, hide_query) => {
-        return _.where(hidden_headers, hide_query);
-    }, headers);
+
+    let hidden_headers = _.flatten(
+        hiding_queries.map((hide_query) => {
+            return _.where(headers, hide_query);
+        })
+    );
 
     return (header) => {
-        console.log(headers)
-        console.log(hidden_headers)
-        return hidden_headers.indexOf(header) !== -1;
+        return _.where(hidden_headers, header).length > 0;
     }
 }

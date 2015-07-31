@@ -536,14 +536,20 @@ describe('hidden header checker', function () {
             {'one': 'top heading 1'},
             {'three': 'third heading 2'}];
 
-        let hider = generate_hidden_check(stub_headers, hiding_query);
+        let hider = generate_hidden_check(heading_headers, hiding_query);
 
         let is_hidden1 = {
             one:'top heading 1',
             two: 'second heading 2',
             three: 'third heading 1'};
 
+        let is_hidden2 = {
+            one:'top heading 2',
+            two: 'second heading 1',
+            three: 'third heading 2'};
+
         expect(hider(is_hidden1)).to.equal(true);
+        expect(hider(is_hidden2)).to.equal(true);
 
     });
 
