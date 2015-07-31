@@ -76,8 +76,9 @@ export class HeaderTable extends React.Component {
 
         let column_headings = table.heading_headers.map((header, index) => {
             return table.heading.map((heading) => {
-                if (header[heading].hop) {
-                    return <th key={index} colSpan={header[heading].hop}>{header[heading].header}</th>;
+                if (header.hop[heading]) {
+                    return <th key={index} colSpan={header.hop[heading]}>
+                        {header[heading]}</th>;
                 }
             });
         });
@@ -86,7 +87,9 @@ export class HeaderTable extends React.Component {
         let columns = _.zip.apply({}, column_headings).map((row, index) => {
             if (index==0) {
                 return <tr key={index}>
-                    <th rowSpan={table.heading.length} colSpan={table.stub.length} />{row}</tr>
+                    <th rowSpan={table.heading.length} colSpan={table.stub.length} />
+                    {row}
+                </tr>
             } else {
                 return <tr key={index}>{row}</tr>
             }
@@ -99,12 +102,13 @@ export class HeaderTable extends React.Component {
             let row_headings = table.stub.map((heading, thindex) => {
 
                 let header = row_heading[heading];
-                console.log("one row", row_heading, thindex, heading, header)
-                if (header.hop) {
 
-                    console.log("rows", header[heading])
+                if (row_heading.hop[heading]) {
 
-                    let elem = <th key={index + '_' + thindex} rowSpan={header.hop}>{header.header}</th>;
+                    let elem = <th key={index + '_' + thindex}
+                                   rowSpan={row_heading.hop[heading]}>
+                        {header}</th>;
+
                     return elem;
                 }
             });
