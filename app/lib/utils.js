@@ -223,8 +223,6 @@ export function toggle_header(table, heading, header) {
 }
 
 export function remove_hidden_from_table(table, hidden) {
-    let is_stub;
-    let is_heading;
 
     _.forOwn(hidden, (hidden_headers, heading) => {
         // TODO: change this to use filter

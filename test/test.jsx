@@ -1,6 +1,7 @@
 import { expect } from 'chai';
 import React from 'react/addons';
 const TestUtils = React.addons.TestUtils;
+
 import {
     Table,
     generate_headers,
@@ -11,7 +12,11 @@ import {
     remove_hidden_from_matrix
 } from '../app/lib/utils';
 
-import {generate_matrix_headers} from '../app/lib/matrix_header';
+import {
+    generate_matrix_headers,
+    generate_hidden_check
+} from '../app/lib/matrix_header';
+
 import ManualTable from '../app/components/manual_table';
 import {MatrixTable} from '../app/components/matrix_table';
 import lodash from 'lodash';
@@ -452,35 +457,94 @@ describe('matrix header generation', function () {
     };
     testtable.meta = Table(testtable);
     testtable.hopper = {
-        one: create_header_hopper(testtable.levels.one, testtable.meta.heading_size, testtable.meta.hops.one),
-        two: create_header_hopper(testtable.levels.two, testtable.meta.heading_size, testtable.meta.hops.two),
-        three: create_header_hopper(testtable.levels.three, testtable.meta.heading_size, testtable.meta.hops.three),
-        first: create_header_hopper(testtable.levels.first, testtable.meta.stub_size, testtable.meta.hops.first),
-        second: create_header_hopper(testtable.levels.second, testtable.meta.stub_size, testtable.meta.hops.second)
+        one: create_header_hopper(testtable.levels.one, testtable.meta.heading_size,
+            testtable.meta.hops.one),
+        two: create_header_hopper(testtable.levels.two, testtable.meta.heading_size,
+            testtable.meta.hops.two),
+        three: create_header_hopper(testtable.levels.three, testtable.meta.heading_size,
+            testtable.meta.hops.three),
+        first: create_header_hopper(testtable.levels.first, testtable.meta.stub_size,
+            testtable.meta.hops.first),
+        second: create_header_hopper(testtable.levels.second, testtable.meta.stub_size,
+            testtable.meta.hops.second)
     };
 
     it('stub header objects should have correct headers and hop settings', function () {
-        let headers = generate_matrix_headers(testtable, testtable.stub, testtable.meta.stub_size);
-        expect(headers[0].first.header).to.equal('top row 1');
-        expect(headers[0].first.hop).to.equal(4);
-        expect(headers[1].second.header).to.equal('second row 2');
-        expect(headers[1].first.hop).to.equal(null);
+        let headers = generate_matrix_headers(testtable, testtable.stub,
+            testtable.meta.stub_size);
+        expect(headers[0].first).to.equal('top row 1');
+        expect(headers[0].hop.first).to.equal(4);
+        expect(headers[1].second).to.equal('second row 2');
+        expect(headers[1].hop.first).to.equal(null);
 
-        expect(headers[4].first.header).to.equal('top row 2');
-        expect(headers[4].first.hop).to.equal(4);
+        expect(headers[4].first).to.equal('top row 2');
+        expect(headers[4].hop.first).to.equal(4);
     });
 
     it('heading header objects should have correct headers and hop settings', function () {
-        let headers = generate_matrix_headers(testtable, testtable.heading, testtable.meta.heading_size);
+        let headers = generate_matrix_headers(testtable, testtable.heading,
+            testtable.meta.heading_size);
 
-        expect(headers[0].two.header).to.equal('second heading 1');
-        expect(headers[0].two.hop).to.equal(2);
-        expect(headers[1].three.header).to.equal('third heading 2');
-        expect(headers[1].two.hop).to.equal(null);
+        expect(headers[0].two).to.equal('second heading 1');
+        expect(headers[0].hop.two).to.equal(2);
+        expect(headers[1].three).to.equal('third heading 2');
+        expect(headers[1].hop.two).to.equal(null);
 
-        expect(headers[6].one.header).to.equal('top heading 2');
-        expect(headers[6].one.hop).to.equal(6);
-        expect(headers[6].three.hop).to.equal(1);
+        expect(headers[6].one).to.equal('top heading 2');
+        expect(headers[6].hop.one).to.equal(6);
+        expect(headers[6].hop.three).to.equal(1);
+    });
+});
+
+describe('hidden header checker', function () {
+
+    let testtable = {
+        heading: ['one', 'two', 'three'],
+        stub: ['first', 'second'],
+
+        matrix: _.range(8).map((i) => [1,2,3,4,5,6,7,8,9,10,11,i+1]),
+
+        levels: {
+            one: ['top heading 1', 'top heading 2'],
+            two: ['second heading 1', 'second heading 2', 'second heading 3'],
+            three: ['third heading 1', 'third heading 2'],
+            first: ['top row 1', 'top row 2'],
+            second: ['second row 1', 'second row 2', 'second row 3', 'second row 4']
+        }
+    };
+    testtable.meta = Table(testtable);
+    testtable.hopper = {
+        one: create_header_hopper(testtable.levels.one, testtable.meta.heading_size,
+            testtable.meta.hops.one),
+        two: create_header_hopper(testtable.levels.two, testtable.meta.heading_size,
+            testtable.meta.hops.two),
+        three: create_header_hopper(testtable.levels.three, testtable.meta.heading_size,
+            testtable.meta.hops.three),
+        first: create_header_hopper(testtable.levels.first, testtable.meta.stub_size,
+            testtable.meta.hops.first),
+        second: create_header_hopper(testtable.levels.second, testtable.meta.stub_size,
+            testtable.meta.hops.second)
+    };
+    let stub_headers = generate_matrix_headers(testtable, testtable.stub,
+        testtable.meta.stub_size);
+    let heading_headers = generate_matrix_headers(testtable, testtable.heading,
+        testtable.meta.heading_size);
+
+    it('should hide certain headers', function () {
+
+        let hiding_query = [
+            {'one': 'top heading 1'},
+            {'three': 'third heading 2'}];
+
+        let hider = generate_hidden_check(stub_headers, hiding_query);
+
+        let is_hidden1 = {
+            one:'top heading 1',
+            two: 'second heading 2',
+            three: 'third heading 1'};
+
+        expect(hider(is_hidden1)).to.equal(true);
+
     });
 
 });
