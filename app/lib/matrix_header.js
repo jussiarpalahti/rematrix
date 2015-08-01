@@ -66,3 +66,17 @@ export function generate_hidden_check(headers, hiding_queries) {
         return _.where(hidden_headers, header).length > 0;
     }
 }
+
+export function generate_hidden_index(original_headers, visible_headers) {
+    /*
+    Goes through all headers and returns their index position
+    if the header is in visible_headers
+    This means that for this index all cells on this point of the axis
+    can be used in the matrix
+     */
+    return original_headers.map((header, index) => {
+       if (visible_headers.indexOf(header) !== -1) {
+           return index;
+       }
+    });
+}
