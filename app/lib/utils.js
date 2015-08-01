@@ -4,8 +4,20 @@ var _ = lodash;
 export function Table(table) {
     var resp = getSize(table);
     resp.hops = getHops(table);
-
+    resp.shadow = create_shadow_object.bind(resp);
     return resp;
+}
+
+export function create_shadow_object (fields, obj) {
+    if (!obj) obj = this;
+    let shadow_object = {};
+    _.assign(shadow_object, obj);
+
+    _.forOwn(fields, (value, field) => {
+        shadow_object['shadow_' + field] = shadow_object[field];
+        shadow_object[field] = value;
+    });
+    return shadow_object;
 }
 
 let getSize = function(table) {
@@ -223,7 +235,7 @@ export function toggle_header(table, heading, header) {
 }
 
 export function remove_hidden_from_table(table, hidden) {
-
+    let new_table =
     _.forOwn(hidden, (hidden_headers, heading) => {
         // TODO: change this to use filter
         let args = hidden_headers;

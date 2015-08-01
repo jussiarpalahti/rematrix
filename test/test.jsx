@@ -9,7 +9,8 @@ import {
     get_cursor_position,
     toggle_header,
     remove_hidden_from_table,
-    remove_hidden_from_matrix
+    remove_hidden_from_matrix,
+    create_shadow_object
 } from '../app/lib/utils';
 
 import {
@@ -638,6 +639,34 @@ describe('header table view test', function () {
         var target = column_headers[7];
 
         expect(target.props.children).to.equal("second row 2");
+    });
+
+});
+
+describe('shadow object function', function () {
+
+    it("should correctly shadow stated fields and preserve others", function () {
+
+        let old = {
+            field:"value",
+            deep_field: [1,2,3,4],
+            subobj:{value: "preserved"}};
+        let shadow_old = create_shadow_object({deep_field: [6,7,8,9]}, old);
+        shadow_old.subobj.value = "same as old";
+        shadow_old.deep_field[1] = 77;
+        shadow_old.shadow_deep_field[3] = 44;
+
+        console.log("old", old);
+        console.log("shadow", shadow_old);
+
+        expect(shadow_old.deep_field[0]).to.equal(6);
+        expect(old.deep_field[0]).to.equal(1);
+        expect(shadow_old.deep_field[1]).to.equal(77);
+        expect(old.deep_field[1]).to.equal(2);
+        expect(shadow_old.field).to.equal(old.field);
+        expect(shadow_old.subobj.value).to.equal(old.subobj.value);
+        expect(shadow_old.shadow_deep_field[3]).to.equal(old.deep_field[3]);
+
     });
 
 });
