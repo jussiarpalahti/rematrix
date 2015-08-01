@@ -754,11 +754,86 @@ describe('verify hidden headers are indexed properly', function () {
     it('should create indexes for hidden headers', function () {
 
         let hidden_index = generate_hidden_index(all_headers, visible_headers);
-
-        expect(hidden_index.length).to.equal(3);
+        expect(hidden_index.length).to.equal(9);
         expect(hidden_index.indexOf(1)).to.equal(-1);
         expect(hidden_index.indexOf(7)).to.not.equal(-1);
 
     });
 
-})
+});
+
+describe('matrix filter using headers', function () {
+
+        let testtable = {
+            heading: ['one', 'two', 'three'],
+            stub: ['first', 'second'],
+
+            matrix: _.range(8).map((i) => [1,2,3,4,5,6,7,8,9,10,11,i+1]),
+
+            levels: {
+                one: ['top heading 1', 'top heading 2'],
+                two: ['second heading 1', 'second heading 2', 'second heading 3'],
+                three: ['third heading 1', 'third heading 2'],
+                first: ['top row 1', 'top row 2'],
+                second: ['second row 1', 'second row 2', 'second row 3', 'second row 4']
+            }
+        };
+        testtable.meta = Table(testtable);
+        testtable.hopper = {
+            one: create_header_hopper(testtable.levels.one, testtable.meta.heading_size, testtable.meta.hops.one),
+            two: create_header_hopper(testtable.levels.two, testtable.meta.heading_size, testtable.meta.hops.two),
+            three: create_header_hopper(testtable.levels.three, testtable.meta.heading_size, testtable.meta.hops.three),
+            first: create_header_hopper(testtable.levels.first, testtable.meta.stub_size, testtable.meta.hops.first),
+            second: create_header_hopper(testtable.levels.second, testtable.meta.stub_size, testtable.meta.hops.second)
+        };
+
+        let visible_table = {
+            heading: ['one', 'two', 'three'],
+            stub: ['first', 'second'],
+
+            matrix: _.range(8).map((i) => [1,2,3,4,5,6,7,8,9,10,11,i+1]),
+
+            levels: {
+                one: ['top heading 1'],
+                two: ['second heading 1', 'second heading 2', 'second heading 3'],
+                three: ['third heading 2'],
+                first: ['top row 1', 'top row 2'],
+                second: ['second row 1', 'second row 2', 'second row 3', 'second row 4']
+            }
+        };
+        visible_table.meta = Table(visible_table);
+        visible_table.hopper = {
+            one: create_header_hopper(visible_table.levels.one,
+                visible_table.meta.heading_size, visible_table.meta.hops.one),
+            two: create_header_hopper(visible_table.levels.two,
+                visible_table.meta.heading_size, visible_table.meta.hops.two),
+            three: create_header_hopper(visible_table.levels.three,
+                visible_table.meta.heading_size, visible_table.meta.hops.three),
+            first: create_header_hopper(visible_table.levels.first,
+                visible_table.meta.stub_size, visible_table.meta.hops.first),
+            second: create_header_hopper(visible_table.levels.second,
+                visible_table.meta.stub_size, visible_table.meta.hops.second)
+        };
+
+        let all_headers = generate_matrix_headers(testtable, testtable.heading,
+            testtable.meta.heading_size);
+
+        let visible_headers = generate_matrix_headers(visible_table, visible_table.heading,
+            visible_table.meta.heading_size);
+
+        let hidden_index = generate_hidden_index(all_headers, visible_headers);
+
+        it('matrix should be smaller', function () {
+
+            let unmatrix = remove_hidden_from_matrix(testtable.matrix,
+                {column: hidden_index, row: []});
+
+            expect(unmatrix.length).to.equal(8);
+
+            expect(unmatrix[0].length).to.equal(3);
+
+            expect(unmatrix[0][0]).to.equal(2);
+
+        });
+    }
+);
