@@ -74,9 +74,9 @@ export function generate_hidden_index(original_headers, visible_headers) {
     This means that for this index all cells on this point of the axis
     can be used in the matrix
      */
-    return original_headers.map((header, index) => {
-       if (visible_headers.indexOf(header) !== -1) {
+    return _.filter(original_headers.map((header, index) => {
+        if (!_.findWhere(visible_headers, _.omit(header, 'hop'))) {
            return index;
        }
-    });
+    }), (item) => item !== undefined);
 }
