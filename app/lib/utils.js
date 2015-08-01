@@ -242,12 +242,9 @@ export function toggle_header(table, heading, header) {
 }
 
 export function remove_hidden_from_table(table, hidden) {
-    let new_table =
     _.forOwn(hidden, (hidden_headers, heading) => {
-        // TODO: change this to use filter
-        let args = hidden_headers;
-        args.unshift(table.levels[heading]);
-        table.levels[heading] = _.without.apply(this, args);
+        table.levels[heading] = _.filter(table.levels[heading],
+            (header, index) => hidden_headers.indexOf(header) === -1);
     });
 }
 
