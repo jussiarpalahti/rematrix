@@ -838,12 +838,9 @@ describe('matrix filter using headers', function () {
                 testtable.matrix,
                 hidden_index
             );
-            console.log(hidden_index)
-            console.log(unmatrix)
-            expect(unmatrix.length).to.equal(8);
 
+            expect(unmatrix.length).to.equal(4);
             expect(unmatrix[0].length).to.equal(3);
-
             expect(unmatrix[0][0]).to.equal(2);
 
         });
