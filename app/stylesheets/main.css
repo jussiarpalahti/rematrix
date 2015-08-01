@@ -24,3 +24,12 @@ for Pure menus
 }
 
 .header_menu {display: inline; float: left;}
+
+.pure-table-bordered th {
+    text-align: center;
+    border: 1px solid #cbcbcb;
+}
+
+.pure-table-bordered tbody th {
+    text-align: left;
+}
