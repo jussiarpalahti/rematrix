@@ -77,10 +77,6 @@ export class HeaderTable extends React.Component {
         let column_headings = table.heading_headers.map((header, index) => {
             return table.heading.map((heading) => {
 
-                if (table.heading_hider(header)) {
-                        return;
-                }
-
                 if (header.hop[heading]) {
                     return <th key={index} colSpan={header.hop[heading]}>
                         {header[heading]}</th>;
@@ -122,14 +118,76 @@ export class HeaderTable extends React.Component {
                 [
                     row_headings,
                     row.map((cell, cindex) => {
-                        let column_header = table.heading_headers[cindex];
-                        if (table.heading_hider(column_header)) {
-                            return null;
-                        } else {
-                            return <td key={index + '_' + cindex}>
-                                {cell}
-                            </td>
-                        }
+                        return <td key={index + '_' + cindex}>
+                            {cell}
+                        </td>
+
+                    })
+                ]
+            }</tr>
+        });
+
+        return <table className="pure-table pure-table-bordered">
+            <thead>
+            {columns}
+            </thead>
+            <tbody>
+            {data}
+            </tbody>
+        </table>;
+
+    }
+}
+
+export class HiddenTable extends React.Component {
+
+    render() {
+        let table = this.props.table;
+
+        let column_headings = table.heading_headers.map((header, index) => {
+            return table.heading.map((heading) => {
+
+                if (header.hop[heading]) {
+                    return <th key={index} colSpan={header.hop[heading]}>
+                        {header[heading]}</th>;
+                }
+            });
+        });
+
+        // NOTE: column_headings is at this point a list of lists of th elements which must be divided into rows
+        let columns = _.zip.apply({}, column_headings).map((row, index) => {
+            if (index==0) {
+                return <tr key={index}>
+                    <th rowSpan={table.heading.length} colSpan={table.stub.length} />
+                    {row}
+                </tr>
+            } else {
+                return <tr key={index}>{row}</tr>
+            }
+        });
+
+        let data = table.matrix.map((row, index) => {
+
+            let row_heading = table.row_headers[index];
+
+            let row_headings = table.stub.map((heading, thindex) => {
+                let header = row_heading[heading];
+                if (row_heading.hop[heading]) {
+                    let elem = <th key={index + '_' + thindex}
+                                   rowSpan={row_heading.hop[heading]}>
+                        {header}
+                    </th>;
+                    return elem;
+                }
+            });
+
+            return <tr className={(index % 2) != 0 ? "pure-table-odd" : ""} key={index}>{
+                [
+                    row_headings,
+                    row.map((cell, cindex) => {
+                        return <td key={index + '_' + cindex}>
+                            {cell}
+                        </td>
                     })
                 ]
             }</tr>

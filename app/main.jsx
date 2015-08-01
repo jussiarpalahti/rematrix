@@ -3,14 +3,27 @@ import './stylesheets/pure/pure-min.css';
 import './stylesheets/main.css';
 
 import React from 'react';
-import {MatrixTable, HeaderTable} from './components/matrix_table.jsx';
+import {
+    MatrixTable,
+    HeaderTable,
+    HiddenTable
+} from './components/matrix_table.jsx';
 import App from './components/App.jsx'
 
 import lodash from 'lodash';
 var _ = lodash;
 
-import {Table, generate_headers, create_header_hopper} from '../app/lib/utils';
-import {generate_matrix_headers, generate_hidden_check} from '../app/lib/matrix_header';
+import {
+    Table,
+    generate_headers,
+    create_header_hopper,
+    remove_hidden_from_matrix
+} from '../app/lib/utils';
+import {
+    generate_matrix_headers,
+    generate_hidden_check,
+    generate_hidden_index
+} from '../app/lib/matrix_header';
 
 main();
 
@@ -81,9 +94,17 @@ function main() {
     calc_table.row_headers = generate_matrix_headers(calc_table, calc_table.stub, calc_table.meta.stub_size);
     calc_table.heading_headers = generate_matrix_headers(calc_table, calc_table.heading, calc_table.meta.heading_size);
 
-    let hiding_query = [{'one': 'top heading 1'}];
-
-    calc_table.heading_hider = generate_hidden_check(calc_table.heading_headers, hiding_query);
+    let hidden_table = hide_table();
+    let hidden_index = {
+        heading: generate_hidden_index(calc_table.heading_headers,
+        hidden_table.heading_headers),
+        stub: generate_hidden_index(calc_table.row_headers,
+            hidden_table.row_headers)
+    };
+    hidden_table.matrix = remove_hidden_from_matrix(
+        testtable.matrix,
+        hidden_index
+    );
 
     var app = document.createElement('div');
     document.body.appendChild(app);
@@ -96,7 +117,42 @@ function main() {
         <App menu={calc_table.levels.first} name="Vuosi" />
         <MatrixTable table={calc_table} />
         <HeaderTable table={calc_table} />
+        <HiddenTable table={hidden_table} />
     </div>, app);
+}
+
+function hide_table() {
+
+    let calc_table = {
+        heading: ['one', 'two', 'three'],
+        stub: ['first', 'second'],
+
+        matrix: _.range(8).map((i) => [1,2,3,4,5,6,7,8,9,10,11,i+1]),
+
+        levels: {
+            one: ['top heading 1'],
+            two: ['second heading 1', 'second heading 2', 'second heading 3'],
+            three: ['third heading 1',],
+            first: ['top row 2'],
+            second: ['second row 1', 'second row 3', 'second row 4']
+        }
+    };
+
+    calc_table.meta = Table(calc_table);
+
+    calc_table.hopper = {
+        one: create_header_hopper(calc_table.levels.one, calc_table.meta.heading_size, calc_table.meta.hops.one),
+        two: create_header_hopper(calc_table.levels.two, calc_table.meta.heading_size, calc_table.meta.hops.two),
+        three: create_header_hopper(calc_table.levels.three, calc_table.meta.heading_size, calc_table.meta.hops.three),
+        first: create_header_hopper(calc_table.levels.first, calc_table.meta.stub_size, calc_table.meta.hops.first),
+        second: create_header_hopper(calc_table.levels.second, calc_table.meta.stub_size, calc_table.meta.hops.second)
+    };
+
+
+    calc_table.row_headers = generate_matrix_headers(calc_table, calc_table.stub, calc_table.meta.stub_size);
+    calc_table.heading_headers = generate_matrix_headers(calc_table, calc_table.heading, calc_table.meta.heading_size);
+
+    return calc_table;
 }
 
 function real_table() {
