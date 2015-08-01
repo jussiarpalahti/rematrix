@@ -656,9 +656,6 @@ describe('shadow object function', function () {
         shadow_old.deep_field[1] = 77;
         shadow_old.shadow_deep_field[3] = 44;
 
-        console.log("old", old);
-        console.log("shadow", shadow_old);
-
         expect(shadow_old.deep_field[0]).to.equal(6);
         expect(old.deep_field[0]).to.equal(1);
         expect(shadow_old.deep_field[1]).to.equal(77);
@@ -666,7 +663,37 @@ describe('shadow object function', function () {
         expect(shadow_old.field).to.equal(old.field);
         expect(shadow_old.subobj.value).to.equal(old.subobj.value);
         expect(shadow_old.shadow_deep_field[3]).to.equal(old.deep_field[3]);
-
     });
+});
 
+describe('create shadow table', function () {
+
+    let testtable = {
+        heading: ['one', 'two', 'three'],
+        stub: ['first', 'second'],
+
+        matrix: _.range(8).map((i) => [1,2,3,4,5,6,7,8,9,10,11,i+1]),
+
+        levels: {
+            one: ['top heading 1', 'top heading 2'],
+            two: ['second heading 1', 'second heading 2', 'second heading 3'],
+            three: ['third heading 1', 'third heading 2'],
+            first: ['top row 1', 'top row 2'],
+            second: ['second row 1', 'second row 2', 'second row 3', 'second row 4']
+        }
+    };
+
+    testtable.meta = Table(testtable);
+
+    it('should allow shadowing heading and stub', function () {
+        let shadow_fields = {
+            three: ['third heading 1'],
+            first: ['top row 2'],
+        };
+
+        let shadow_levels = testtable.shadow(shadow_fields, testtable.levels);
+        let shadow_table = testtable.shadow({levels: shadow_levels});
+        console.log(shadow_levels);
+        console.log(shadow_table);
+    });
 });

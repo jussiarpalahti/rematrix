@@ -4,11 +4,18 @@ var _ = lodash;
 export function Table(table) {
     var resp = getSize(table);
     resp.hops = getHops(table);
-    resp.shadow = create_shadow_object.bind(resp);
+    table.shadow = create_shadow_object.bind(table);
     return resp;
 }
 
 export function create_shadow_object (fields, obj) {
+    /*
+     create_shadow_object essentially aliases given fields with
+     a prefix and sets aliased fields to new values
+     without affecting original object.
+     If object is not given, assumes that this is the context
+     that should be copied.
+     */
     if (!obj) obj = this;
     let shadow_object = {};
     _.assign(shadow_object, obj);
