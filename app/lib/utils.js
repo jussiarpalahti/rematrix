@@ -254,11 +254,11 @@ export function remove_hidden_from_matrix(matrix, hidden) {
      */
 
     let is_hidden_column = (value, index) => {
-        return hidden.column.indexOf(index) === -1;
+        return hidden.heading.indexOf(index) === -1;
     };
 
     let is_hidden_row = (row, index) => {
-        if (hidden.row.indexOf(index) === -1) return _.filter(row, is_hidden_column);
+        if (hidden.stub.indexOf(index) === -1) return _.filter(row, is_hidden_column);
     };
 
     return _.filter(_.map(matrix, is_hidden_row));

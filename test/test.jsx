@@ -425,8 +425,8 @@ describe('remove data from matrix', function () {
         let matrix = _.range(8).map((i) => [1,2,3,4,5,6,7,8,9,10,11,i+1]);
 
         let hidden = {
-            row: [2, 6],
-            column: [1, 7, 9]
+            stub: [2, 6],
+            heading: [1, 7, 9]
         };
 
         it('should have smaller rows and columns', function () {
@@ -798,7 +798,7 @@ describe('matrix filter using headers', function () {
                 two: ['second heading 1', 'second heading 2', 'second heading 3'],
                 three: ['third heading 2'],
                 first: ['top row 1', 'top row 2'],
-                second: ['second row 1', 'second row 2', 'second row 3', 'second row 4']
+                second: ['second row 1', 'second row 3']
             }
         };
         visible_table.meta = Table(visible_table);
@@ -815,19 +815,31 @@ describe('matrix filter using headers', function () {
                 visible_table.meta.stub_size, visible_table.meta.hops.second)
         };
 
-        let all_headers = generate_matrix_headers(testtable, testtable.heading,
+        let all_headings = generate_matrix_headers(testtable, testtable.heading,
             testtable.meta.heading_size);
 
-        let visible_headers = generate_matrix_headers(visible_table, visible_table.heading,
+        let visible_headings = generate_matrix_headers(visible_table, visible_table.heading,
             visible_table.meta.heading_size);
 
-        let hidden_index = generate_hidden_index(all_headers, visible_headers);
+        let all_stubs = generate_matrix_headers(testtable, testtable.stub,
+            testtable.meta.stub_size);
+
+        let visible_stubs = generate_matrix_headers(visible_table, visible_table.stub,
+            visible_table.meta.stub_size);
+
+        let hidden_index = {
+            heading: generate_hidden_index(all_headings, visible_headings),
+            stub: generate_hidden_index(all_stubs, visible_stubs)
+        };
 
         it('matrix should be smaller', function () {
 
-            let unmatrix = remove_hidden_from_matrix(testtable.matrix,
-                {column: hidden_index, row: []});
-
+            let unmatrix = remove_hidden_from_matrix(
+                testtable.matrix,
+                hidden_index
+            );
+            console.log(hidden_index)
+            console.log(unmatrix)
             expect(unmatrix.length).to.equal(8);
 
             expect(unmatrix[0].length).to.equal(3);
