@@ -109,7 +109,10 @@ function main() {
     var app = document.createElement('div');
     document.body.appendChild(app);
 
-    let visibility = (heading, headers) => console.log("change", heading, headers);
+    let visible_table = _.clone(calc_table);
+    let visibility = (heading, headers) => handle_visibility(
+        visible_table, calc_table,
+        heading, headers);
 
     React.render(<div>
         <h1>React Table Viewer</h1>
@@ -119,9 +122,33 @@ function main() {
         {calc_table.heading.map((heading, index) => {
            return <App change_visibility={visibility} start={index} key={index} menu={calc_table.levels[heading]} name={heading} />})}
 
-        <HeaderTable table={calc_table} />
+        <HiddenTable table={visible_table} />
 
     </div>, app);
+}
+
+function handle_visibility(table, original_table, heading, headers) {
+    let new_headers = [];
+    _.forOwn(headers, (hidden, header) => {
+        if (!hidden) new_headers.push(header);
+    });
+    table.levels[heading] = new_headers;
+    
+    table.meta = Table(table);
+    table.row_headers = generate_matrix_headers(table, table.stub, table.meta.stub_size);
+    table.heading_headers = generate_matrix_headers(table, table.heading, table.meta.heading_size);
+    let hidden_index = {
+        heading: generate_hidden_index(original_table.heading_headers,
+            table.heading_headers),
+        stub: generate_hidden_index(original_table.row_headers,
+            table.row_headers)
+    };
+    table.matrix = remove_hidden_from_matrix(
+        original_table.matrix,
+        hidden_index
+    );
+    console.log("updated", table);
+    return;
 }
 
 function hide_table() {

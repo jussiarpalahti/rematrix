@@ -7,7 +7,7 @@ let App = React.createClass({
     getInitialState : function () {
         let hidden_items = {};
         _.map(this.props.menu, (header, index) => {
-            hidden_items[header] = true;
+            hidden_items[header] = false;
         });
         return {
             items : this.props.menu,
@@ -24,6 +24,7 @@ let App = React.createClass({
         }
         this.setState({hidden_items: newly_hidden}, () => {
             this.props.change_visibility(this.props.name, this.state.hidden_items);
+            this.forceUpdate();
         });
     },
 
