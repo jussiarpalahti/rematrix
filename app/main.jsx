@@ -109,13 +109,15 @@ function main() {
     var app = document.createElement('div');
     document.body.appendChild(app);
 
+    let visibility = (heading, headers) => console.log("change", heading, headers);
+
     React.render(<div>
         <h1>React Table Viewer</h1>
 
         {calc_table.stub.map((heading, index) => {
-            return <App start={index} key={index} menu={calc_table.levels[heading]} name={heading} />})}
+            return <App change_visibility={visibility} start={index} key={index} menu={calc_table.levels[heading]} name={heading} />})}
         {calc_table.heading.map((heading, index) => {
-           return <App start={index} key={index} menu={calc_table.levels[heading]} name={heading} />})}
+           return <App change_visibility={visibility} start={index} key={index} menu={calc_table.levels[heading]} name={heading} />})}
 
         <HeaderTable table={calc_table} />
 
