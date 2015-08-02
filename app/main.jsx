@@ -111,10 +111,12 @@ function main() {
 
     React.render(<div>
         <h1>React Table Viewer</h1>
-        <App menu={calc_table.levels.one} name="Alue" />
-        <App menu={calc_table.levels.two} name="Ikä" />
-        <App menu={calc_table.levels.three} name="Sukupuoli" />
-        <App menu={calc_table.levels.first} name="Vuosi" />
+
+        {calc_table.stub.map((heading, index) => {
+            return <App key={index} menu={calc_table.levels[heading]} name={heading} />})}
+        {calc_table.heading.map((heading, index) => {
+           return <App key={index} menu={calc_table.levels[heading]} name={heading} />})}
+        
         <MatrixTable table={calc_table} />
         <HeaderTable table={calc_table} />
         <HiddenTable table={hidden_table} />
