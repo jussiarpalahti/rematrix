@@ -113,13 +113,12 @@ function main() {
         <h1>React Table Viewer</h1>
 
         {calc_table.stub.map((heading, index) => {
-            return <App key={index} menu={calc_table.levels[heading]} name={heading} />})}
+            return <App start={index} key={index} menu={calc_table.levels[heading]} name={heading} />})}
         {calc_table.heading.map((heading, index) => {
-           return <App key={index} menu={calc_table.levels[heading]} name={heading} />})}
-        
-        <MatrixTable table={calc_table} />
+           return <App start={index} key={index} menu={calc_table.levels[heading]} name={heading} />})}
+
         <HeaderTable table={calc_table} />
-        <HiddenTable table={hidden_table} />
+
     </div>, app);
 }
 
