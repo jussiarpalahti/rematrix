@@ -133,6 +133,7 @@ function handle_visibility(table, original_table, heading, headers) {
         if (!hidden) new_headers.push(header);
     });
     table.levels[heading] = new_headers;
+    table.meta = Table(table);
     table.hopper = {
         one: create_header_hopper(table.levels.one, table.meta.heading_size, table.meta.hops.one),
         two: create_header_hopper(table.levels.two, table.meta.heading_size, table.meta.hops.two),
@@ -140,7 +141,6 @@ function handle_visibility(table, original_table, heading, headers) {
         first: create_header_hopper(table.levels.first, table.meta.stub_size, table.meta.hops.first),
         second: create_header_hopper(table.levels.second, table.meta.stub_size, table.meta.hops.second)
     };
-    table.meta = Table(table);
     table.row_headers = generate_matrix_headers(table, table.stub, table.meta.stub_size);
     table.heading_headers = generate_matrix_headers(table, table.heading, table.meta.heading_size);
     let hidden_index = {
