@@ -1,23 +1,32 @@
+import lodash from 'lodash';
+var _ = lodash;
 
 import React from 'react';
 
-export default class App extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {count: props.start};
-    }
-    toggle = function () {
-        this.setState({count: this.state.count + 1});
-    }.bind(this);
+let App = React.createClass({
+    getInitialState : function () {
+        return {
+            items : this.props.menu,
+            hidden_items: {}
+        };
+    },
 
-    render() {
+    toggle : function (item) {
+        let newly_hidden = _.clone(this.state.hidden_items);
+        newly_hidden[item] = newly_hidden[item] ? false : true;
+        this.setState({hidden_items: newly_hidden});
+    },
+
+    render: function () {
 
       let menu_items = this.props.menu.map((item, index) => {
-          return <li onClick={this.toggle} key={index} className="pure-menu-item"><a href="#" className="pure-menu-link">{item}</a></li>
+          return <li onClick={this.toggle.bind(this, item)} key={index} className="pure-menu-item"><a href="#" className="pure-menu-link">
+            <span>{this.state.hidden_items[item] ? "\u2718" : "\u2713"} </span>{item}
+          </a></li>
+
       });
 
       return <div className="header_menu">
-          <h2>{this.state.count}</h2>
           <div className="pure-menu pure-menu-scrollable custom-restricted">
         <a href="#" className="pure-menu-link pure-menu-heading">{this.props.name}</a>
 
@@ -26,4 +35,6 @@ export default class App extends React.Component {
         </ul>
       </div></div>;
     }
-}
+});
+
+export default App;
