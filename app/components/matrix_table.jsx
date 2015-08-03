@@ -193,7 +193,7 @@ export class HiddenTable extends React.Component {
             }</tr>
         });
 
-        return <div><button onClick={this.forceUpdate.bind(this)}>Päivitä</button>
+        return <div>
             <table className="pure-table pure-table-bordered">
             <thead>
             {columns}

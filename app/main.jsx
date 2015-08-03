@@ -29,6 +29,8 @@ main();
 
 function main() {
 
+    let rapp;
+
     let testtable = {
         heading: ['one', 'two', 'three'],
         stub: ['first', 'second'],
@@ -111,10 +113,11 @@ function main() {
 
     let visible_table = _.clone(calc_table);
     let visibility = (heading, headers) => handle_visibility(
+        rapp,
         visible_table, calc_table,
         heading, headers);
 
-    React.render(<div>
+    rapp = React.render(<div>
         <h1>React Table Viewer</h1>
 
         {calc_table.stub.map((heading, index) => {
@@ -127,7 +130,7 @@ function main() {
     </div>, app);
 }
 
-function handle_visibility(table, original_table, heading, headers) {
+function handle_visibility(rapp, table, original_table, heading, headers) {
     let new_headers = [];
     _.forOwn(headers, (hidden, header) => {
         if (!hidden) new_headers.push(header);
@@ -153,8 +156,7 @@ function handle_visibility(table, original_table, heading, headers) {
         original_table.matrix,
         hidden_index
     );
-    console.log("updated", table);
-    return;
+    rapp.forceUpdate();
 }
 
 function hide_table() {
