@@ -111,21 +111,22 @@ function main() {
     var app = document.createElement('div');
     document.body.appendChild(app);
 
-    let visible_table = _.clone(calc_table);
+    let rtable = real_table();
+    let visible_table = _.clone(rtable);
     let visibility = (heading, headers) => handle_visibility(
         rapp,
-        visible_table, calc_table,
+        visible_table, rtable,
         heading, headers);
 
     rapp = React.render(<div>
         <h1>React Table Viewer</h1>
 
         <div className="header_menu"><div>Rows</div>
-        {calc_table.stub.map((heading, index) => {
-            return <App change_visibility={visibility} start={index} key={index} menu={calc_table.levels[heading]} name={heading} />})}</div>
+        {rtable.stub.map((heading, index) => {
+            return <App change_visibility={visibility} start={index} key={index} menu={rtable.levels[heading]} name={heading} />})}</div>
         <div className="header_menu"><div>Columns</div>
-        {calc_table.heading.map((heading, index) => {
-           return <App change_visibility={visibility} start={index} key={index} menu={calc_table.levels[heading]} name={heading} />})}</div>
+        {rtable.heading.map((heading, index) => {
+           return <App change_visibility={visibility} start={index} key={index} menu={rtable.levels[heading]} name={heading} />})}</div>
 
         <HiddenTable table={visible_table} />
 
@@ -139,13 +140,17 @@ function handle_visibility(rapp, table, original_table, heading, headers) {
     });
     table.levels[heading] = new_headers;
     table.meta = Table(table);
-    table.hopper = {
-        one: create_header_hopper(table.levels.one, table.meta.heading_size, table.meta.hops.one),
-        two: create_header_hopper(table.levels.two, table.meta.heading_size, table.meta.hops.two),
-        three: create_header_hopper(table.levels.three, table.meta.heading_size, table.meta.hops.three),
-        first: create_header_hopper(table.levels.first, table.meta.stub_size, table.meta.hops.first),
-        second: create_header_hopper(table.levels.second, table.meta.stub_size, table.meta.hops.second)
-    };
+
+    _.map(table.stub, (heading, index) => {
+        table.hopper[heading] = create_header_hopper(table.levels[heading],
+            table.meta.stub_size, table.meta.hops[heading]);
+    });
+
+    _.map(table.heading, (heading, index) => {
+        table.hopper[heading] = create_header_hopper(table.levels[heading],
+            table.meta.heading_size, table.meta.hops[heading]);
+    });
+
     table.row_headers = generate_matrix_headers(table, table.stub, table.meta.stub_size);
     table.heading_headers = generate_matrix_headers(table, table.heading, table.meta.heading_size);
     let hidden_index = {
@@ -520,5 +525,7 @@ function real_table() {
         Sukupuoli: create_header_hopper(table.levels.Sukupuoli, table.meta.heading_size, table.meta.hops.Sukupuoli),
         'Ikä': create_header_hopper(table.levels['Ikä'], table.meta.heading_size, table.meta.hops['Ikä'])
     };
+    table.row_headers = generate_matrix_headers(table, table.stub, table.meta.stub_size);
+    table.heading_headers = generate_matrix_headers(table, table.heading, table.meta.heading_size);
     return table;
 }

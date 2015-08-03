@@ -135,7 +135,6 @@ export function create_header_hopper(headers, size, hop) {
     effectively restarting it.
 
      */
-
     var index = 0;
     var loops = size / (hop * headers.length);
     var loop_index = 0;
