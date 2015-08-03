@@ -120,10 +120,12 @@ function main() {
     rapp = React.render(<div>
         <h1>React Table Viewer</h1>
 
+        <div className="header_menu"><div>Rows</div>
         {calc_table.stub.map((heading, index) => {
-            return <App change_visibility={visibility} start={index} key={index} menu={calc_table.levels[heading]} name={heading} />})}
+            return <App change_visibility={visibility} start={index} key={index} menu={calc_table.levels[heading]} name={heading} />})}</div>
+        <div className="header_menu"><div>Columns</div>
         {calc_table.heading.map((heading, index) => {
-           return <App change_visibility={visibility} start={index} key={index} menu={calc_table.levels[heading]} name={heading} />})}
+           return <App change_visibility={visibility} start={index} key={index} menu={calc_table.levels[heading]} name={heading} />})}</div>
 
         <HiddenTable table={visible_table} />
 

@@ -17,13 +17,14 @@ for Pure menus
 */
 
 .custom-restricted {
-    height: 160px;
-    width: 150px;
+    height: 10em;
+    width: 14em;
     border: 1px solid gray;
     border-radius: 4px;
 }
 
-.header_menu {display: inline; float: left;}
+.header_menu {display: inline; float: left;
+    margin-right: 0.7em;}
 
 .pure-table-bordered th {
     text-align: center;
