@@ -1,4 +1,5 @@
 
+
 import d3 from 'd3';
 import queue from 'queue-async';
 
@@ -23,6 +24,11 @@ export function create_dispatch (event_handlers) {
             else dispatch.on(ev_type, handler)
         });
     });
-
     return dispatch;
+}
+
+export var dispatchers = {};
+
+export function register_dispatch(name, event_handlers) {
+    dispatchers[name] = create_dispatch(event_handlers);
 }

@@ -865,17 +865,13 @@ describe('test dispatcher', function () {
     };
 
     let dispatch = create_dispatch(test_handlers);
-    console.log("type1 dispatchers", dispatch.on("type1"))
-    console.log("type2 dispatchers", dispatch.on("type2"))
 
     dispatch.type1(1);
     dispatch.type2(2);
 
     it('should trigger both types and all their handlers', function () {
-
         expect(test_val).to.equal(1);
         expect(test_val_2).to.equal(2);
         expect(test_val_3).to.equal(1);
-
     });
 });
