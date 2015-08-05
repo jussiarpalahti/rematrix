@@ -26,7 +26,7 @@ import {
     generate_hidden_index
 } from '../app/lib/matrix_header';
 
-import {build} from '../app/lib/table_utils';
+import {build, handle_visibility} from '../app/lib/table_utils';
 
 let Main = React.createClass({
 
@@ -42,9 +42,12 @@ let Main = React.createClass({
 
     render: function () {
 
-        let visibility = (heading, headers) => handle_visibility(
-            visible_table, rtable,
-            heading, headers);
+        let visibility = (heading, headers) => {
+            handle_visibility(
+                this.state.visible_table, this.state.rtable,
+                heading, headers);
+            this.forceUpdate();
+        };
 
         return <div>
             <div className="header_menu">

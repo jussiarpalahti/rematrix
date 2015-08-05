@@ -98,7 +98,8 @@ export function build() {
 
     return [rtable, visible_table];
 }
-function handle_visibility(table, original_table, heading, headers) {
+
+export function handle_visibility(table, original_table, heading, headers) {
     let new_headers = [];
     _.forOwn(headers, (hidden, header) => {
         if (!hidden) new_headers.push(header);
@@ -128,7 +129,6 @@ function handle_visibility(table, original_table, heading, headers) {
         original_table.matrix,
         hidden_index
     );
-    // rapp.forceUpdate();
 }
 
 function hide_table() {
