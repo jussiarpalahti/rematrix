@@ -21,6 +21,8 @@ import {
 
 import ManualTable from '../app/components/manual_table';
 import {MatrixTable, HeaderTable} from '../app/components/matrix_table';
+import {create_dispatch} from '../app/lib/converser'
+
 import lodash from 'lodash';
 var _ = lodash;
 
@@ -846,3 +848,34 @@ describe('matrix filter using headers', function () {
         });
     }
 );
+
+describe('test dispatcher', function () {
+
+    let test_val;
+    let test_val_2;
+    let test_val_3;
+
+    let test_handlers = {
+        "type1" : [
+            (arg) => {
+                test_val = arg
+            },
+            (arg) => test_val_3 = arg],
+        "type2" : [(arg) => test_val_2 = arg]
+    };
+
+    let dispatch = create_dispatch(test_handlers);
+    console.log("type1 dispatchers", dispatch.on("type1"))
+    console.log("type2 dispatchers", dispatch.on("type2"))
+
+    dispatch.type1(1);
+    dispatch.type2(2);
+
+    it('should trigger both types and all their handlers', function () {
+
+        expect(test_val).to.equal(1);
+        expect(test_val_2).to.equal(2);
+        expect(test_val_3).to.equal(1);
+
+    });
+});
