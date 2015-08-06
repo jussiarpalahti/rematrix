@@ -57,8 +57,8 @@ export function build() {
         },
     };
 
-    let rtable = real_table();
-    let visible_table = _.clone(rtable);
+    let rtable = get_table('real');
+    let visible_table = get_table('real');
 
     return [rtable, visible_table];
 }
@@ -445,6 +445,21 @@ function real_table() {
                 "1980"]
         }
     };
-    let table = FullTable(basetable);
-    return table;
+    return basetable;
 }
+
+function get_table(tableid) {
+    /*
+    Function goes to find a table for a given Id
+    and returns a FullTable from it
+     */
+    let basetable = TABLES[tableid];
+    return FullTable(basetable);
+}
+
+/*
+Placeholder "database" for table meta
+ */
+let TABLES = {
+    real: real_table()
+};
