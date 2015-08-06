@@ -34,8 +34,8 @@ import {TABLES} from './lib/table_utils';
 let Main = React.createClass({
     getInitialState : function () {
         return {
-            rtable: null,
-            visible_table: null
+            rtable: get_table("test"),
+            visible_table: get_table("test")
         };
     },
     componentDidMount: function () {
@@ -74,11 +74,9 @@ let Main = React.createClass({
         del_dispatcher('app');
     },
     render: function () {
-        let header = <div className="top_header">
-            <TableSelect tables={TABLES} /></div>;
-        if (!this.state.visible_table && !this.state.rtable) return header;
-        else return <div>
-            {header}
+        return <div>
+            <div className="top_header">
+                <TableSelect tables={TABLES} initial_table="test" /></div>
             <div className="header_menu">
                 <div>Rows</div>
                 {this.state.rtable.stub.map((heading, index) => {
