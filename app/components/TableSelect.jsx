@@ -5,7 +5,17 @@ import React from 'react';
 import {get_dispatcher} from '../lib/converser';
 
 let TableSelect = React.createClass({
-    chooser: (tableid) => {},
+    getInitialState : function () {
+        return {
+            chosen_table : this.props.initial_table,
+        };
+    },
+    chooser: function (tableid) {
+        this.setState({chosen_table: tableid}, () => {
+            console.log(tableid)
+            //get_dispatcher('app').toggle(this.props.name, this.state.hidden_items);
+        });
+    },
     render: function () {
         let menu_items = [];
         _.forOwn(this.props.tables, (table, tableid) => {
@@ -14,7 +24,7 @@ let TableSelect = React.createClass({
                      className="pure-menu-item">
                     <a href="#" className="pure-menu-link">
                     <span>{
-                        this.props.chosen_table === tableid ? '\u2713' : ''} </span>{tableid}
+                        this.state.chosen_table === tableid ? '\u2713' : ' '} </span>{tableid}
                 </a>
             </li>);
       });

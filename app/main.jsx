@@ -65,7 +65,7 @@ let Main = React.createClass({
     render: function () {
         return <div>
             <div className="top_header">
-                <TableSelect tables={TABLES} chosen_table={'real'} /></div>
+                <TableSelect tables={TABLES} initial_table={'real'} /></div>
             <div className="header_menu">
                 <div>Rows</div>
                 {this.state.rtable.stub.map((heading, index) => {

@@ -42,21 +42,6 @@ export function FullTable(basetable) {
 }
 
 export function build() {
-    let old_basetable = {
-        heading: ['one', 'two', 'three'],
-        stub: ['first', 'second'],
-
-        matrix: _.range(8).map((i) => [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, i + 1]),
-
-        levels: {
-            one: ['top heading 1', 'top heading 2'],
-            two: ['second heading 1', 'second heading 2', 'second heading 3'],
-            three: ['third heading 1', 'third heading 2'],
-            first: ['top row 1', 'top row 2'],
-            second: ['second row 1', 'second row 2', 'second row 3', 'second row 4']
-        },
-    };
-
     let rtable = get_table('real');
     let visible_table = get_table('real');
 
@@ -461,5 +446,17 @@ function get_table(tableid) {
 Placeholder "database" for table meta and matrix
  */
 export var TABLES = {
-    real: real_table()
+    real: real_table(),
+    test: {
+        heading: ['one', 'two', 'three'],
+        stub: ['first', 'second'],
+        matrix: _.range(8).map((i) => [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, i + 1]),
+        levels: {
+            one: ['top heading 1', 'top heading 2'],
+            two: ['second heading 1', 'second heading 2', 'second heading 3'],
+            three: ['third heading 1', 'third heading 2'],
+            first: ['top row 1', 'top row 2'],
+            second: ['second row 1', 'second row 2', 'second row 3', 'second row 4']
+        }
+    }
 };
