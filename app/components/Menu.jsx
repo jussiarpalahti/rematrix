@@ -31,7 +31,8 @@ let Menu = React.createClass({
         });
     },
 
-    toggle : function (item) {
+    toggle : function (item, e) {
+        e.preventDefault();
         let newly_hidden = _.clone(this.state.hidden_items);
         if (newly_hidden[item]) {
             newly_hidden[item] = false;

@@ -37,3 +37,9 @@ for Pure menus
 .pure-table-bordered tbody th {
     text-align: left;
 }
+
+#table {
+    padding: 1em 0;
+    clear: both;
+    max-width: 90%;
+}

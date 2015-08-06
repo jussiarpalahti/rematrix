@@ -10,7 +10,8 @@ let TableSelect = React.createClass({
             chosen_table : this.props.initial_table,
         };
     },
-    chooser: function (tableid) {
+    chooser: function (tableid, e) {
+        e.preventDefault();
         this.setState({chosen_table: tableid}, () => {
             get_dispatcher('app').data_change(tableid);
         });

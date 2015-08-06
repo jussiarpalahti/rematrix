@@ -195,7 +195,7 @@ export class HiddenTable extends React.Component {
             }</tr>
         });
 
-        return <div>
+        return <div id="table">
             <table className="pure-table pure-table-bordered">
             <thead>
             {columns}
