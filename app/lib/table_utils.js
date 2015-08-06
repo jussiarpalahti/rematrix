@@ -39,7 +39,7 @@ export function FullTable(basetable) {
     table.heading_headers = generate_matrix_headers(table, table.heading,
         table.meta.heading_size);
 
-    table.matrix = fetch_matrix(table);
+    table.matrix = MATRIX[table.name];
     return table;
 }
 
@@ -116,24 +116,10 @@ function hide_table() {
     return calc_table;
 }
 
-function fetch_matrix(table) {
-    /*
-    Retrieves matrix from inner db
-    or starts its loading and returns null
-     */
-    let matrix = MATRIX[table.name];
-    if (matrix) {
-        return matrix;
-    }
-    else {
-        load_matrix(table);
-        return null;
-    }
-}
-
 let SERVER = '';
 function load_matrix(table) {
     d3.json(table.url, (err, data) => {
+        SENTINEL[table.name] = false;
         if (err) console.log("problem fetching data", err);
         else {
             console.log("fetched some data", table.url)
@@ -143,13 +129,25 @@ function load_matrix(table) {
     });
 }
 
+/*
+Sentinels are used to track ongoing network request
+ */
+let SENTINEL = {};
 export function get_table(tableid) {
     /*
     Function goes to find a table for a given Id
     and returns a FullTable from it
      */
     let basetable = TABLES[tableid];
-    return FullTable(basetable);
+
+    let table = FullTable(basetable);
+    if (!table.matrix) {
+        if (!SENTINEL[table.name]) {
+            SENTINEL[table.name] = true;
+            load_matrix(table);
+        }
+    }
+    return table;
 }
 
 /*
