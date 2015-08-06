@@ -19,7 +19,11 @@ let Menu = React.createClass({
     componentWillReceiveProps: function(nextProps) {
         let hidden_items = {};
         _.map(nextProps.menu, (header, index) => {
-            hidden_items[header] = false;
+            if (this.props.name === nextProps.name && this.state.hidden_items[header]) {
+                hidden_items[header] = true;
+            } else {
+                hidden_items[header] = false;
+            }
         });
         this.setState({
             items : nextProps.menu,

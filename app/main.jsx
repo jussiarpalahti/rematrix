@@ -32,34 +32,40 @@ import {register_dispatch, get_dispatcher, del_dispatcher} from './lib/converser
 import {TABLES} from './lib/table_utils';
 
 let Main = React.createClass({
-
     getInitialState : function () {
-
-        let [rtable, visible_table] = build();
-
         return {
-            rtable: rtable,
-            visible_table: visible_table
+            rtable: null,
+            visible_table: null
         };
     },
-
     componentDidMount: function () {
-
         let dispatcher = register_dispatch('app', {
             toggle : [
                 (heading, headers) => {
-                handle_visibility(
-                    this.state.visible_table, this.state.rtable,
-                    heading, headers);
+                    console.log('toggle')
+                    handle_visibility(
+                        this.state.visible_table, this.state.rtable,
+                        heading, headers);
                 this.forceUpdate();
             }],
             data_change: [
                 (tableid) => {
+                    console.log('data change')
                     this.setState({
                         rtable:  get_table(tableid),
                         visible_table: get_table(tableid)
                 });
-            }]
+            }],
+            table_loaded: [
+                (tableid) => {
+                    /*
+                    Data change started table loading which dispatches
+                    this event so that table change can be tried again
+                     */
+                    console.log('table loaded')
+                    this.state.dispatcher.data_change(tableid);
+                }
+            ]
         });
         this.setState({dispatcher: dispatcher});
     },
@@ -67,11 +73,12 @@ let Main = React.createClass({
     componentWillUnmount: function () {
         del_dispatcher('app');
     },
-
     render: function () {
-        return <div>
-            <div className="top_header">
-                <TableSelect tables={TABLES} initial_table={'real'} /></div>
+        let header = <div className="top_header">
+            <TableSelect tables={TABLES} /></div>;
+        if (!this.state.visible_table && !this.state.rtable) return header;
+        else return <div>
+            {header}
             <div className="header_menu">
                 <div>Rows</div>
                 {this.state.rtable.stub.map((heading, index) => {

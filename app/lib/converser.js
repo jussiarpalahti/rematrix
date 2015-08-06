@@ -31,7 +31,7 @@ let dispatchers = {};
 
 export function register_dispatch(name, event_handlers) {
     dispatchers[name] = create_dispatch(event_handlers);
-    return dispatchers;
+    return dispatchers[name];
 }
 
 export function get_dispatcher(name) {

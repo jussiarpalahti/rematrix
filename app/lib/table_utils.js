@@ -1,4 +1,4 @@
-
+import d3 from 'd3';
 import lodash from 'lodash';
 var _ = lodash;
 
@@ -14,6 +14,7 @@ import {
     generate_hidden_check,
     generate_hidden_index
 } from './matrix_header';
+import {get_dispatcher} from '../lib/converser';
 
 export function FullTable(basetable) {
     /*
@@ -115,9 +116,49 @@ function hide_table() {
     return calc_table;
 }
 
-function real_table() {
-    let basetable = {
+function fetch_matrix(table) {
+    /*
+    Retrieves matrix from inner db
+    or starts its loading and returns null
+     */
+    let matrix = MATRIX[table.name];
+    if (matrix) {
+        return matrix;
+    }
+    else {
+        load_matrix(table);
+        return null;
+    }
+}
+
+let SERVER = '';
+function load_matrix(table) {
+    d3.json(table.url, (err, data) => {
+        if (err) console.log("problem fetching data", err);
+        else {
+            console.log("fetched some data", table.url)
+            MATRIX[table.name] = data;
+            get_dispatcher('app').table_loaded(table.name);
+        }
+    });
+}
+
+export function get_table(tableid) {
+    /*
+    Function goes to find a table for a given Id
+    and returns a FullTable from it
+     */
+    let basetable = TABLES[tableid];
+    return FullTable(basetable);
+}
+
+/*
+Placeholder "database" for table meta and matrix
+ */
+export var TABLES = {
+    real: {
         name: 'real',
+        url: '/data/real.json',
         "heading": [
             "Sukupuoli",
             "Ikä"],
@@ -149,28 +190,7 @@ function real_table() {
                 "1979",
                 "1980"]
         }
-    };
-    return basetable;
-}
-
-function fetch_matrix(table) {
-    return MATRIX[table.name];
-}
-
-export function get_table(tableid) {
-    /*
-    Function goes to find a table for a given Id
-    and returns a FullTable from it
-     */
-    let basetable = TABLES[tableid];
-    return FullTable(basetable);
-}
-
-/*
-Placeholder "database" for table meta and matrix
- */
-export var TABLES = {
-    real: real_table(),
+    },
     test: {
         name: 'test',
         heading: ['one', 'two', 'three'],
@@ -190,286 +210,5 @@ Placeholder for matrix data
  */
 export var MATRIX = {
     test: _.range(8).map((i) => [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, i + 1]),
-    real: [
-    [
-        "498680",
-        "6329",
-        "5827",
-        "4921",
-        "221072",
-        "3337",
-        "2897",
-        "2511",
-        "277608",
-        "2992",
-        "2930",
-        "2410"
-    ],
-    [
-        "493847",
-        "6064",
-        "5902",
-        "5561",
-        "219024",
-        "3195",
-        "3098",
-        "2754",
-        "274823",
-        "2869",
-        "2804",
-        "2807"
-    ],
-    [
-        "487519",
-        "5816",
-        "5657",
-        "5468",
-        "216505",
-        "2955",
-        "2991",
-        "2860",
-        "271014",
-        "2861",
-        "2666",
-        "2608"
-    ],
-    [
-        "484879",
-        "5602",
-        "5561",
-        "5475",
-        "215386",
-        "2848",
-        "2840",
-        "2918",
-        "269493",
-        "2754",
-        "2721",
-        "2557"
-    ],
-    [
-        "483743",
-        "5724",
-        "5319",
-        "5307",
-        "215117",
-        "2949",
-        "2704",
-        "2707",
-        "268626",
-        "2775",
-        "2615",
-        "2600"
-    ],
-    [
-        "120632",
-        "2099",
-        "2027",
-        "1801",
-        "58136",
-        "1071",
-        "1035",
-        "972",
-        "62496",
-        "1028",
-        "992",
-        "829"
-    ],
-    [
-        "123388",
-        "2221",
-        "2136",
-        "2023",
-        "59596",
-        "1170",
-        "1096",
-        "1040",
-        "63792",
-        "1051",
-        "1040",
-        "983"
-    ],
-    [
-        "126735",
-        "2185",
-        "2307",
-        "2184",
-        "61145",
-        "1110",
-        "1213",
-        "1128",
-        "65590",
-        "1075",
-        "1094",
-        "1056"
-    ],
-    [
-        "129758",
-        "2085",
-        "2236",
-        "2312",
-        "62496",
-        "1095",
-        "1111",
-        "1182",
-        "67262",
-        "990",
-        "1125",
-        "1130"
-    ],
-    [
-        "133712",
-        "2177",
-        "2171",
-        "2287",
-        "64489",
-        "1088",
-        "1144",
-        "1145",
-        "69223",
-        "1089",
-        "1027",
-        "1142"
-    ],
-    [
-        "117520",
-        "2284",
-        "2127",
-        "1910",
-        "57558",
-        "1184",
-        "1051",
-        "963",
-        "59962",
-        "1100",
-        "1076",
-        "947"
-    ],
-    [
-        "121734",
-        "2336",
-        "2342",
-        "2161",
-        "59622",
-        "1190",
-        "1241",
-        "1078",
-        "62112",
-        "1146",
-        "1101",
-        "1083"
-    ],
-    [
-        "125516",
-        "2343",
-        "2379",
-        "2395",
-        "61473",
-        "1215",
-        "1214",
-        "1257",
-        "64043",
-        "1128",
-        "1165",
-        "1138"
-    ],
-    [
-        "127403",
-        "2192",
-        "2326",
-        "2378",
-        "62349",
-        "1168",
-        "1211",
-        "1198",
-        "65054",
-        "1024",
-        "1115",
-        "1180"
-    ],
-    [
-        "129807",
-        "2234",
-        "2229",
-        "2330",
-        "63452",
-        "1168",
-        "1180",
-        "1207",
-        "66355",
-        "1066",
-        "1049",
-        "1123"
-    ],
-    [
-        "6915",
-        "104",
-        "77",
-        "79",
-        "3312",
-        "49",
-        "45",
-        "43",
-        "3603",
-        "55",
-        "32",
-        "36"
-    ],
-    [
-        "7033",
-        "79",
-        "100",
-        "82",
-        "3389",
-        "40",
-        "53",
-        "50",
-        "3644",
-        "39",
-        "47",
-        "32"
-    ],
-    [
-        "7050",
-        "89",
-        "80",
-        "102",
-        "3386",
-        "44",
-        "43",
-        "57",
-        "3664",
-        "45",
-        "37",
-        "45"
-    ],
-    [
-        "7029",
-        "76",
-        "87",
-        "81",
-        "3397",
-        "49",
-        "45",
-        "45",
-        "3632",
-        "27",
-        "42",
-        "36"
-    ],
-    [
-        "7027",
-        "60",
-        "78",
-        "99",
-        "3401",
-        "29",
-        "48",
-        "50",
-        "3626",
-        "31",
-        "30",
-        "49"
-    ]
-]
+    real: null
 }
