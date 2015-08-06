@@ -13,7 +13,7 @@ let TableSelect = React.createClass({
     chooser: function (tableid) {
         this.setState({chosen_table: tableid}, () => {
             console.log(tableid)
-            //get_dispatcher('app').toggle(this.props.name, this.state.hidden_items);
+            get_dispatcher('app').data_change(tableid);
         });
     },
     render: function () {

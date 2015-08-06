@@ -27,7 +27,7 @@ import {
     generate_hidden_index
 } from '../app/lib/matrix_header';
 
-import {build, handle_visibility} from './lib/table_utils';
+import {build, handle_visibility, get_table} from './lib/table_utils';
 import {register_dispatch, get_dispatcher, del_dispatcher} from './lib/converser';
 import {TABLES} from './lib/table_utils';
 
@@ -52,6 +52,13 @@ let Main = React.createClass({
                     this.state.visible_table, this.state.rtable,
                     heading, headers);
                 this.forceUpdate();
+            }],
+            data_change: [
+                (tableid) => {
+                    this.setState({
+                        rtable:  get_table(tableid),
+                        visible_table: get_table(tableid)
+                });
             }]
         });
 

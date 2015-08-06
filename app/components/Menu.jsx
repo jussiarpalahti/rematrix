@@ -29,11 +29,14 @@ let Menu = React.createClass({
     },
 
     render: function () {
-        let menu_items = this.state.items.map((item, index) => {
-          return <li onClick={this.toggle.bind(this, item)} key={index} className="pure-menu-item"><a href="#" className="pure-menu-link">
-            <span>{this.state.hidden_items[item] ? "\u2717" : "\u2713"} </span>{item}
-          </a></li>
-
+        let menu_items = this.state.items.map(
+            (item, index) => {
+                return <li
+                    onClick={this.toggle.bind(this, item)} key={index}
+                    className="pure-menu-item">
+                        <a href="#" className="pure-menu-link">
+                        <span>{this.state.hidden_items[item] ? "\u2717" : "\u2713"} </span>{item}</a>
+            </li>
       });
 
       return <div className="header_menu">

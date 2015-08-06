@@ -433,7 +433,7 @@ function real_table() {
     return basetable;
 }
 
-function get_table(tableid) {
+export function get_table(tableid) {
     /*
     Function goes to find a table for a given Id
     and returns a FullTable from it
