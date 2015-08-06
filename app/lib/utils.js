@@ -8,6 +8,35 @@ export function Table(table) {
     return resp;
 }
 
+export function FullTable(basetable) {
+    /*
+    Creates a clone of basetable
+    and adds meta and header structures to the clone
+     */
+    let table = _.cloneDeep(basetable);
+    
+    table.base = basetable;
+    table.meta = getSize(table);
+    table.meta.hops = getHops(table);
+    table.shadow = create_shadow_object.bind(table);
+
+    table.hopper = {};
+    _.map(table.stub, (heading, index) => {
+        table.hopper[heading] = create_header_hopper(table.levels[heading],
+            table.meta.stub_size, table.meta.hops[heading]);
+    });
+    _.map(table.heading, (heading, index) => {
+        table.hopper[heading] = create_header_hopper(table.levels[heading],
+            table.meta.heading_size, table.meta.hops[heading]);
+    });
+
+    table.row_headers = generate_matrix_headers(table, table.stub, table.meta.stub_size);
+    table.heading_headers = generate_matrix_headers(table, table.heading,
+        table.meta.heading_size);
+
+    return table;
+}
+
 export function create_shadow_object (fields, obj) {
     /*
      create_shadow_object essentially aliases given fields with
