@@ -27,8 +27,17 @@ export function create_dispatch (event_handlers) {
     return dispatch;
 }
 
-export var dispatchers = {};
+let dispatchers = {};
 
 export function register_dispatch(name, event_handlers) {
     dispatchers[name] = create_dispatch(event_handlers);
+    return dispatchers;
+}
+
+export function get_dispatcher(name) {
+    return dispatchers[name];
+}
+
+export function del_dispatcher(name) {
+    delete dispatchers[name];
 }

@@ -2,6 +2,7 @@ import lodash from 'lodash';
 var _ = lodash;
 
 import React from 'react';
+import {get_dispatcher} from '../lib/converser';
 
 let Menu = React.createClass({
     getInitialState : function () {
@@ -23,7 +24,7 @@ let Menu = React.createClass({
             newly_hidden[item] = true;
         }
         this.setState({hidden_items: newly_hidden}, () => {
-            this.props.change_visibility(this.props.name, this.state.hidden_items);
+            get_dispatcher('app').toggle(this.props.name, this.state.hidden_items);
         });
     },
 

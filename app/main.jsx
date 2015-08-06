@@ -26,7 +26,8 @@ import {
     generate_hidden_index
 } from '../app/lib/matrix_header';
 
-import {build, handle_visibility} from '../app/lib/table_utils';
+import {build, handle_visibility} from './lib/table_utils';
+import {register_dispatch, get_dispatcher, del_dispatcher} from './lib/converser';
 
 let Main = React.createClass({
 
@@ -40,27 +41,40 @@ let Main = React.createClass({
         };
     },
 
+    componentDidMount: function () {
+
+        let dispatcher = register_dispatch('app', {
+            toggle : [
+                (heading, headers) => {
+                handle_visibility(
+                    this.state.visible_table, this.state.rtable,
+                    heading, headers);
+                this.forceUpdate();
+            }]
+        });
+
+        this.setState({dispatcher: dispatcher});
+    },
+
+    componentWillUnmount: function () {
+        del_dispatcher('app');
+    },
+
     render: function () {
 
-        let visibility = (heading, headers) => {
-            handle_visibility(
-                this.state.visible_table, this.state.rtable,
-                heading, headers);
-            this.forceUpdate();
-        };
 
         return <div>
             <div className="header_menu">
                 <div>Rows</div>
                 {this.state.rtable.stub.map((heading, index) => {
-                    return <Menu change_visibility={visibility} start={index} key={index}
+                    return <Menu start={index} key={index}
                                  menu={this.state.rtable.levels[heading]}
                                  name={heading}/>
                 })}</div>
             <div className="header_menu">
                 <div>Columns</div>
                 {this.state.rtable.heading.map((heading, index) => {
-                    return <Menu change_visibility={visibility} start={index} key={index}
+                    return <Menu start={index} key={index}
                                  menu={this.state.rtable.levels[heading]}
                                  name={heading}/>
                 })}</div>
