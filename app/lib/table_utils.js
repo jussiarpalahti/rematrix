@@ -6,7 +6,7 @@ import {
     Table,
     generate_headers,
     create_header_hopper,
-    remove_hidden_from_matrix
+    remove_hidden_from_matrix,
 } from './utils';
 
 import {
@@ -14,6 +14,32 @@ import {
     generate_hidden_check,
     generate_hidden_index
 } from './matrix_header';
+
+export function FullTable(basetable) {
+    /*
+     Creates a clone of basetable
+     and adds meta and header structures to the clone
+     */
+    let table = _.cloneDeep(basetable);
+    table.meta = Table(table);
+    table.base = basetable;
+
+    table.hopper = {};
+    _.map(table.stub, (heading, index) => {
+        table.hopper[heading] = create_header_hopper(table.levels[heading],
+            table.meta.stub_size, table.meta.hops[heading]);
+    });
+    _.map(table.heading, (heading, index) => {
+        table.hopper[heading] = create_header_hopper(table.levels[heading],
+            table.meta.heading_size, table.meta.hops[heading]);
+    });
+
+    table.row_headers = generate_matrix_headers(table, table.stub, table.meta.stub_size);
+    table.heading_headers = generate_matrix_headers(table, table.heading,
+        table.meta.heading_size);
+
+    return table;
+}
 
 export function build() {
     let testtable = {

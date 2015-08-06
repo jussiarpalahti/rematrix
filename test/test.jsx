@@ -10,7 +10,7 @@ import {
     toggle_header,
     remove_hidden_from_table,
     remove_hidden_from_matrix,
-    create_shadow_object
+    create_shadow_object,
 } from '../app/lib/utils';
 
 import {
@@ -22,6 +22,7 @@ import {
 import ManualTable from '../app/components/manual_table';
 import {MatrixTable, HeaderTable} from '../app/components/matrix_table';
 import {create_dispatch} from '../app/lib/converser'
+import {FullTable} from  '../app/lib/table_utils';
 
 import lodash from 'lodash';
 var _ = lodash;
@@ -874,4 +875,35 @@ describe('test dispatcher', function () {
         expect(test_val_2).to.equal(2);
         expect(test_val_3).to.equal(1);
     });
+});
+
+describe('FullTable creator test', function () {
+
+    let testtable = {
+        heading: ['one', 'two', 'three'],
+        stub: ['first', 'second'],
+
+        matrix: _.range(8).map((i) => [1,2,3,4,5,6,7,8,9,10,11,i+1]),
+
+        levels: {
+            one: ['top heading 1', 'top heading 2'],
+            two: ['second heading 1', 'second heading 2', 'second heading 3'],
+            three: ['third heading 1', 'third heading 2'],
+            first: ['top row 1', 'top row 2'],
+            second: ['second row 1', 'second row 2', 'second row 3', 'second row 4']
+        }
+    };
+
+    let new_table = FullTable(testtable);
+    let new_table2 = FullTable(testtable);
+
+    it('it should have indentical basetable', function () {
+       expect(new_table.base).to.equal(new_table2.base);
+    });
+
+    it('should have heading and row header lists of correct length', function () {
+        expect(new_table.row_headers.length).to.equal(8);
+        expect(new_table.heading_headers.length).to.equal(12);
+    });
+
 });
