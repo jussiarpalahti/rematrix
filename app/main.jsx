@@ -10,6 +10,7 @@ import {
 } from './components/matrix_table.jsx';
 import App from './components/App.jsx'
 import Menu from './components/Menu.jsx';
+import TableSelect from './components/TableSelect.jsx'
 
 import lodash from 'lodash';
 var _ = lodash;
@@ -28,6 +29,7 @@ import {
 
 import {build, handle_visibility} from './lib/table_utils';
 import {register_dispatch, get_dispatcher, del_dispatcher} from './lib/converser';
+import {TABLES} from './lib/table_utils';
 
 let Main = React.createClass({
 
@@ -64,6 +66,7 @@ let Main = React.createClass({
 
 
         return <div>
+            <TableSelect tables={TABLES} chosen_table={'real'} />
             <div className="header_menu">
                 <div>Rows</div>
                 {this.state.rtable.stub.map((heading, index) => {

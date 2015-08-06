@@ -458,8 +458,8 @@ function get_table(tableid) {
 }
 
 /*
-Placeholder "database" for table meta
+Placeholder "database" for table meta and matrix
  */
-let TABLES = {
+export var TABLES = {
     real: real_table()
 };
