@@ -850,7 +850,7 @@ describe('matrix filter using headers', function () {
     }
 );
 
-describe('test dispatcher', function () {
+describe('test dispatcher creator', function () {
 
     let test_val;
     let test_val_2;
@@ -904,6 +904,80 @@ describe('FullTable creator test', function () {
     it('should have heading and row header lists of correct length', function () {
         expect(new_table.row_headers.length).to.equal(8);
         expect(new_table.heading_headers.length).to.equal(12);
+    });
+
+});
+
+describe('FullTable with header table view test', function () {
+    jsdom();
+    var otable;
+    let basetable = {
+        heading: ['one', 'two', 'three'],
+        stub: ['first', 'second'],
+
+        matrix: _.range(8).map((i) => [1,2,3,4,5,6,7,8,9,10,11,i+1]),
+
+        levels: {
+            one: ['top heading 1', 'top heading 2'],
+            two: ['second heading 1', 'second heading 2', 'second heading 3'],
+            three: ['third heading 1', 'third heading 2'],
+            first: ['top row 1', 'top row 2'],
+            second: ['second row 1', 'second row 2', 'second row 3', 'second row 4']
+        }
+    };
+
+    let testtable = FullTable(basetable);
+
+    before(function() {
+        otable = TestUtils.renderIntoDocument(
+            <HeaderTable table={testtable} />
+        );
+    });
+
+    it('should have 8 tr elements in table body', function () {
+        var body = TestUtils.findRenderedDOMComponentWithTag(otable, 'tbody');
+        var tr = TestUtils.scryRenderedDOMComponentsWithTag(body, 'tr');
+        expect(tr.length).to.equal(8);
+    });
+
+    it('should have 12 td elements in first tr of the table body', function () {
+        var body = TestUtils.findRenderedDOMComponentWithTag(otable, 'tbody');
+        var tr = TestUtils.scryRenderedDOMComponentsWithTag(body, 'tr');
+        var columns = TestUtils.scryRenderedDOMComponentsWithTag(tr[0], 'td');
+        expect(columns.length).to.equal(12);
+    });
+
+    it('should have 96 td elements in the whole table', function () {
+        var elems = TestUtils.scryRenderedDOMComponentsWithTag(otable, 'td');
+        expect(elems.length).to.equal(96);
+    });
+
+    it('should have 6 th elements in the second tr of the table heading with colspan of 2', function () {
+
+        var head = TestUtils.findRenderedDOMComponentWithTag(otable, 'thead');
+        var trs = TestUtils.scryRenderedDOMComponentsWithTag(head, 'tr');
+        var column_headers = TestUtils.scryRenderedDOMComponentsWithTag(trs[1], 'th');
+
+        expect(column_headers.length).to.equal(6);
+        expect(Number(column_headers[1].props.colSpan)).to.equal(2);
+    });
+
+    it('should have correct column header text in the third heading row\'s fifth th node', function () {
+
+        var head = TestUtils.findRenderedDOMComponentWithTag(otable, 'thead');
+        var trs = TestUtils.scryRenderedDOMComponentsWithTag(head, 'tr');
+        var column_headers = TestUtils.scryRenderedDOMComponentsWithTag(trs[2], 'th');
+        var target = column_headers[4];
+        expect(target.props.children).to.equal("third heading 1");
+    });
+
+    it('should have correct row header text in the sixth row\'s second th node', function () {
+
+        var body = TestUtils.findRenderedDOMComponentWithTag(otable, 'tbody');
+        var column_headers = TestUtils.scryRenderedDOMComponentsWithTag(body, 'th');
+        var target = column_headers[7];
+
+        expect(target.props.children).to.equal("second row 2");
     });
 
 });
