@@ -16,6 +16,17 @@ let Menu = React.createClass({
         };
     },
 
+    componentWillReceiveProps: function(nextProps) {
+        let hidden_items = {};
+        _.map(nextProps.menu, (header, index) => {
+            hidden_items[header] = false;
+        });
+        this.setState({
+            items : nextProps.menu,
+            hidden_items: hidden_items
+        });
+    },
+
     toggle : function (item) {
         let newly_hidden = _.clone(this.state.hidden_items);
         if (newly_hidden[item]) {
