@@ -12,7 +12,6 @@ let TableSelect = React.createClass({
     },
     chooser: function (tableid) {
         this.setState({chosen_table: tableid}, () => {
-            console.log(tableid)
             get_dispatcher('app').data_change(tableid);
         });
     },
@@ -31,7 +30,7 @@ let TableSelect = React.createClass({
 
       return <div className="header_menu">
           <div className="pure-menu pure-menu-horizontal">
-        <a href="#" className="pure-menu-link pure-menu-heading">Taulukot</a>
+        <a href="#" className="pure-menu-link pure-menu-heading">Tables</a>
 
         <ul className="pure-menu-list">
             {menu_items}

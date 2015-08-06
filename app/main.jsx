@@ -61,7 +61,6 @@ let Main = React.createClass({
                 });
             }]
         });
-
         this.setState({dispatcher: dispatcher});
     },
 
