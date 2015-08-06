@@ -144,6 +144,7 @@ export class HiddenTable extends React.Component {
     render() {
         let table = this.props.table;
         if (!table) return <div>no table</div>
+        if (!table.matrix) return <div>no matrix</div>
 
         let column_headings = table.heading_headers.map((header, index) => {
             return table.heading.map((heading) => {
