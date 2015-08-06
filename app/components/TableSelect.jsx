@@ -9,10 +9,8 @@ let TableSelect = React.createClass({
     render: function () {
         let menu_items = [];
         _.forOwn(this.props.tables, (table, tableid) => {
-            console.log("taulu", table)
-            console.log("tauluid", tableid)
             menu_items.push(
-                <li onClick={this.chooser.bind(this, tableid)}
+                <li key={tableid} onClick={this.chooser.bind(this, tableid)}
                      className="pure-menu-item">
                     <a href="#" className="pure-menu-link">
                     <span>{
@@ -22,7 +20,7 @@ let TableSelect = React.createClass({
       });
 
       return <div className="header_menu">
-          <div className="pure-menu pure-menu-scrollable custom-restricted">
+          <div className="pure-menu pure-menu-horizontal">
         <a href="#" className="pure-menu-link pure-menu-heading">Taulukot</a>
 
         <ul className="pure-menu-list">
