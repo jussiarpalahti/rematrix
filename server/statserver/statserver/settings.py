@@ -37,12 +37,15 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'statapp',
+    'corsheaders',
     'django_extensions',
+
+    'statapp',
 )
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -87,7 +90,7 @@ DATABASES = {
 # Internationalization
 # https://docs.djangoproject.com/en/1.8/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'fi-FI'
 
 TIME_ZONE = 'UTC'
 
@@ -106,3 +109,5 @@ STATIC_URL = '/static/'
 DATA_ROOT = BASE_DIR + '/data'
 
 APPEND_SLASH = False
+
+CORS_ORIGIN_ALLOW_ALL = True
