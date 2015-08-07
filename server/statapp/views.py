@@ -6,7 +6,7 @@ import mimetypes
 import opendata.px_reader as px
 
 
-def get_px(path, data=False, meta=False):
+def get_px(path, data=False, meta=False, sample=False):
     root = Path(settings.DATA_ROOT)
     doc = Path(path)
     px_doc = px.Px(str(root.joinpath(doc.name)))
@@ -14,7 +14,7 @@ def get_px(path, data=False, meta=False):
     resp = {
         "name": doc.name,
         "title": px_doc.title,
-        "url": path
+        "url": str(path)
     }
     if meta:
         resp.update({
@@ -23,7 +23,22 @@ def get_px(path, data=False, meta=False):
             'levels': px_doc.values})
     if data:
         resp['matrix'] = px_doc.data
+    if sample:
+        resp['matrix'] = sample_matrix(px_doc)
     return resp
+
+
+def sample_matrix(px_doc):
+    """
+    Yes, at the moment the sample is first 100
+    rows of the matrix
+
+    :param px_doc:
+    :type px_doc:
+    :return:
+    :rtype:
+    """
+    return [row[:20] for row in px_doc.data[:30]]
 
 
 def serve_direct(request, path):
@@ -87,6 +102,5 @@ def index(request):
     json_docs = p.glob('*.json')
     px_docs = p.glob('*.px')
     return JsonResponse({
-        'px': [str(i).replace(settings.BASE_DIR, '') for i in px_docs],
-        "json": [str(i).replace(settings.BASE_DIR, '/json') for i in json_docs]
+        'pxdocs': [get_px(px_doc, sample=True, meta=True) for px_doc in px_docs]
     })
