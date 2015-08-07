@@ -14,7 +14,7 @@ def get_px(path, data=False, meta=False, sample=False):
     resp = {
         "name": doc.name,
         "title": px_doc.title,
-        "url": str(path)
+        "url": str(path).replace(settings.DATA_ROOT, '')
     }
     if meta:
         resp.update({

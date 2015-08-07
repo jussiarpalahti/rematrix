@@ -42,7 +42,7 @@ let Main = React.createClass({
         let dispatcher = register_dispatch('app', {
             toggle : [
                 (heading, headers) => {
-                    console.log('toggle')
+                    console.log('toggle');
                     handle_visibility(
                         this.state.visible_table, this.state.rtable,
                         heading, headers);
@@ -50,10 +50,12 @@ let Main = React.createClass({
             }],
             data_change: [
                 (tableid) => {
-                    console.log('data change')
+                    console.log('data change');
+                    let rtable = get_table(tableid);
+                    let visible_table = get_table(tableid);
                     this.setState({
-                        rtable:  get_table(tableid),
-                        visible_table: get_table(tableid)
+                        rtable:  rtable,
+                        visible_table: visible_table
                 });
             }],
             table_loaded: [
@@ -62,7 +64,7 @@ let Main = React.createClass({
                     Data change started table loading which dispatches
                     this event so that table change can be tried again
                      */
-                    console.log('table loaded')
+                    console.log('table loaded');
                     this.state.dispatcher.data_change(tableid);
                 }
             ]

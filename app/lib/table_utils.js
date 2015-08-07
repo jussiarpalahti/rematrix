@@ -118,16 +118,17 @@ function hide_table() {
 let SERVER = 'http://localhost:8000';
 let ROUTER = {
     index: SERVER + '/',
-    matrix: SERVER + '/matrix/'
+    matrix: SERVER + '/matrix'
 };
 
 function load_matrix(table) {
-    d3.json(table.url, (err, data) => {
+    d3.json(ROUTER.matrix + table.url, (err, data) => {
         SENTINEL[table.name] = false;
         if (err) console.log("problem fetching data", err);
         else {
-            console.log("fetched some data", table.url)
-            table.matrix = data;
+            console.log("fetched some data", table.url, data)
+            table.matrix = data.matrix;
+            TABLES[table.name].matrix = data.matrix;
             get_dispatcher('app').table_loaded(table.name);
         }
     });
@@ -145,7 +146,10 @@ export function get_table(tableid) {
     let basetable = TABLES[tableid];
 
     let table = FullTable(basetable);
-    if (!table.matrix) {
+    if (table.preview || !table.matrix) {
+        table.preview = false;
+        table.matrix = null;
+        TABLES[tableid].preview = false;
         if (!SENTINEL[table.name]) {
             SENTINEL[table.name] = true;
             load_matrix(table);
