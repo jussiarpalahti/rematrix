@@ -39,7 +39,6 @@ export function FullTable(basetable) {
     table.heading_headers = generate_matrix_headers(table, table.heading,
         table.meta.heading_size);
 
-    table.matrix = MATRIX[table.name];
     return table;
 }
 
@@ -116,14 +115,19 @@ function hide_table() {
     return calc_table;
 }
 
-let SERVER = '';
+let SERVER = 'http://localhost:8000';
+let ROUTER = {
+    index: SERVER + '/',
+    matrix: SERVER + '/matrix/'
+};
+
 function load_matrix(table) {
     d3.json(table.url, (err, data) => {
         SENTINEL[table.name] = false;
         if (err) console.log("problem fetching data", err);
         else {
             console.log("fetched some data", table.url)
-            MATRIX[table.name] = data;
+            table.matrix = data;
             get_dispatcher('app').table_loaded(table.name);
         }
     });
@@ -150,10 +154,39 @@ export function get_table(tableid) {
     return table;
 }
 
+export function fetch_table_previews(cb) {
+    d3.json(ROUTER.index, (err, data) => {
+        if (err) console.log("problem fetching tables", SERVER.index, err);
+        else {
+            console.log("fetched some tables");
+            data.map((table, index) => {
+                table.preview = true;
+                TABLES[table.name] = table;
+            });
+            cb(); // this should render the app now that initialization is done
+        }
+    });
+}
+
 /*
 Placeholder "database" for table meta and matrix
  */
 export var TABLES = {
+    test: {
+        name: 'test',
+        heading: ['one', 'two', 'three'],
+        stub: ['first', 'second'],
+        levels: {
+            one: ['top heading 1', 'top heading 2'],
+            two: ['second heading 1', 'second heading 2', 'second heading 3'],
+            three: ['third heading 1', 'third heading 2'],
+            first: ['top row 1', 'top row 2'],
+            second: ['second row 1', 'second row 2', 'second row 3', 'second row 4']
+        }
+    }
+}
+
+export var OLD_TABLES = {
     real: {
         name: 'real',
         url: '/data/real.json',
@@ -202,11 +235,3 @@ export var TABLES = {
         }
     }
 };
-
-/*
-Placeholder for matrix data
- */
-export var MATRIX = {
-    test: _.range(8).map((i) => [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, i + 1]),
-    real: null
-}

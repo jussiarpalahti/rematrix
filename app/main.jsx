@@ -29,7 +29,7 @@ import {
 
 import {build, handle_visibility, get_table} from './lib/table_utils';
 import {register_dispatch, get_dispatcher, del_dispatcher} from './lib/converser';
-import {TABLES} from './lib/table_utils';
+import {TABLES, fetch_table_previews} from './lib/table_utils';
 
 let Main = React.createClass({
     getInitialState : function () {
@@ -99,10 +99,19 @@ let Main = React.createClass({
 function main() {
     var app = document.createElement('div');
     document.body.appendChild(app);
-    React.render(<div>
-        <h1>React Table Viewer</h1>
-        <Main />
-    </div>, app);
+    let init = false;
+    let renderer = () => {
+        init = true;
+        React.render(<div>
+            <h1>React Table Viewer</h1>
+            <Main />
+        </div>, app);
+    };
+
+    // point here is to see if renderer has run once so init is assumed done
+    if (init) renderer();
+    else fetch_table_previews(renderer);
+
 }
 
 main();
