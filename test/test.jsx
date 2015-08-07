@@ -16,7 +16,9 @@ import {
 import {
     generate_matrix_headers,
     generate_hidden_check,
-    generate_hidden_index
+    generate_hidden_index,
+    get_header_mask,
+    get_matrix_mask
 } from '../app/lib/matrix_header';
 
 import ManualTable from '../app/components/manual_table';
@@ -897,7 +899,7 @@ describe('FullTable creator test', function () {
     let new_table = FullTable(testtable);
     let new_table2 = FullTable(testtable);
 
-    it('it should have indentical basetable', function () {
+    it('it should have identical basetable', function () {
        expect(new_table.base).to.equal(new_table2.base);
     });
 
@@ -979,5 +981,37 @@ describe('FullTable with header table view test', function () {
 
         expect(target.props.children).to.equal("second row 2");
     });
+
+});
+
+describe.only("matrix mask test", function () {
+
+    let original_headers = ['top heading 1', 'top heading 2'];
+    let visible_headers = ['top heading 1'];
+    let hop = 1;
+    let heading_size = 12;
+
+    let [mask, d] = get_header_mask(
+        visible_headers, original_headers,
+        hop,heading_size);
+    console.log(mask);
+    console.log(d);
+
+    //let hops = [6, 2, 1];
+    //let all_headers = [
+    //    [
+    //        ['top heading 1'], ['top heading 1', 'top heading 2']
+    //    ],
+    //    [
+    //        ['second heading 2', 'second heading 3'],
+    //        ['second heading 1', 'second heading 2', 'second heading 3']
+    //    ],
+    //    [
+    //        ['third heading 1'], ['third heading 1', 'third heading 2']
+    //    ]
+    //];
+    //
+    //let full_mask = get_matrix_mask(all_headers, hops);
+    //console.log("full", full_mask)
 
 });

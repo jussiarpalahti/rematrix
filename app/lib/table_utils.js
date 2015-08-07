@@ -55,7 +55,7 @@ export function handle_visibility(table, original_table, heading, headers, hidde
     hidden_headers has heading: header, visibility pairs so all headings
     can be hidden
      */
-    
+
     if (!hidden_headers) {
         let new_headers = [];
         _.forOwn(headers, (hidden, header) => {
@@ -109,7 +109,7 @@ function hide_table() {
         levels: {
             one: ['top heading 1'],
             two: ['second heading 1', 'second heading 2', 'second heading 3'],
-            three: ['third heading 1',],
+            three: ['third heading 1'],
             first: ['top row 2'],
             second: ['second row 1', 'second row 3', 'second row 4']
         }
