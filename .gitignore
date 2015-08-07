@@ -3,3 +3,9 @@ build
 .idea
 
 *~
+*~
+__pycache__
+db.sqlite3
+*.mo
+*.sqlite
+*.pyc
