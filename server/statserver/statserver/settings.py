@@ -38,6 +38,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'statapp',
+    'django_extensions',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -101,3 +102,5 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
 STATIC_URL = '/static/'
+
+DATA_ROOT = BASE_DIR + '/data'
