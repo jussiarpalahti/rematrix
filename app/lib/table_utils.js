@@ -49,12 +49,29 @@ export function build() {
     return [rtable, visible_table];
 }
 
-export function handle_visibility(table, original_table, heading, headers) {
-    let new_headers = [];
-    _.forOwn(headers, (hidden, header) => {
-        if (!hidden) new_headers.push(header);
-    });
-    table.levels[heading] = new_headers;
+export function handle_visibility(table, original_table, heading, headers, hidden_headers) {
+    /*
+    Old case: only one heading at a time gets hidden
+    hidden_headers has heading: header, visibility pairs so all headings
+    can be hidden
+     */
+    
+    if (!hidden_headers) {
+        let new_headers = [];
+        _.forOwn(headers, (hidden, header) => {
+            if (!hidden) new_headers.push(header);
+        });
+        table.levels[heading] = new_headers;
+    } else if (hidden_headers) {
+        _.forOwn(hidden_headers, (headers, heading) => {
+            let new_headers = [];
+            _.forOwn(headers, (hidden, header) => {
+                if (!hidden) new_headers.push(header);
+            });
+            table.levels[heading] = new_headers;
+        });
+    }
+
     table.meta = Table(table);
 
     _.map(table.stub, (heading, index) => {
