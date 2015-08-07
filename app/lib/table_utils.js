@@ -156,13 +156,14 @@ export function get_table(tableid) {
 
 export function fetch_table_previews(cb) {
     d3.json(ROUTER.index, (err, data) => {
-        if (err) console.log("problem fetching tables", SERVER.index, err);
+        if (err) console.log("problem fetching tables", ROUTER.index, err);
         else {
-            console.log("fetched some tables");
-            data.map((table, index) => {
+            console.log("fetched some tables", data);
+            _.map(data.pxdocs, (table, index) => {
                 table.preview = true;
                 TABLES[table.name] = table;
             });
+            console.log(TABLES)
             cb(); // this should render the app now that initialization is done
         }
     });
@@ -182,7 +183,8 @@ export var TABLES = {
             three: ['third heading 1', 'third heading 2'],
             first: ['top row 1', 'top row 2'],
             second: ['second row 1', 'second row 2', 'second row 3', 'second row 4']
-        }
+        },
+        matrix: _.range(8).map((i) => [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, i + 1])
     }
 }
 
