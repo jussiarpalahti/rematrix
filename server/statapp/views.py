@@ -3,6 +3,27 @@ from django.http import HttpResponse, JsonResponse
 from django.conf import settings
 from pathlib import Path
 import mimetypes
+import opendata.px_reader as px
+
+
+def get_px(path, data=False, meta=False):
+    root = Path(settings.DATA_ROOT)
+    doc = Path(path)
+    px_doc = px.Px(str(root.joinpath(doc.name)))
+
+    resp = {
+        "name": doc.name,
+        "title": px_doc.title,
+        "url": path
+    }
+    if meta:
+        resp.update({
+            'stub': px_doc.stub,
+            'heading': px_doc.heading,
+            'levels': px_doc.values})
+    if data:
+        resp['matrix'] = px_doc.data
+    return resp
 
 
 def serve_direct(request, path):
@@ -22,7 +43,8 @@ def full(request, path):
     :return:
     :rtype:
     """
-    return HttpResponse("jei")
+    resp = get_px(path, meta=True, data=True)
+    return JsonResponse(resp)
 
 
 def data(request, path):
@@ -35,7 +57,8 @@ def data(request, path):
     :return:
     :rtype:
     """
-    return HttpResponse("jee")
+    resp = get_px(path, data=True)
+    return JsonResponse(resp)
 
 
 def meta(request, path):
@@ -48,7 +71,8 @@ def meta(request, path):
     :return:
     :rtype:
     """
-    return HttpResponse("jes")
+    resp = get_px(path, meta=True)
+    return JsonResponse(resp)
 
 
 def index(request):

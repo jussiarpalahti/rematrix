@@ -8,5 +8,5 @@ urlpatterns = [
     url(r'matrix/(.*)', data),
     url(r'meta/(.*)', meta),
     url(r'json/(.*)', serve_direct),
-    url(r'', index),
+    url(r'^$', index),
 ]
