@@ -104,3 +104,5 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 DATA_ROOT = BASE_DIR + '/data'
+
+APPEND_SLASH = False
