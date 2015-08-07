@@ -119,16 +119,18 @@ export function get_header_mask(visible_headers, original_headers, hop, heading_
         console.log("per header", offset, size, loops)
 
         let header_mask = _.flatten(get_header_mask(loops, offset, size, hop));
-        d[header] = header_mask;
         return header_mask;
     });
 
-    return [_.flatten(mask), d];
+    return _.flatten(mask);
 }
 
 export function get_matrix_mask(all_headers, hops) {
-    return _.map(all_headers, (headers, index) => {
+    let heading_size = all_headers[0][1].length * hops[0];
+    let matrix_mask =  _.map(all_headers, (headers, index) => {
         console.log("all", headers)
-        return get_header_mask(...headers, hops[index]);
+        return get_header_mask(...headers, hops[index], heading_size);
     });
+    console.log("full before", matrix_mask)
+    return _.intersection.apply({}, matrix_mask);
 }

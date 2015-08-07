@@ -991,27 +991,39 @@ describe.only("matrix mask test", function () {
     let hop = 1;
     let heading_size = 12;
 
-    let [mask, d] = get_header_mask(
-        visible_headers, original_headers,
-        hop,heading_size);
-    console.log(mask);
-    console.log(d);
+    it('should handle one header', function () {
+        let mask = get_header_mask(
+            visible_headers, original_headers,
+            hop,heading_size);
+        expect(mask[1]).to.equal(2);
+        expect(mask.length).to.equal(6);
+    });
 
-    //let hops = [6, 2, 1];
-    //let all_headers = [
-    //    [
-    //        ['top heading 1'], ['top heading 1', 'top heading 2']
-    //    ],
-    //    [
-    //        ['second heading 2', 'second heading 3'],
-    //        ['second heading 1', 'second heading 2', 'second heading 3']
-    //    ],
-    //    [
-    //        ['third heading 1'], ['third heading 1', 'third heading 2']
-    //    ]
-    //];
-    //
-    //let full_mask = get_matrix_mask(all_headers, hops);
-    //console.log("full", full_mask)
+    let hops = [6, 2, 1];
+    let all_headers = [
+        [
+            ['top heading 1'], ['top heading 1', 'top heading 2']
+        ],
+        [
+            ['second heading 2', 'second heading 3'],
+            ['second heading 1', 'second heading 2', 'second heading 3']
+        ],
+        [
+            ['third heading 1'], ['third heading 1', 'third heading 2']
+        ]
+    ];
+    let matrix = _.range(12);
+
+    it('should handle many headers', function () {
+        let full_mask = get_matrix_mask(all_headers, hops);
+        expect(full_mask[0]).to.equal(2);
+        expect(full_mask[1]).to.equal(4);
+        expect(full_mask.length).to.equal(2);
+
+        let visible_value = matrix[full_mask[0]];
+        expect(visible_value).to.equal(2);
+        let visible_value_2 = matrix[full_mask[1]];
+        expect(visible_value_2).to.equal(4);
+    });
 
 });
