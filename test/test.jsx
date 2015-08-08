@@ -18,7 +18,9 @@ import {
     generate_hidden_check,
     generate_hidden_index,
     get_header_mask,
-    get_matrix_mask
+    get_matrix_mask,
+    get_header_hop,
+    get_heading_hopper
 } from '../app/lib/matrix_header';
 
 import ManualTable from '../app/components/manual_table';
@@ -984,7 +986,7 @@ describe('FullTable with header table view test', function () {
 
 });
 
-describe.only("matrix mask test", function () {
+describe("matrix mask test", function () {
 
     let original_headers = ['top heading 1', 'top heading 2'];
     let visible_headers = ['top heading 1'];
@@ -1026,4 +1028,29 @@ describe.only("matrix mask test", function () {
         expect(visible_value_2).to.equal(4);
     });
 
+});
+
+describe('get header on a position test', function () {
+
+    it('should handle null and active positions for hop of 2', function () {
+        let headers = ['second heading 1', 'second heading 2', 'second heading 3'];
+        let hop = 2;
+        let checker =  get_header_hop(headers, hop);
+
+        expect(checker(0)).to.equal(headers[0]);
+        expect(checker(1)).to.equal(null);
+        expect(checker(2)).to.equal(headers[1]);
+    });
+
+    it('should handle null and active positions for hop of 1', function () {
+        let headers = ['third heading 1', 'third heading 2'];
+        let hop = 1;
+        let checker =  get_header_hop(headers, hop);
+
+        expect(checker(0)).to.equal(headers[0]);
+        expect(checker(1)).to.not.equal(null);
+        expect(checker(1)).to.equal(headers[1]);
+        expect(checker(2)).to.equal(headers[0]);
+        expect(checker(11)).to.equal(headers[1]);
+    });
 });

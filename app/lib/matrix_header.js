@@ -163,8 +163,7 @@ export function get_heading_hopper(headings, hops, pos) {
 
     let hoppers = {};
     _.forOwn(headings, (headers, heading) => {
-        let heading_size = headers.length * hops[heading];
-        hoppers[heading] = get_heading_hop(headers, hops[heading], heading_size);
+        hoppers[heading] = get_header_hop(headers, hops[heading]);
     });
 
     // Checker function to go through all headers' checkers
@@ -177,21 +176,23 @@ export function get_heading_hopper(headings, hops, pos) {
     };
 }
 
-let get_heading_hop = (headers, hop, size) => {
+export function get_header_hop  (headers, hop) {
     /*
     Returns a function to check which header is active on given position
-     */
+    Position can be between 0 and infinity
+    */
+    let heading_size = headers.length * hop;
     return (pos) => {
         let loop, inside_heading_pos, header_pos;
         // shortcut: no header start on this position
         if (pos % hop !== 0) return null;
-        loop = pos / size;
+        loop = Math.floor(pos / heading_size);
         if (loop >= 1) {
-            inside_heading_pos = pos - loop * size;
-            header_pos = Math.floor(inside_heading_pos / hop);
+            inside_heading_pos = pos - loop * heading_size;
+            header_pos = inside_heading_pos / hop;
         } else {
             header_pos = Math.floor(pos / hop);
         }
         return headers[header_pos];
     };
-};
+}
