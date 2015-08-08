@@ -109,7 +109,6 @@ export function get_header_mask(visible_headers, original_headers, hop, heading_
         let offset = get_offset(header, original_headers, hop);
         let size = hop * original_headers.length;
         let loops = heading_size / size;
-        console.log("per header", offset, size, loops)
 
         return _.flatten(get_header_mask(loops, offset, size, hop));
     });
@@ -121,13 +120,11 @@ export function get_header_mask(visible_headers, original_headers, hop, heading_
 // + the offset in last set
 let get_startpos = (loop, offset, size) => {
     let startpos = loop  * size + offset;
-    console.log("startpos", startpos)
     return startpos;
 };
 
 // offset is the position times hop in the original
 let get_offset = (header, headers, hop) => {
-    console.log("offsetting", header, headers.indexOf(header), hop)
     return headers.indexOf(header) * hop;
 };
 
@@ -139,44 +136,49 @@ export function get_matrix_mask(all_headers, hops) {
      */
     let heading_size = all_headers[0][1].length * hops[0];
     let matrix_mask =  _.map(all_headers, (headers, index) => {
-        console.log("all", headers)
         return get_header_mask(...headers, hops[index], heading_size);
     });
-    console.log("full before", matrix_mask)
     return _.intersection.apply({}, matrix_mask);
 }
 
-export function get_heading_hopper(headings, hops, pos) {
+export function get_heading_hopper(headings, hops) {
     /*
-    For headings
-        shortcut:
-            if pos % hop !== 0: return null
-            since header can be happening but on its hop start pos
-        Get heading size
-        Get loop = pos / heading_size
-        If 1 or more:
-            get inside_heading = pos - loop * heading_size
-        Otherwise startpos is 0
-        header_pos = Inside_heading / hop
-        return headers[header_pos], hop
-     */
+    Builds a function from headings and their hops.
+    Returned function answers with a list of header
+    objects for a given position.
+    If a header does not appear on this position, it won't
+    be returned.
 
-    let hoppers = {};
-    _.forOwn(headings, (headers, heading) => {
-        hoppers[heading] = get_header_hop(headers, hops[heading]);
+    NOTE: Since level order is important here, but I can't be bothered
+    to travel with the heading order list like I've done before, on this
+    I've moved to JS stable list of objects (where's OrderedDict when you
+    need it...?
+    */
+
+    let hoppers = _.map(headings, (item, index) => {
+        return {
+            checker: get_header_from_pos(item.headers, hops[item.heading]),
+            heading: item.heading};
     });
 
     // Checker function to go through all headers' checkers
     return (pos) => {
-        let resp = {};
-        _.forOwn(hoppers, (checker, heading) => {
-            resp[heading] = checker(pos);
-        });
-        return resp;
+        return _.compact(
+            _.map(hoppers, (hopper) => {
+                let active_header = hopper.checker(pos);
+                if (active_header !== null) {
+                    return {
+                        heading: hopper.heading,
+                        header: active_header,
+                        hop: hops[hopper.heading]
+                    };
+                } else {
+                    return null;
+                }}));
     };
 }
 
-export function get_header_hop  (headers, hop) {
+export function get_header_from_pos (headers, hop) {
     /*
     Returns a function to check which header is active on given position
     Position can be between 0 and infinity

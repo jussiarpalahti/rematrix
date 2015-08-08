@@ -19,7 +19,7 @@ import {
     generate_hidden_index,
     get_header_mask,
     get_matrix_mask,
-    get_header_hop,
+    get_header_from_pos,
     get_heading_hopper
 } from '../app/lib/matrix_header';
 
@@ -1035,17 +1035,18 @@ describe('get header on a position test', function () {
     it('should handle null and active positions for hop of 2', function () {
         let headers = ['second heading 1', 'second heading 2', 'second heading 3'];
         let hop = 2;
-        let checker =  get_header_hop(headers, hop);
+        let checker =  get_header_from_pos(headers, hop);
 
         expect(checker(0)).to.equal(headers[0]);
         expect(checker(1)).to.equal(null);
         expect(checker(2)).to.equal(headers[1]);
+        expect(checker(6)).to.equal(headers[0]);
     });
 
     it('should handle null and active positions for hop of 1', function () {
         let headers = ['third heading 1', 'third heading 2'];
         let hop = 1;
-        let checker =  get_header_hop(headers, hop);
+        let checker =  get_header_from_pos(headers, hop);
 
         expect(checker(0)).to.equal(headers[0]);
         expect(checker(1)).to.not.equal(null);
@@ -1053,4 +1054,28 @@ describe('get header on a position test', function () {
         expect(checker(2)).to.equal(headers[0]);
         expect(checker(11)).to.equal(headers[1]);
     });
+});
+
+describe('heading\'s headers on a position test', function () {
+
+    let headings = [
+        {
+            heading: "one",
+            headers: ['top heading 1', 'top heading 2']},
+        {
+            heading: "second",
+            headers: ['second heading 1', 'second heading 2', 'second heading 3']},
+        {
+            heading: "three",
+            headers: ['third heading 1', 'third heading 2']}
+    ];
+
+    let hops = [6, 2, 1];
+
+    it('should handle three levels with varying hops', function () {
+
+        let checkers = get_heading_hopper(headings, hops);
+
+    });
+
 });
