@@ -1063,19 +1063,24 @@ describe('heading\'s headers on a position test', function () {
             heading: "one",
             headers: ['top heading 1', 'top heading 2']},
         {
-            heading: "second",
+            heading: "two",
             headers: ['second heading 1', 'second heading 2', 'second heading 3']},
         {
             heading: "three",
             headers: ['third heading 1', 'third heading 2']}
     ];
-
-    let hops = [6, 2, 1];
+    let hops = {three: 1, two: 2, one: 6};
 
     it('should handle three levels with varying hops', function () {
 
         let checkers = get_heading_hopper(headings, hops);
+        expect(checkers(0).length).to.equal(3);
+        expect(checkers(1).length).to.equal(1);
+        expect(checkers(2).length).to.equal(2);
 
+        let second_top_hopper = checkers(6);
+        expect(second_top_hopper[0].header).to.equal(headings[0].headers[1]);
+        expect(second_top_hopper[1].header).to.equal(headings[1].headers[0]);
+        expect(second_top_hopper[2].header).to.equal(headings[2].headers[0]);
     });
-
 });
