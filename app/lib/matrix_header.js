@@ -82,14 +82,13 @@ export function generate_hidden_index(original_headers, visible_headers) {
 }
 
 export function get_header_mask(visible_headers, original_headers, hop, heading_size) {
-
-    // startpos is the place of loop times size of one set of headers
-    // + the offset in last set
-    let get_startpos = (loop, offset, size) => {
-        let startpos = loop  * size + offset;
-        console.log("startpos", startpos)
-        return startpos;
-    };
+    /*
+    Based on a given set of visible and original headers, former being a subset of latter,
+    calculate visible index positions on the axis.
+    Given heading size is the amount of cells in the axis that the headers have to fill.
+    For top level, all headers together are large enough. Other levels need to cycle through
+    their headers as many times till all space is filled.
+    */
 
     let get_range = (start_pos, hop) => {
         return _.range(start_pos, start_pos + hop);
@@ -102,12 +101,6 @@ export function get_header_mask(visible_headers, original_headers, hop, heading_
         })
     };
 
-    // offset is the position times hop in the original
-    let get_offset = (header, headers, hop) => {
-        console.log("offsetting", header, headers.indexOf(header), hop)
-        return headers.indexOf(header) * hop;
-    };
-
     let d = {};
     // for all the visible headers loop through them
     // and calculate mask for each header and return a list of all
@@ -118,14 +111,32 @@ export function get_header_mask(visible_headers, original_headers, hop, heading_
         let loops = heading_size / size;
         console.log("per header", offset, size, loops)
 
-        let header_mask = _.flatten(get_header_mask(loops, offset, size, hop));
-        return header_mask;
+        return _.flatten(get_header_mask(loops, offset, size, hop));
     });
 
     return _.flatten(mask);
 }
 
+// startpos is the place of loop times size of one set of headers
+// + the offset in last set
+let get_startpos = (loop, offset, size) => {
+    let startpos = loop  * size + offset;
+    console.log("startpos", startpos)
+    return startpos;
+};
+
+// offset is the position times hop in the original
+let get_offset = (header, headers, hop) => {
+    console.log("offsetting", header, headers.indexOf(header), hop)
+    return headers.indexOf(header) * hop;
+};
+
 export function get_matrix_mask(all_headers, hops) {
+    /*
+    This is a convenience function for get_header_mask that
+    goes through many headers where both arguments are in the
+    order of levels, from top to bottom
+     */
     let heading_size = all_headers[0][1].length * hops[0];
     let matrix_mask =  _.map(all_headers, (headers, index) => {
         console.log("all", headers)
@@ -134,3 +145,53 @@ export function get_matrix_mask(all_headers, hops) {
     console.log("full before", matrix_mask)
     return _.intersection.apply({}, matrix_mask);
 }
+
+export function get_heading_hopper(headings, hops, pos) {
+    /*
+    For headings
+        shortcut:
+            if pos % hop !== 0: return null
+            since header can be happening but on its hop start pos
+        Get heading size
+        Get loop = pos / heading_size
+        If 1 or more:
+            get inside_heading = pos - loop * heading_size
+        Otherwise startpos is 0
+        header_pos = Inside_heading / hop
+        return headers[header_pos], hop
+     */
+
+    let hoppers = {};
+    _.forOwn(headings, (headers, heading) => {
+        let heading_size = headers.length * hops[heading];
+        hoppers[heading] = get_heading_hop(headers, hops[heading], heading_size);
+    });
+
+    // Checker function to go through all headers' checkers
+    return (pos) => {
+        let resp = {};
+        _.forOwn(hoppers, (checker, heading) => {
+            resp[heading] = checker(pos);
+        });
+        return resp;
+    };
+}
+
+let get_heading_hop = (headers, hop, size) => {
+    /*
+    Returns a function to check which header is active on given position
+     */
+    return (pos) => {
+        let loop, inside_heading_pos, header_pos;
+        // shortcut: no header start on this position
+        if (pos % hop !== 0) return null;
+        loop = pos / size;
+        if (loop >= 1) {
+            inside_heading_pos = pos - loop * size;
+            header_pos = Math.floor(inside_heading_pos / hop);
+        } else {
+            header_pos = Math.floor(pos / hop);
+        }
+        return headers[header_pos];
+    };
+};
