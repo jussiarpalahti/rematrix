@@ -986,7 +986,7 @@ describe('FullTable with header table view test', function () {
 
 });
 
-describe("matrix mask test", function () {
+describe("header and matrix mask test", function () {
 
     let original_headers = ['top heading 1', 'top heading 2'];
     let visible_headers = ['top heading 1'];
@@ -1074,10 +1074,9 @@ describe('heading\'s headers on a position test', function () {
     it('should handle three levels with varying hops', function () {
 
         let checkers = get_heading_hopper(headings, hops);
-        expect(checkers(0).length).to.equal(3);
-        expect(checkers(1).length).to.equal(1);
-        expect(checkers(2).length).to.equal(2);
-
+        expect(checkers(0)[0].hop).to.equal(6);
+        expect(checkers(1)[0]).to.equal(null);
+        expect(checkers(2)[2].heading).to.equal("three");
         let second_top_hopper = checkers(6);
         expect(second_top_hopper[0].header).to.equal(headings[0].headers[1]);
         expect(second_top_hopper[1].header).to.equal(headings[1].headers[0]);

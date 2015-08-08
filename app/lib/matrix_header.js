@@ -163,8 +163,7 @@ export function get_heading_hopper(headings, hops) {
 
     // Checker function to go through all headers' checkers
     return (pos) => {
-        return _.compact(
-            _.map(hoppers, (hopper) => {
+        return _.map(hoppers, (hopper) => {
                 let active_header = hopper.checker(pos);
                 if (active_header !== null) {
                     return {
@@ -174,7 +173,7 @@ export function get_heading_hopper(headings, hops) {
                     };
                 } else {
                     return null;
-                }}));
+                }});
     };
 }
 

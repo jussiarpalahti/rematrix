@@ -6,7 +6,8 @@ import React from 'react';
 import {
     MatrixTable,
     HeaderTable,
-    HiddenTable
+    HiddenTable,
+    HoppingTable
 } from './components/matrix_table.jsx';
 import App from './components/App.jsx'
 import Menu from './components/Menu.jsx';
@@ -24,7 +25,9 @@ import {
 import {
     generate_matrix_headers,
     generate_hidden_check,
-    generate_hidden_index
+    generate_hidden_index,
+    get_heading_hopper,
+    get_header_mask
 } from '../app/lib/matrix_header';
 
 import {build, handle_visibility, get_table} from './lib/table_utils';
@@ -102,18 +105,35 @@ function main() {
     var app = document.createElement('div');
     document.body.appendChild(app);
     let init = false;
+
+    // TODO: just to help with testing, remove at earliest convenience
+    let table = helper();
     let renderer = () => {
         init = true;
         React.render(<div>
             <h1>React Table Viewer</h1>
-            <Main />
+            <HoppingTable table={table} />
         </div>, app);
     };
-
+    renderer();
     // point here is to see if renderer has run once so init is assumed done
-    if (init) renderer();
-    else fetch_table_previews(renderer);
+    //if (init) renderer();
+    //else fetch_table_previews(renderer);
 
+}
+
+function helper() {
+    let basetable = get_table("test");
+    let headings = _.map(basetable.heading, (heading, index) => {
+       return {
+           heading: heading,
+           headers: basetable.levels[heading]
+       }
+    });
+
+    basetable.heading_hopper = get_heading_hopper(headings, basetable.meta.hops);
+
+    return basetable;
 }
 
 main();

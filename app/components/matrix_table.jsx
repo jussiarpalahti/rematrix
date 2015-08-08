@@ -143,8 +143,8 @@ export class HiddenTable extends React.Component {
 
     render() {
         let table = this.props.table;
-        if (!table) return <div>no table</div>
-        if (!table.matrix) return <div>no matrix</div>
+        if (!table) return <div>no table</div>;
+        if (!table.matrix) return <div>no matrix</div>;
 
         let column_headings = table.heading_headers.map((header, index) => {
             return table.heading.map((heading) => {
@@ -207,3 +207,47 @@ export class HiddenTable extends React.Component {
 
     }
 }
+
+export var HoppingTable = React.createClass({
+
+    render: function () {
+        let table = this.props.table;
+
+        // initialize an array of empty arrays for headings
+        let columns = _.map(_.range(table.heading.length), () => []);
+
+        // iterate once for each column, headers go into column list as TH elements
+        for (let col_index = 0; col_index < table.meta.heading_size; col_index++) {
+            _.forEach(
+                table.heading_hopper(col_index),
+                    (heading, thindex) => {
+                    if (heading) {
+                        columns[thindex].push(<th key={col_index + '_' + thindex}
+                                   colSpan={heading.hop}>{heading.header}</th>);
+                    }
+            });
+        }
+
+        return <div id="table">
+            <table className="pure-table pure-table-bordered">
+                <thead>
+                {
+                    columns.map((heading, index) => {
+                        if (index==0) {
+                            return <tr key={index}>
+                                <th rowSpan={table.heading.length}
+                                    colSpan={table.stub.length} />
+                                    {heading}
+                            </tr>
+                        } else {
+                            return <tr key={index}>{heading}</tr>
+                        }
+                    })
+                }
+                </thead>
+                <tbody>
+
+                </tbody>
+            </table></div>;
+    }
+});
