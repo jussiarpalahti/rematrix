@@ -228,6 +228,30 @@ export var HoppingTable = React.createClass({
             });
         }
 
+        let data = table.matrix.map((row, index) => {
+
+            let row_headings = _.map(
+                table.stub_hopper(index),
+                (heading, thindex) => {
+                    if (heading) {
+                        return <th key={index + '_' + thindex}
+                                   rowSpan={heading.hop}>
+                                {heading.header}</th>;
+                    }
+            });
+
+            return <tr className={(index % 2) != 0 ? "pure-table-odd" : ""} key={index}>{
+                [
+                    row_headings,
+                    row.map((cell, cindex) => {
+                        return <td key={index + '_' + cindex}>
+                            {cell}
+                        </td>
+                    })
+                ]
+            }</tr>
+        });
+
         return <div id="table">
             <table className="pure-table pure-table-bordered">
                 <thead>
@@ -246,7 +270,7 @@ export var HoppingTable = React.createClass({
                 }
                 </thead>
                 <tbody>
-
+                {data}
                 </tbody>
             </table></div>;
     }

@@ -130,8 +130,15 @@ function helper() {
            headers: basetable.levels[heading]
        }
     });
+    let stubs = _.map(basetable.stub, (heading, index) => {
+        return {
+            heading: heading,
+            headers: basetable.levels[heading]
+        }
+    });
 
     basetable.heading_hopper = get_heading_hopper(headings, basetable.meta.hops);
+    basetable.stub_hopper = get_heading_hopper(stubs, basetable.meta.hops);
 
     return basetable;
 }
