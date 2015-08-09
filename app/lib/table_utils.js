@@ -254,7 +254,7 @@ export function get_preview_table_levels(table, size) {
     _.forOwn(preview_levels, (headers, heading) => {
        preview_levels[heading] = _.uniq(headers);
     });
-    
+
     return preview_levels;
 }
 

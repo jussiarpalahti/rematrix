@@ -134,7 +134,6 @@ export function get_matrix_mask(all_headers, hops) {
     order of levels, from top to bottom
      */
     let heading_size = all_headers[0][1].length * hops[0];
-    console.log("masker", heading_size, hops);
     let matrix_mask =  _.map(all_headers, (headers, index) => {
         return get_header_mask(...headers, hops[index], heading_size);
     });
@@ -196,4 +195,12 @@ export function get_header_from_pos (headers, hop) {
         }
         return headers[header_pos];
     };
+}
+
+export function matrix_hider (table) {
+    return _.map(table.stub_mask, (row) => {
+        return _.map(table.heading_mask, (col) => {
+            return table.matrix[row][col];
+        });
+    });
 }
