@@ -12,7 +12,9 @@ import {
 import {
     generate_matrix_headers,
     generate_hidden_check,
-    generate_hidden_index
+    generate_hidden_index,
+    get_heading_hopper,
+    get_header_mask
 } from './matrix_header';
 import {get_dispatcher} from '../lib/converser';
 
@@ -25,20 +27,19 @@ export function FullTable(basetable) {
     table.meta = Table(table);
     table.base = basetable;
 
-    table.hopper = {};
-    _.map(table.stub, (heading, index) => {
-        table.hopper[heading] = create_header_hopper(table.levels[heading],
-            table.meta.stub_size, table.meta.hops[heading]);
-    });
-    _.map(table.heading, (heading, index) => {
-        table.hopper[heading] = create_header_hopper(table.levels[heading],
-            table.meta.heading_size, table.meta.hops[heading]);
-    });
+    let heading_to_list = (heading) => {
+        _.map(heading, (heading, index) => {
+            return {
+                heading: heading,
+                headers: basetable.levels[heading]
+            }
+        });
+    };
 
-    table.row_headers = generate_matrix_headers(table, table.stub, table.meta.stub_size);
-    table.heading_headers = generate_matrix_headers(table, table.heading,
-        table.meta.heading_size);
-
+    table.get_heading_hopper = get_heading_hopper(
+        heading_to_list(table.heading));
+    table.stub_hopper = get_heading_hopper(
+        heading_to_list(table.stub));
     return table;
 }
 
@@ -185,7 +186,7 @@ export function fetch_table_previews(cb) {
                 TABLES[table.name] = table;
             });
             console.log(TABLES)
-            cb(); // this should render the app now that initialization is done
+            cb(data.pxdocs); // this should render the app now that initialization is done
         }
     });
 }
@@ -204,10 +205,9 @@ export var TABLES = {
             three: ['third heading 1', 'third heading 2'],
             first: ['top row 1', 'top row 2'],
             second: ['second row 1', 'second row 2', 'second row 3', 'second row 4']
-        },
-        matrix: _.range(8).map((i) => [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, i + 1])
+        }
     }
-}
+};
 
 export var OLD_TABLES = {
     real: {
@@ -255,6 +255,7 @@ export var OLD_TABLES = {
             three: ['third heading 1', 'third heading 2'],
             first: ['top row 1', 'top row 2'],
             second: ['second row 1', 'second row 2', 'second row 3', 'second row 4']
-        }
+        },
+        matrix: _.range(8).map((i) => [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, i + 1])
     }
 };
