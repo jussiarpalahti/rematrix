@@ -18,13 +18,14 @@ import {
 } from './matrix_header';
 import {get_dispatcher} from '../lib/converser';
 
-export function FullTable(table, new_levels) {
+export function FullTable(basetable, new_levels) {
     /*
      Creates a full table from table meta data
      or updates old table with new levels
      and adds meta and header structures to the clone
      */
-    if (!table.base) table.base = _.cloneDeep(table);
+    let table = _.cloneDeep(basetable);
+    if (!table.base) table.base = basetable;
 
     if (new_levels) {
         _.forOwn(table.levels, (headers, heading) => {
@@ -35,9 +36,9 @@ export function FullTable(table, new_levels) {
     table.meta = Table(table);
 
     if (new_levels) {
-        let heading_headers = headings_to__mask_list(table.levels, table.base.levels,
+        let heading_headers = headings_to_mask_list(table.levels, table.base.levels,
             'heading');
-        let stub_headers = headings_to__mask_list(table.levels, table.base.levels,
+        let stub_headers = headings_to_mask_list(table.levels, table.base.levels,
             'stub');
         let heading_mask = get_matrix_mask(heading_headers, table.base.meta.hops);
         let stub_mask = get_matrix_mask(stub_headers, table.base.meta.hops);
@@ -46,15 +47,15 @@ export function FullTable(table, new_levels) {
     }
 
     table.heading_hopper = get_heading_hopper(
-        heading_to_list(table.heading, table));
+        heading_to_list(table.heading, table), table.meta.hops);
     table.stub_hopper = get_heading_hopper(
-        heading_to_list(table.stub, table));
+        heading_to_list(table.stub, table), table.meta.hops);
 
     return table;
 }
 
 let heading_to_list = (heading, table) => {
-    _.map(heading, (heading, index) => {
+    return _.map(heading, (heading, index) => {
         return {
             heading: heading,
             headers: table.levels[heading]
@@ -62,8 +63,8 @@ let heading_to_list = (heading, table) => {
     });
 };
 
-let headings_to__mask_list = (new_levels, all_levels, heading) => {
-    _.map(table[heading], (level_ids) => {
+let headings_to_mask_list = (new_levels, all_levels, heading) => {
+    return _.map(table[heading], (level_ids) => {
         return [new_levels[level_ids], all_levels[level_ids]]
     });
 };
@@ -216,6 +217,28 @@ export function fetch_table_previews(cb) {
     });
 }
 
+export function get_preview_table_levels(table) {
+    /*
+     Calculates effective levels to get a table with 30 rows and columns
+     as a preview
+
+     Heading hopper is used to ask active levels for every cell
+     and added to level object's list
+     */
+    // initialize empty headers for levels object
+    let preview_levels = _.mapValues(table.levels, () => []);
+    for (let index=0; index < 10; index++) {
+        _.forEach(_.filter(table.heading_hopper(index)), (headings) => {
+            preview_levels[headings.heading].push(headings.header);
+        });
+        _.forEach(_.filter(table.stub_hopper(index)), (headings) => {
+            preview_levels[headings.heading].push(headings.header);
+        });
+    }
+    return preview_levels;
+}
+
+
 /*
 Placeholder "database" for table meta and matrix
  */
@@ -230,7 +253,8 @@ export var TABLES = {
             three: ['third heading 1', 'third heading 2'],
             first: ['top row 1', 'top row 2'],
             second: ['second row 1', 'second row 2', 'second row 3', 'second row 4']
-        }
+        },
+        matrix: _.range(8).map((i) => [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, i + 1])
     }
 };
 
