@@ -119,8 +119,7 @@ export function get_header_mask(visible_headers, original_headers, hop, heading_
 // startpos is the place of loop times size of one set of headers
 // + the offset in last set
 let get_startpos = (loop, offset, size) => {
-    let startpos = loop  * size + offset;
-    return startpos;
+    return loop  * size + offset;
 };
 
 // offset is the position times hop in the original
@@ -135,6 +134,7 @@ export function get_matrix_mask(all_headers, hops) {
     order of levels, from top to bottom
      */
     let heading_size = all_headers[0][1].length * hops[0];
+    console.log("masker", heading_size, hops);
     let matrix_mask =  _.map(all_headers, (headers, index) => {
         return get_header_mask(...headers, hops[index], heading_size);
     });
