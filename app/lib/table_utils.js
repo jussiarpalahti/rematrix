@@ -27,13 +27,11 @@ export function FullTable(basetable, new_levels) {
      the base table's
      */
     let table = _.cloneDeep(basetable);
-
     if (new_levels) {
         _.forOwn(table.levels, (headers, heading) => {
             if (new_levels[heading]) table.levels[heading] = new_levels[heading];
         });
     }
-
     table.meta = Table(table);
     table.base = basetable;
 
@@ -48,21 +46,28 @@ export function FullTable(basetable, new_levels) {
         table.stub_mask = stub_mask;
     }
 
-    let heading_to_list = (heading) => {
-        _.map(heading, (heading, index) => {
-            return {
-                heading: heading,
-                headers: basetable.levels[heading]
-            }
-        });
-    };
-
     table.get_heading_hopper = get_heading_hopper(
-        heading_to_list(table.heading));
+        heading_to_list(table.heading, table));
     table.stub_hopper = get_heading_hopper(
-        heading_to_list(table.stub));
+        heading_to_list(table.stub, table));
+
     return table;
 }
+
+let heading_to_list = (heading, table) => {
+    _.map(heading, (heading, index) => {
+        return {
+            heading: heading,
+            headers: table.levels[heading]
+        }
+    });
+};
+
+let headings_to__mask_list = (new_levels, all_levels, heading) => {
+    _.map(table[heading], (level_ids) => {
+        return [new_levels[level_ids], all_levels[level_ids]]
+    });
+};
 
 export function build() {
     let rtable = get_table('real');

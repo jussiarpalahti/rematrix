@@ -27,7 +27,6 @@ let TableStore = () => {
     obj._populate_tablestore = populate_tables.bind(obj);
     obj._fetch_matrix = fetch_matrix.bind(obj);
     obj._call_listeners = call_listeners.bind(obj);
-    obj._get_choicetable = get_choicetable.bind(obj);
     obj._get_preview_table = get_preview_table.bind(obj);
 };
 
@@ -54,13 +53,8 @@ function get_list(cb) {
 function set_choices(choices) {
     let table = this.tables[this.active_table];
     let new_levels = {};
-    this.chosen[table.name] = this._get_choicetable(table, new_levels);
+    this.chosen[table.name] = FullTable(table, new_levels);
     this._call_listeners();
-}
-
-function get_choicetable(table, new_levels) {
-    let choice_table = FullTable(table, new_levels);
-    return choice_table;
 }
 
 function fetch_matrix(tableid) {
@@ -90,9 +84,3 @@ function call_listeners() {
 function get_preview_table (tableid) {
 
 }
-
-let headings_to__mask_list = (new_levels, all_levels, heading) => {
-    _.map(table[heading], (level_ids) => {
-        return [new_levels[level_ids], all_levels[level_ids]]
-    });
-};
