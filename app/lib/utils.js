@@ -4,7 +4,7 @@ var _ = lodash;
 export function Table(table) {
     var resp = getSize(table);
     resp.hops = getHops(table);
-    table.shadow = create_shadow_object.bind(table);
+    //table.shadow = create_shadow_object.bind(table);
     return resp;
 }
 

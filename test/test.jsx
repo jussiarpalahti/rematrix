@@ -1093,8 +1093,9 @@ describe.only('testing preview level generation', function () {
 
         let full_table = FullTable(big_table);
         let preview = get_preview_table_levels(full_table, 15);
-        console.log(preview);
-        console.log(full_table.meta)
+
+        let small_table = FullTable(_.clone(full_table), preview);
+        console.log(small_table);
 
     });
 });

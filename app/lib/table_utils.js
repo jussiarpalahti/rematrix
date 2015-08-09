@@ -14,7 +14,7 @@ import {
     generate_hidden_check,
     generate_hidden_index,
     get_heading_hopper,
-    get_header_mask
+    get_matrix_mask
 } from './matrix_header';
 import {get_dispatcher} from '../lib/converser';
 
@@ -25,7 +25,12 @@ export function FullTable(basetable, new_levels) {
      and adds meta and header structures to the clone
      */
     let table = _.cloneDeep(basetable);
-    if (!table.base) table.base = basetable;
+    if (!table.base) {
+        table.base = basetable;
+        if (!table.base.meta) {
+            table.base.meta = Table(table.base);
+        }
+    }
 
     if (new_levels) {
         _.forOwn(table.levels, (headers, heading) => {
@@ -34,14 +39,16 @@ export function FullTable(basetable, new_levels) {
     }
 
     table.meta = Table(table);
-
     if (new_levels) {
-        let heading_headers = headings_to_mask_list(table.levels, table.base.levels,
+        let heading_hops_list = hops_to_list(table.base.meta.hops, 'heading', table.base);
+        let heading_headers = headings_to_mask_list(table, table.levels, table.base.levels,
             'heading');
-        let stub_headers = headings_to_mask_list(table.levels, table.base.levels,
+        let stub_headers = headings_to_mask_list(table, table.levels, table.base.levels,
             'stub');
-        let heading_mask = get_matrix_mask(heading_headers, table.base.meta.hops);
-        let stub_mask = get_matrix_mask(stub_headers, table.base.meta.hops);
+        let stub_hops_list = hops_to_list(table.base.meta.hops, 'stub', table.base);
+        console.log(heading_hops_list, stub_hops_list);
+        let heading_mask = get_matrix_mask(heading_headers, heading_hops_list);
+        let stub_mask = get_matrix_mask(stub_headers, stub_hops_list);
         table.heading_mask = heading_mask;
         table.stub_mask = stub_mask;
     }
@@ -54,6 +61,12 @@ export function FullTable(basetable, new_levels) {
     return table;
 }
 
+let hops_to_list = (hops, heading, table) => {
+    return _.map(table[heading], (level_ids) => {
+        return hops[level_ids];
+    });
+};
+
 let heading_to_list = (heading, table) => {
     return _.map(heading, (heading, index) => {
         return {
@@ -63,7 +76,7 @@ let heading_to_list = (heading, table) => {
     });
 };
 
-let headings_to_mask_list = (new_levels, all_levels, heading) => {
+let headings_to_mask_list = (table, new_levels, all_levels, heading) => {
     return _.map(table[heading], (level_ids) => {
         return [new_levels[level_ids], all_levels[level_ids]]
     });
@@ -225,7 +238,7 @@ export function get_preview_table_levels(table, size) {
      Heading hopper is used to ask active levels for every cell
      and added to level object's list
      */
-    if (!size) size = 30;
+    if (!size) size = 10;
 
     // initialize empty headers for levels object
     let preview_levels = _.mapValues(table.levels, () => []);
