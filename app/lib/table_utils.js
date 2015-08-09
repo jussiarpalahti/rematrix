@@ -18,35 +18,34 @@ import {
 } from './matrix_header';
 import {get_dispatcher} from '../lib/converser';
 
-export function FullTable(basetable, new_levels) {
+export function FullTable(table, new_levels) {
     /*
-     Creates a clone of basetable
+     Creates a full table from table meta data
+     or updates old table with new levels
      and adds meta and header structures to the clone
-
-     If new levels are given, those are used instead of
-     the base table's
      */
-    let table = _.cloneDeep(basetable);
+    if (!table.base) table.base = _.cloneDeep(table);
+
     if (new_levels) {
         _.forOwn(table.levels, (headers, heading) => {
             if (new_levels[heading]) table.levels[heading] = new_levels[heading];
         });
     }
+
     table.meta = Table(table);
-    table.base = basetable;
 
     if (new_levels) {
-        let heading_headers = headings_to__mask_list(table.levels, basetable.levels,
+        let heading_headers = headings_to__mask_list(table.levels, table.base.levels,
             'heading');
-        let stub_headers = headings_to__mask_list(table.levels, basetable.levels,
+        let stub_headers = headings_to__mask_list(table.levels, table.base.levels,
             'stub');
-        let heading_mask = get_matrix_mask(heading_headers, basetable.meta.hops);
-        let stub_mask = get_matrix_mask(stub_headers, basetable.meta.hops);
+        let heading_mask = get_matrix_mask(heading_headers, table.base.meta.hops);
+        let stub_mask = get_matrix_mask(stub_headers, table.base.meta.hops);
         table.heading_mask = heading_mask;
         table.stub_mask = stub_mask;
     }
 
-    table.get_heading_hopper = get_heading_hopper(
+    table.heading_hopper = get_heading_hopper(
         heading_to_list(table.heading, table));
     table.stub_hopper = get_heading_hopper(
         heading_to_list(table.stub, table));
