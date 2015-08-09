@@ -1089,24 +1089,10 @@ describe('heading\'s headers on a position test', function () {
 
 describe.only('testing preview level generation', function () {
 
-    it('should be right', function () {
-        let testtable = {
-            heading: ['one', 'two', 'three'],
-            stub: ['first', 'second'],
-
-            matrix: _.range(8).map((i) => [1,2,3,4,5,6,7,8,9,10,11,i+1]),
-
-            levels: {
-                one: ['top heading 1', 'top heading 2'],
-                two: ['second heading 1', 'second heading 2', 'second heading 3'],
-                three: ['third heading 1', 'third heading 2'],
-                first: ['top row 1', 'top row 2'],
-                second: ['second row 1', 'second row 2', 'second row 3', 'second row 4']
-            }
-        };
+    it('should be properly smaller', function () {
 
         let full_table = FullTable(big_table);
-        let preview = get_preview_table_levels(full_table);
+        let preview = get_preview_table_levels(full_table, 15);
         console.log(preview);
         console.log(full_table.meta)
 

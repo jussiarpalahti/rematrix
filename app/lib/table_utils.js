@@ -217,7 +217,7 @@ export function fetch_table_previews(cb) {
     });
 }
 
-export function get_preview_table_levels(table) {
+export function get_preview_table_levels(table, size) {
     /*
      Calculates effective levels to get a table with 30 rows and columns
      as a preview
@@ -225,9 +225,11 @@ export function get_preview_table_levels(table) {
      Heading hopper is used to ask active levels for every cell
      and added to level object's list
      */
+    if (!size) size = 30;
+
     // initialize empty headers for levels object
     let preview_levels = _.mapValues(table.levels, () => []);
-    for (let index=0; index < 10; index++) {
+    for (let index=0; index < size; index++) {
         _.forEach(_.filter(table.heading_hopper(index)), (headings) => {
             preview_levels[headings.heading].push(headings.header);
         });
