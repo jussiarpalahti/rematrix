@@ -54,24 +54,12 @@ function get_list(cb) {
 function set_choices(choices) {
     let table = this.tables[this.active_table];
     let new_levels = {};
-    _.forOwn(this.levels, (headers, heading) => {
-        if (choices[heading]) new_levels[heading] = choices[heading];
-        else new_levels[heading] = headers;
-    });
     this.chosen[table.name] = this._get_choicetable(table, new_levels);
     this._call_listeners();
 }
 
 function get_choicetable(table, new_levels) {
-    let heading_headers = headings_to__mask_list(new_levels, table.levels,
-    'heading');
-    let stub_headers = headings_to__mask_list(new_levels, table.levels,
-        'stub');
-    let heading_mask = get_matrix_mask(heading_headers, table.meta.hops);
-    let stub_mask = get_matrix_mask(stub_headers, table.meta.hops);
-    let choice_table = FullTable(table);
-    choice_table.heading_mask = heading_mask;
-    choice_table.stub_mask = stub_mask;
+    let choice_table = FullTable(table, new_levels);
     return choice_table;
 }
 

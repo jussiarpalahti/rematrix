@@ -18,14 +18,35 @@ import {
 } from './matrix_header';
 import {get_dispatcher} from '../lib/converser';
 
-export function FullTable(basetable) {
+export function FullTable(basetable, new_levels) {
     /*
      Creates a clone of basetable
      and adds meta and header structures to the clone
+
+     If new levels are given, those are used instead of
+     the base table's
      */
     let table = _.cloneDeep(basetable);
+
+    if (new_levels) {
+        _.forOwn(table.levels, (headers, heading) => {
+            if (new_levels[heading]) table.levels[heading] = new_levels[heading];
+        });
+    }
+
     table.meta = Table(table);
     table.base = basetable;
+
+    if (new_levels) {
+        let heading_headers = headings_to__mask_list(table.levels, basetable.levels,
+            'heading');
+        let stub_headers = headings_to__mask_list(table.levels, basetable.levels,
+            'stub');
+        let heading_mask = get_matrix_mask(heading_headers, basetable.meta.hops);
+        let stub_mask = get_matrix_mask(stub_headers, basetable.meta.hops);
+        table.heading_mask = heading_mask;
+        table.stub_mask = stub_mask;
+    }
 
     let heading_to_list = (heading) => {
         _.map(heading, (heading, index) => {
