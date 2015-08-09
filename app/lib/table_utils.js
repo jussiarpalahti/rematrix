@@ -249,6 +249,12 @@ export function get_preview_table_levels(table, size) {
             preview_levels[headings.heading].push(headings.header);
         });
     }
+
+    // some headers repeat
+    _.forOwn(preview_levels, (headers, heading) => {
+       preview_levels[heading] = _.uniq(headers);
+    });
+    
     return preview_levels;
 }
 
