@@ -27,8 +27,9 @@ let TableSelect = React.createClass({
                 <li key={tableid} onClick={this.chooser.bind(this, tableid)}
                      className="pure-menu-item">
                     <a href="#" className="pure-menu-link">
-                    <span>{
-                        this.state.chosen_table === tableid ? '\u2713' : ' '} </span>{tableid}
+                    <span>
+                        {this.state.chosen_table === tableid ? '\u2713' : ' '} </span>
+                        {table.title}
                 </a>
             </li>);
       });

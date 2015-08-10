@@ -29,13 +29,13 @@ export function create_shadow_object (fields, obj) {
 
 let getSize = function(table) {
     var heading_size = table.heading.map(key => table.levels[key]).reduce((a, b) => {
-        if (a.length) return a.length * b.length;
+        if (!a) return b.length;
         else return a * b.length
-    });
+    }, null);
     var stub_size = table.stub.map(key => table.levels[key]).reduce((a, b) => {
-        if (a.length) return a.length * b.length;
+        if (!a) return b.length;
         else return a * b.length
-    });
+    }, null);
 
     return {
         heading_size: heading_size,

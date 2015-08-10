@@ -661,7 +661,7 @@ describe('header table view test', function () {
 
 });
 
-describe('shadow object function', function () {
+describe.skip('shadow object function', function () {
 
     it("should correctly shadow stated fields and preserve others", function () {
 
@@ -684,7 +684,7 @@ describe('shadow object function', function () {
     });
 });
 
-describe('create shadow table', function () {
+describe.skip('create shadow table', function () {
 
     let testtable = {
         heading: ['one', 'two', 'three'],
@@ -1102,7 +1102,28 @@ describe('heading\'s headers on a position test', function () {
     });
 });
 
-describe.only('testing preview level generation', function () {
+describe('testing preview level generation', function () {
+
+    it('should support one level table', function () {
+        let cols = _.toArray(_.times(12, (index) => 'col heading ' + index));
+        let basetable = {
+            stub: ['one', 'two', 'three'],
+            heading: ['only_one'],
+
+            matrix: _.range(12).map((i) => [1,2,3,4,5,6,7,8,9,10,11,i+1]),
+
+            levels: {
+                one: ['top heading 1', 'top heading 2'],
+                two: ['second heading 1', 'second heading 2', 'second heading 3'],
+                three: ['third heading 1', 'third heading 2'],
+                only_one: cols
+            }
+        };
+
+        let testtable = FullTable(basetable);
+        
+
+    });
 
     it('should be properly smaller', function () {
 
