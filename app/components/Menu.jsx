@@ -47,7 +47,10 @@ let Menu = React.createClass({
             newly_hidden[item] = true;
         }
         this.setState({hidden_items: newly_hidden}, () => {
-            get_dispatcher('app').toggle(this.props.name, this.state.hidden_items);
+            let headers = _.toArray(_.keys(_.pick(
+                this.state.hidden_items, (hidden, header) => hidden ? false: true)
+            ));
+            this.props.on_choice(this.props.name, headers);
         });
     },
 

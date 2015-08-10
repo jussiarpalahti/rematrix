@@ -51,13 +51,13 @@ let Main = React.createClass({
                 let tables = this.props.store.get_list();
                 this.setState({tables: tables}, () => console.log("state updated"));
             }
-            else if (this.props.store.is_open() && this.state.chosen_table && (
-                !this.state.table || this.state.chosen_table !== this.state.table.name)
-            ) {
+            else if (this.props.store.is_open() && this.state.chosen_table) {
                 console.log("asking table from store");
                 let table = this.props.store.get_table(this.state.chosen_table);
                 if (table) {
-                    this.setState({table: table}, () => console.log("table state updated", table.name));
+                    this.setState(
+                        {table: table},
+                        () => console.log("table state updated", table.name));
                 }
             }
         };
@@ -99,7 +99,16 @@ let Main = React.createClass({
     on_table_change: function(tableid) {
         console.log('like to choose table', tableid);
         let table = this.props.store.get_table(tableid);
-        if (table) this.setState({table: table})
+        if (table) {
+            this.setState({
+                table: table, chosen_table: table.name
+            }, () => console.log("changing table from event listener", tableid));
+        }
+    },
+
+    on_choice: function(heading, headers) {
+        console.log('like to change choices', heading, headers);
+        this.props.store.set_choices(this.state.table, heading, headers);
     },
 
     componentWillUnmount: function () {
@@ -109,7 +118,7 @@ let Main = React.createClass({
         let table = null;
         if (this.state.table) {
             table = <div>
-                <MenuBar table={this.state.table} on_change={this.on_table_change} />
+                <MenuBar table={this.state.table} on_choice={this.on_choice} />
                 <HoppingTable table={this.state.table} />
             </div>;
         }
@@ -129,7 +138,7 @@ let MenuBar = React.createClass({
             <div className="header_menu">
             <div>Rows</div>
             {this.props.table.stub.map((heading, index) => {
-                return <Menu on_change={this.props.on_change} key={index}
+                return <Menu on_choice={this.props.on_choice} key={index}
                              visible={this.props.table.levels[heading]}
                              menu={this.props.table.base.levels[heading]}
                              name={heading}/>
@@ -137,7 +146,7 @@ let MenuBar = React.createClass({
             <div className="header_menu">
                 <div>Columns</div>
                 {this.props.table.heading.map((heading, index) => {
-                    return <Menu on_change={this.props.on_change} key={index}
+                    return <Menu on_choice={this.props.on_choice} key={index}
                                  visible={this.props.table.levels[heading]}
                                  menu={this.props.table.base.levels[heading]}
                                  name={heading}/>

@@ -62,10 +62,13 @@ function get_list(cb) {
     }
 }
 
-function set_choices(tableid, choices) {
-    let table = this.tables[tableid];
-    let new_levels = {};
-    this.tables[tableid] = FullTable(table, new_levels);
+function set_choices(table, heading, headers) {
+    let new_levels = _.clone(table.levels);
+    new_levels[heading] = headers;
+    console.log("store levelled", new_levels);
+    let new_table = FullTable(table, new_levels);
+    console.log("table renewed", new_table);
+    this.tables[table.name] = new_table;
     this._call_listeners();
 }
 
