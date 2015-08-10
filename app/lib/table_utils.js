@@ -179,15 +179,14 @@ let ROUTER = {
     matrix: SERVER + '/matrix'
 };
 
-function load_matrix(table) {
+export function load_matrix(table, cb) {
+    SENTINEL[table.name] = true;
     d3.json(ROUTER.matrix + table.url, (err, data) => {
         SENTINEL[table.name] = false;
         if (err) console.log("problem fetching data", err);
         else {
             console.log("fetched some data", table.url, data)
-            table.matrix = data.matrix;
-            TABLES[table.name].matrix = data.matrix;
-            get_dispatcher('app').table_loaded(table.name);
+            cb(matrix);
         }
     });
 }

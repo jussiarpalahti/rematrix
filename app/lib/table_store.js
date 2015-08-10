@@ -4,7 +4,8 @@ var _ = lodash;
 import {
     fetch_table_previews,
     FullTable,
-    get_preview_table_levels
+    get_preview_table_levels,
+    load_matrix
 } from './table_utils'
 
 import {
@@ -29,7 +30,11 @@ let TableStore = () => {
 };
 
 function get_table(tableid) {
-    return this.tables[tableid]
+    let table = this.tables[tableid];
+    if (table.matrix) return table;
+    else {
+        this._fetch_matrix(tableid);
+    }
 }
 
 function get_list(cb) {
@@ -50,7 +55,14 @@ function set_choices(tableid, choices) {
 }
 
 function fetch_matrix(tableid) {
-
+    load_matrix(
+        this.tables[tableid],
+        (matrix) => {
+            let table = this.tables[tableid];
+            table.matrix = matrix;
+            this._call_listeners();
+        }
+    );
 }
 
 function populate_tables() {

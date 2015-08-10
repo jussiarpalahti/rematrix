@@ -1,6 +1,5 @@
 
-export var big_table =
-        {
+export var big_table = {
             "heading": [
                 "Talotyyppi",
                 "Vuosi"
@@ -747,4 +746,4 @@ export var big_table =
             ],
             "title": "Asuntokunnat henkil\u00f6luvun ja talotyypin mukaan 31.12.",
             "url": "/asunnot.px"
-}
+};
