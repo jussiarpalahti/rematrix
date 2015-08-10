@@ -14,7 +14,8 @@ import {
     generate_hidden_check,
     generate_hidden_index,
     get_heading_hopper,
-    get_matrix_mask
+    get_matrix_mask,
+    filter_matrix
 } from './matrix_header';
 import {get_dispatcher} from '../lib/converser';
 
@@ -50,6 +51,7 @@ export function FullTable(basetable, new_levels) {
         let stub_mask = get_matrix_mask(stub_headers, stub_hops_list);
         table.heading_mask = heading_mask;
         table.stub_mask = stub_mask;
+        table.matrix = filter_matrix(table, table.base.matrix)
     }
 
     table.heading_hopper = get_heading_hopper(

@@ -128,12 +128,6 @@ function helper() {
 
     let small_table = FullTable(_.clone(full_table), preview);
 
-    small_table.matrix = _.map(small_table.stub_mask, (row) => {
-        return _.map(small_table.heading_mask, (col) => {
-            return small_table.matrix[row][col];
-        })
-    });
-
     return small_table;
 
     let basetable = get_table("test");

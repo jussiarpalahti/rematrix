@@ -20,7 +20,8 @@ import {
     get_header_mask,
     get_matrix_mask,
     get_header_from_pos,
-    get_heading_hopper
+    get_heading_hopper,
+    matrix_hider
 } from '../app/lib/matrix_header';
 
 import ManualTable from '../app/components/manual_table';
@@ -1031,6 +1032,20 @@ describe("header and matrix mask test", function () {
         expect(visible_value_2).to.equal(4);
     });
 
+    //it('should handle bigger tables', function () {
+    //
+    //    let table = FullTable(big_table);
+    //    let heading_hops_list = hops_to_list(table.base.meta.hops, 'heading', table.base);
+    //    let heading_headers = headings_to_mask_list(table, table.levels, table.base.levels,
+    //        'heading');
+    //    let stub_headers = headings_to_mask_list(table, table.levels, table.base.levels,
+    //        'stub');
+    //    let stub_hops_list = hops_to_list(table.base.meta.hops, 'stub', table.base);
+    //    let heading_mask = get_matrix_mask(heading_headers, heading_hops_list);
+    //    let stub_mask = get_matrix_mask(stub_headers, stub_hops_list);
+    //
+    //});
+
 });
 
 describe('get header on a position test', function () {
@@ -1094,8 +1109,10 @@ describe.only('testing preview level generation', function () {
         let full_table = FullTable(big_table);
         let preview = get_preview_table_levels(full_table, 15);
 
-        let small_table = FullTable(_.clone(full_table), preview);
-        console.log(small_table);
+        let preview_table = FullTable(_.clone(full_table), preview);
 
+        expect(preview_table.matrix.length).to.be.below(full_table.matrix.length);
+        expect(preview_table.stub_mask[0]).to.be.equal(0);
+        expect(preview_table.levels.Alue[0]).to.be.equal(full_table.levels.Alue[0]);
     });
 });
