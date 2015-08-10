@@ -13,7 +13,9 @@ let TableSelect = React.createClass({
     componentWillReceiveProps: function(nextProps) {
         this.setState(
             {chosen_table: nextProps.chosen_table},
-            () => console.log("setting table select state", nextProps.chosen_table)
+            () => console.log("setting table select state",
+                this.props.chosen_table,
+                nextProps.chosen_table)
         );
     },
     chooser: function (tableid, ev) {

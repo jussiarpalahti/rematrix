@@ -47,59 +47,28 @@ let Main = React.createClass({
         let update_cb = () => {
             if (!this.state.tables && this.props.store.is_open()) {
                 let tables = this.props.store.get_list();
-                this.setState({tables: tables}, () => console.log("table change call"));
+                this.setState({tables: tables});
             }
             else if (this.props.store.is_open() && this.state.chosen_table) {
-                console.log("asking table from store");
                 let table = this.props.store.get_table(this.state.chosen_table);
                 if (table) {
                     this.setState(
-                        {table: table},
-                        () => console.log("choice change call", table.name));
+                        {table: table});
                 }
             }
         };
         this.props.store.on_change(update_cb);
-
-        //let dispatcher = register_dispatch('app', {
-        //    toggle : [
-        //        (heading, headers) => {
-        //            console.log('toggle');
-        //            handle_visibility(
-        //                this.state.visible_table, this.state.rtable,
-        //                heading, headers);
-        //        this.forceUpdate();
-        //    }],
-        //    data_change: [
-        //        (tableid) => {
-        //            console.log('data change');
-        //            let rtable = get_table(tableid);
-        //            let visible_table = get_table(tableid);
-        //            this.setState({
-        //                rtable:  rtable,
-        //                visible_table: visible_table
-        //        });
-        //    }],
-        //    table_loaded: [
-        //        (tableid) => {
-        //            /*
-        //            Data change started table loading which dispatches
-        //            this event so that table change can be tried again
-        //             */
-        //            console.log('table loaded');
-        //            this.state.dispatcher.data_change(tableid);
-        //        }
-        //    ]
-        //});
-        //this.setState({dispatcher: dispatcher});
     },
 
     on_table_change: function(tableid) {
+        this.setState({
+            chosen_table: tableid
+        });
         let table = this.props.store.get_table(tableid);
         if (table) {
             this.setState({
-                table: table, chosen_table: table.name
-            }, () => console.log("table change started from request", tableid));
+                table: table
+            });
         }
     },
 
@@ -122,7 +91,7 @@ let Main = React.createClass({
             <div className="top_header"><TableSelect
                 tables={this.state.tables}
                 on_change={this.on_table_change}
-                chosen_table={this.state.table}/></div>
+                chosen_table={this.state.table ? this.state.table.name : null}/></div>
             {table}
         </div>
     }

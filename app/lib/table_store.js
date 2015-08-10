@@ -43,16 +43,13 @@ function get_table(tableid) {
     let table_baseurl = table.url.split("?", 1);
     let new_table_url = table_baseurl + `?rows=${row_positions}&cols=${column_positions}`;
     if (new_table_url === table.url) {
-        console.log("table not changed, return same");
         return table;
     } else {
-        console.log("table not the same, move on with the process");
         table.url = new_table_url;
     }
 
     if (table.matrix) {
         if (table.preview) {
-            console.log('starting a preview');
             let preview_levels = get_preview_table_levels(FullTable(table), 10);
             table = FullTable(table, preview_levels);
             table.preview = false;
@@ -116,7 +113,6 @@ function populate_tables() {
     //this.tables.test.preview = true;
     this._sentinel = true;
     let cb = (data) => {
-        console.log("store got some data", data);
         _.map(data, (table, index) => {
             this.tables[table.name] = FullTable(table);
         });
@@ -131,9 +127,7 @@ function on_change(cb) {
 }
 
 function call_listeners() {
-    console.log("store calling customers, store is open: ", this.is_open());
     _.map(this._listeners, (listener) => {
-        console.log('customer this:', listener);
         listener()
     });
 }

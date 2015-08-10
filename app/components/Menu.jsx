@@ -28,20 +28,9 @@ let Menu = React.createClass({
     componentWillReceiveProps: function(nextProps) {
         let hidden_items = {};
         _.map(nextProps.menu, (header, index) => {
-            if (nextProps.name==="first") {
-                console.log("menu state change", header, "now", this.props.name, "next", nextProps.name,
-                    this.state.hidden_items,
-                    "now", this.props.menu, "next", nextProps.menu,
-                    "now", this.props.visible, "next", nextProps.visible)
-            }
-            if (this.props.name === nextProps.name && this.state.hidden_items[header]) {
-                if (nextProps.name==="first") console.log('old state');
-                hidden_items[header] = true;
-            } else if (nextProps.visible.indexOf(header) !== -1) {
-                if (nextProps.name==="first") console.log('correct state');
+            if (nextProps.visible.indexOf(header) !== -1) {
                 hidden_items[header] = false;
             } else {
-                if (nextProps.name==="first") console.log('correct state, too');
                 hidden_items[header] = true;
             }
         });
