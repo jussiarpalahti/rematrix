@@ -3,6 +3,7 @@ from django.http import HttpResponse, JsonResponse
 from django.conf import settings
 from pathlib import Path
 import mimetypes
+import json
 import opendata.px_reader as px
 
 
@@ -73,7 +74,11 @@ def data(request, path):
     :rtype:
     """
     resp = get_px(path, data=True)
-    return JsonResponse(resp)
+    rows = json.loads(request.GET.get("rows"))
+    cols = json.loads(request.GET.get("cols"))
+    matrix = filter_matrix(resp["matrix"], rows, cols)
+    print len(matrix), len(matrix[0])
+    return JsonResponse({"matrix" : matrix})
 
 
 def meta(request, path):
@@ -104,3 +109,6 @@ def index(request):
     return JsonResponse({
         'pxdocs': [get_px(px_doc, sample=True, meta=True) for px_doc in px_docs]
     })
+
+def filter_matrix(matrix, rows, cols):
+    return [[matrix[row][col] for col in cols] for row in rows]
