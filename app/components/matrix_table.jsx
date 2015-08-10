@@ -211,8 +211,12 @@ export class HiddenTable extends React.Component {
 export var HoppingTable = React.createClass({
 
     render: function () {
-        let table = this.props.table;
-
+        let table;
+        if (this.props.table.preview) {
+            table = this.props.table.preview;
+        } else {
+            table = this.props.table;
+        }
         // initialize an array of empty arrays for headings
         let columns = _.map(_.range(table.heading.length), () => []);
 

@@ -224,7 +224,6 @@ export function fetch_table_previews(cb) {
                 table.preview = true;
                 TABLES[table.name] = table;
             });
-            console.log(TABLES)
             cb(data.pxdocs); // this should render the app now that initialization is done
         }
     });

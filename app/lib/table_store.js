@@ -37,9 +37,17 @@ export function TableStore() {
 
 function get_table(tableid) {
     let table = this.tables[tableid];
-    if (table.matrix) return table;
-    else {
+    if (table.matrix) {
+        if (table.preview) {
+            console.log('starting a preview');
+            let preview_table = _.cloneDeep(table);
+            let preview_levels = get_preview_table_levels(preview_table, 10);
+            this.tables[tableid].preview = FullTable(preview_table, preview_levels);
+        }
+        return table;
+    } else {
         this._fetch_matrix(tableid);
+        return null;
     }
 }
 

@@ -56,7 +56,9 @@ let Main = React.createClass({
             ) {
                 console.log("asking table from store");
                 let table = this.props.store.get_table(this.state.chosen_table);
-                this.setState({table: table}, () => console.log("table state updated", table.name));
+                if (table) {
+                    this.setState({table: table}, () => console.log("table state updated", table.name));
+                }
             }
         };
         this.props.store.on_change(update_cb);
@@ -96,9 +98,8 @@ let Main = React.createClass({
 
     on_table_change: function(tableid) {
         console.log('like to choose table', tableid);
-        this.setState(
-            {table: this.props.store.get_table(tableid)}
-        )
+        let table = this.props.store.get_table(tableid);
+        if (table) this.setState({table: table})
     },
 
     componentWillUnmount: function () {
