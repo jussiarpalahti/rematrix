@@ -3,7 +3,8 @@ var _ = lodash;
 
 import {
     fetch_table_previews,
-    FullTable
+    FullTable,
+    get_preview_table_levels
 } from './table_utils'
 
 import {
@@ -74,22 +75,4 @@ function on_change(cb) {
 
 function call_listeners() {
     _.map(this.listeners, (listener) => listener());
-}
-
-function get_preview_table_levels (table) {
-    /*
-    Calculates effective levels to get a table with 30 rows and columns
-    as a preview
-
-    Heading hopper is used to ask active levels for every cell
-    and added to level object's list
-    */
-    // initialize empty headers for levels object
-    let preview_levels = _.mapValues(table.levels, () => []);
-    for (let index=0; index < 30; index++) {
-        _.forEach(_.filter(table.heading_hopper(index)), (headings) => {
-            preview_levels[headings.heading].push(headings.header);
-        });
-    }
-    return preview_levels;
 }
