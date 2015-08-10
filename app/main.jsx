@@ -45,11 +45,9 @@ let Main = React.createClass({
     },
     componentDidMount: function () {
         let update_cb = () => {
-            console.log("called back from store");
             if (!this.state.tables && this.props.store.is_open()) {
-                console.log("asking list from store");
                 let tables = this.props.store.get_list();
-                this.setState({tables: tables}, () => console.log("state updated"));
+                this.setState({tables: tables}, () => console.log("table change call"));
             }
             else if (this.props.store.is_open() && this.state.chosen_table) {
                 console.log("asking table from store");
@@ -57,7 +55,7 @@ let Main = React.createClass({
                 if (table) {
                     this.setState(
                         {table: table},
-                        () => console.log("table state updated", table.name));
+                        () => console.log("choice change call", table.name));
                 }
             }
         };
@@ -97,17 +95,15 @@ let Main = React.createClass({
     },
 
     on_table_change: function(tableid) {
-        console.log('like to choose table', tableid);
         let table = this.props.store.get_table(tableid);
         if (table) {
             this.setState({
                 table: table, chosen_table: table.name
-            }, () => console.log("changing table from event listener", tableid));
+            }, () => console.log("table change started from request", tableid));
         }
     },
 
     on_choice: function(heading, headers) {
-        console.log('like to change choices', heading, headers);
         this.props.store.set_choices(this.state.table, heading, headers);
     },
 

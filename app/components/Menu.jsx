@@ -14,6 +14,11 @@ let Menu = React.createClass({
                 hidden_items[header] = true;
             }
         });
+        if (this.props.name==="first") {
+            console.log("menu state build", this.props.name, hidden_items,
+                this.props.menu,
+                this.props.visible)
+        }
         return {
             items : this.props.menu,
             hidden_items: hidden_items
@@ -22,14 +27,22 @@ let Menu = React.createClass({
 
     componentWillReceiveProps: function(nextProps) {
         let hidden_items = {};
-
         _.map(nextProps.menu, (header, index) => {
+            if (nextProps.name==="first") {
+                console.log("menu state change", header, "now", this.props.name, "next", nextProps.name,
+                    this.state.hidden_items,
+                    "now", this.props.menu, "next", nextProps.menu,
+                    "now", this.props.visible, "next", nextProps.visible)
+            }
             if (this.props.name === nextProps.name && this.state.hidden_items[header]) {
+                if (nextProps.name==="first") console.log('old state');
                 hidden_items[header] = true;
             } else if (nextProps.visible.indexOf(header) !== -1) {
+                if (nextProps.name==="first") console.log('correct state');
                 hidden_items[header] = false;
             } else {
-                hidden_items[header] = false;
+                if (nextProps.name==="first") console.log('correct state, too');
+                hidden_items[header] = true;
             }
         });
         this.setState({
