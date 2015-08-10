@@ -130,14 +130,16 @@ let MenuBar = React.createClass({
             <div>Rows</div>
             {this.props.table.stub.map((heading, index) => {
                 return <Menu on_change={this.props.on_change} key={index}
-                             menu={this.props.table.levels[heading]}
+                             visible={this.props.table.levels[heading]}
+                             menu={this.props.table.base.levels[heading]}
                              name={heading}/>
             })}</div>
             <div className="header_menu">
                 <div>Columns</div>
                 {this.props.table.heading.map((heading, index) => {
                     return <Menu on_change={this.props.on_change} key={index}
-                                 menu={this.props.table.levels[heading]}
+                                 visible={this.props.table.levels[heading]}
+                                 menu={this.props.table.base.levels[heading]}
                                  name={heading}/>
                 })}</div>
         </div>

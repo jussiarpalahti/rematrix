@@ -8,7 +8,11 @@ let Menu = React.createClass({
     getInitialState : function () {
         let hidden_items = {};
         _.map(this.props.menu, (header, index) => {
-            hidden_items[header] = false;
+            if (this.props.visible.indexOf(header) !== -1) {
+                hidden_items[header] = false;
+            } else {
+                hidden_items[header] = true;
+            }
         });
         return {
             items : this.props.menu,
@@ -18,9 +22,12 @@ let Menu = React.createClass({
 
     componentWillReceiveProps: function(nextProps) {
         let hidden_items = {};
+
         _.map(nextProps.menu, (header, index) => {
             if (this.props.name === nextProps.name && this.state.hidden_items[header]) {
                 hidden_items[header] = true;
+            } else if (nextProps.visible.indexOf(header) !== -1) {
+                hidden_items[header] = false;
             } else {
                 hidden_items[header] = false;
             }
