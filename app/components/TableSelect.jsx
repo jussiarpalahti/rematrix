@@ -7,14 +7,18 @@ import {get_dispatcher} from '../lib/converser';
 let TableSelect = React.createClass({
     getInitialState : function () {
         return {
-            chosen_table : this.props.initial_table,
+            chosen_table : this.props.chosen_table
         };
     },
-    chooser: function (tableid, e) {
-        e.preventDefault();
-        this.setState({chosen_table: tableid}, () => {
-            get_dispatcher('app').data_change(tableid);
-        });
+    componentWillReceiveProps: function(nextProps) {
+        this.setState(
+            {chosen_table: nextProps.chosen_table},
+            () => console.log("setting table select state", nextProps.chosen_table)
+        );
+    },
+    chooser: function (tableid, ev) {
+        ev.preventDefault();
+        this.props.on_change(tableid);
     },
     render: function () {
         let menu_items = [];

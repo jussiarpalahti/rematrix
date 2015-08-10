@@ -54,7 +54,6 @@ function get_list(cb) {
 
 function set_choices(tableid, choices) {
     let table = this.tables[tableid];
-
     let new_levels = {};
     this.tables[tableid] = FullTable(table, new_levels);
     this._call_listeners();
