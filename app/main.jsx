@@ -33,70 +33,94 @@ import {
 import {build, handle_visibility, get_table} from './lib/table_utils';
 import {register_dispatch, get_dispatcher, del_dispatcher} from './lib/converser';
 import {TABLES, fetch_table_previews, FullTable, get_preview_table_levels} from './lib/table_utils';
+import {TableStore} from './lib/table_store';
 
 let Main = React.createClass({
     getInitialState : function () {
         return {
-            rtable: get_table("test"),
-            visible_table: get_table("test")
+            table: null,
+            tables: this.props.store.get_list()
         };
     },
     componentDidMount: function () {
-        let dispatcher = register_dispatch('app', {
-            toggle : [
-                (heading, headers) => {
-                    console.log('toggle');
-                    handle_visibility(
-                        this.state.visible_table, this.state.rtable,
-                        heading, headers);
-                this.forceUpdate();
-            }],
-            data_change: [
-                (tableid) => {
-                    console.log('data change');
-                    let rtable = get_table(tableid);
-                    let visible_table = get_table(tableid);
-                    this.setState({
-                        rtable:  rtable,
-                        visible_table: visible_table
-                });
-            }],
-            table_loaded: [
-                (tableid) => {
-                    /*
-                    Data change started table loading which dispatches
-                    this event so that table change can be tried again
-                     */
-                    console.log('table loaded');
-                    this.state.dispatcher.data_change(tableid);
-                }
-            ]
-        });
-        this.setState({dispatcher: dispatcher});
+        let update_cb = () => {
+            console.log("called back from store");
+            if (!this.state.tables && this.props.store.is_open()) {
+                console.log("asking stuff from store");
+                let tables = this.props.store.get_list();
+                this.setState({tables: tables}, () => console.log("state updated"));
+            }
+        };
+        this.props.store.on_change(update_cb);
+
+        //let dispatcher = register_dispatch('app', {
+        //    toggle : [
+        //        (heading, headers) => {
+        //            console.log('toggle');
+        //            handle_visibility(
+        //                this.state.visible_table, this.state.rtable,
+        //                heading, headers);
+        //        this.forceUpdate();
+        //    }],
+        //    data_change: [
+        //        (tableid) => {
+        //            console.log('data change');
+        //            let rtable = get_table(tableid);
+        //            let visible_table = get_table(tableid);
+        //            this.setState({
+        //                rtable:  rtable,
+        //                visible_table: visible_table
+        //        });
+        //    }],
+        //    table_loaded: [
+        //        (tableid) => {
+        //            /*
+        //            Data change started table loading which dispatches
+        //            this event so that table change can be tried again
+        //             */
+        //            console.log('table loaded');
+        //            this.state.dispatcher.data_change(tableid);
+        //        }
+        //    ]
+        //});
+        //this.setState({dispatcher: dispatcher});
     },
 
     componentWillUnmount: function () {
         del_dispatcher('app');
     },
     render: function () {
+        let table = null;
+        if (this.props.table) {
+            table = <div>
+                <MenuBar table={this.state.table} />
+                <HopperTable table={this.state.table} />
+            </div>;
+        }
         return <div>
-            <div className="top_header">
-                <TableSelect tables={TABLES} initial_table="test" /></div>
+            <div className="top_header"><TableSelect tables={this.state.tables} /></div>
+            {table}
+        </div>
+    }
+});
+
+let MenuBar = React.createClass({
+    render: function () {
+        return <div>
             <div className="header_menu">
-                <div>Rows</div>
-                {this.state.rtable.stub.map((heading, index) => {
-                    return <Menu start={index} key={index}
-                                 menu={this.state.rtable.levels[heading]}
-                                 name={heading}/>
-                })}</div>
+            <div>Rows</div>
+            {this.props.table.stub.map((heading, index) => {
+                return <Menu start={index} key={index}
+                             menu={this.props.table.levels[heading]}
+                             name={heading}/>
+            })}</div>
             <div className="header_menu">
                 <div>Columns</div>
-                {this.state.rtable.heading.map((heading, index) => {
+                {this.props.table.heading.map((heading, index) => {
                     return <Menu start={index} key={index}
-                                 menu={this.state.rtable.levels[heading]}
+                                 menu={this.props.table.levels[heading]}
                                  name={heading}/>
                 })}</div>
-            <HiddenTable table={this.state.visible_table}/>
         </div>
     }
 });
@@ -104,21 +128,16 @@ let Main = React.createClass({
 function main() {
     var app = document.createElement('div');
     document.body.appendChild(app);
-    let init = false;
 
     // TODO: just to help with testing, remove at earliest convenience
-    let table = helper();
-    let renderer = () => {
-        init = true;
-        React.render(<div>
-            <h1>React Table Viewer</h1>
-            <HoppingTable table={table} />
-        </div>, app);
-    };
-    renderer();
-    // point here is to see if renderer has run once so init is assumed done
-    //if (init) renderer();
-    //else fetch_table_previews(renderer);
+    //let table = helper();
+
+    let store = TableStore();
+
+    React.render(<div>
+        <h1>React Table Viewer</h1>
+        <Main store={store} />
+    </div>, app);
 
 }
 

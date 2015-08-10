@@ -5,7 +5,8 @@ import {
     fetch_table_previews,
     FullTable,
     get_preview_table_levels,
-    load_matrix
+    load_matrix,
+    TABLES
 } from './table_utils'
 
 import {
@@ -13,13 +14,16 @@ import {
     get_header_from_pos
 } from './matrix_header';
 
-let TableStore = () => {
+export function TableStore() {
 
     let obj = {
         _sentinel: false,
         tables: {},
-        listeners: []
+        _listeners: []
     };
+    obj.is_open = function () {
+        return !this._sentinel;
+    }.bind(obj);
     obj.get_table = get_table.bind(obj)
     obj.get_list = get_list.bind(obj);
     obj.set_choices = set_choices.bind(obj);
@@ -27,7 +31,9 @@ let TableStore = () => {
     obj._populate_tablestore = populate_tables.bind(obj);
     obj._fetch_matrix = fetch_matrix.bind(obj);
     obj._call_listeners = call_listeners.bind(obj);
-};
+
+    return obj;
+}
 
 function get_table(tableid) {
     let table = this.tables[tableid];
@@ -38,7 +44,7 @@ function get_table(tableid) {
 }
 
 function get_list(cb) {
-    if (this.tables.length === 0) {
+    if (!this._sentinel && _.isEmpty(this.tables)) {
         this._populate_tablestore();
         return null;
     } else {
@@ -68,12 +74,13 @@ function fetch_matrix(tableid) {
 function populate_tables() {
     // network operation in progress
     if (this._sentinel) return null;
-
+    this.tables.test = FullTable(TABLES.test);
     this._sentinel = true;
     let cb = (data) => {
-        _.map(data.pxdocs, (table, index) => {
-            let preview_levels = get_preview_table_levels(table);
-            this.tables[table.name] = FullTable(table, preview_levels);
+        console.log("store got some data", data);
+        _.map(data, (table, index) => {
+            //let preview_levels = get_preview_table_levels(FullTable(table));
+            this.tables[table.name] = FullTable(table);
         });
         this._sentinel = false;
         this._call_listeners();
@@ -86,5 +93,9 @@ function on_change(cb) {
 }
 
 function call_listeners() {
-    _.map(this.listeners, (listener) => listener());
+    console.log("store calling customers, store is open: ", this.is_open());
+    _.map(this._listeners, (listener) => {
+        console.log('customer this:', listener);
+        listener()
+    });
 }
