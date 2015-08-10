@@ -186,7 +186,7 @@ export function load_matrix(table, cb) {
         if (err) console.log("problem fetching data", err);
         else {
             console.log("fetched some data", table.url, data)
-            cb(matrix);
+            cb(data);
         }
     });
 }

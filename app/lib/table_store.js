@@ -37,18 +37,38 @@ export function TableStore() {
 
 function get_table(tableid) {
     let table = this.tables[tableid];
+
+    let row_positions = JSON.stringify(table.stub_mask);
+    let column_positions = JSON.stringify(table.heading_mask);
+    let table_baseurl = table.url.split("?", 1);
+    let new_table_url = table_baseurl + `?rows=${row_positions}&cols=${column_positions}`;
+    if (new_table_url === table.url) {
+        console.log("table not changed, return same");
+        return table;
+    } else {
+        console.log("table not the same, move on with the process");
+        table.url = new_table_url;
+    }
+
     if (table.matrix) {
         if (table.preview) {
             console.log('starting a preview');
             let preview_levels = get_preview_table_levels(FullTable(table), 10);
             table = FullTable(table, preview_levels);
             table.preview = false;
-            console.log(table);
             this.tables[tableid] = table;
+        } else {
+            if (this._sentinel) return null;
+            if (!table.url) return null;
+            // table layout might might have changed, request new matrix
+            this._fetch_matrix(table);
+            return null;
         }
         return table;
     } else {
-        this._fetch_matrix(tableid);
+        if (this._sentinel) return null;
+        if (!table.url) return null;
+        this._fetch_matrix(table);
         return null;
     }
 }
@@ -72,12 +92,18 @@ function set_choices(table, heading, headers) {
     this._call_listeners();
 }
 
-function fetch_matrix(tableid) {
+function fetch_matrix(table) {
+    if (this._sentinel) return null;
+    else this._sentinel = true;
     load_matrix(
-        this.tables[tableid],
-        (matrix) => {
-            let table = this.tables[tableid];
-            table.matrix = matrix;
+        table,
+        (data) => {
+            if (data.matrix.length === table.stub_mask.length) {
+                this._sentinel = false;
+            } else {
+                return null;
+            }
+            this.tables[table.name].matrix = data.matrix;
             this._call_listeners();
         }
     );
@@ -86,12 +112,12 @@ function fetch_matrix(tableid) {
 function populate_tables() {
     // network operation in progress
     if (this._sentinel) return null;
-    this.tables.test = FullTable(TABLES.test);
+    //this.tables.test = FullTable(TABLES.test);
+    //this.tables.test.preview = true;
     this._sentinel = true;
     let cb = (data) => {
         console.log("store got some data", data);
         _.map(data, (table, index) => {
-            //let preview_levels = get_preview_table_levels(FullTable(table));
             this.tables[table.name] = FullTable(table);
         });
         this._sentinel = false;
