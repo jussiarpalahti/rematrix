@@ -43,28 +43,24 @@ function get_table(tableid) {
     let table_baseurl = table.url.split("?", 1);
     let new_table_url = table_baseurl + `?rows=${row_positions}&cols=${column_positions}`;
     if (new_table_url === table.url) {
+        console.log("same old table, same old choices", tableid);
         return table;
     } else {
+        console.log("new table, new address ", tableid, new_table_url);
         table.url = new_table_url;
     }
 
     if (table.matrix) {
-        if (table.preview) {
-            let preview_levels = get_preview_table_levels(FullTable(table), 10);
-            table = FullTable(table, preview_levels);
-            table.preview = false;
-            this.tables[tableid] = table;
-        } else {
-            if (this._sentinel) return null;
-            if (!table.url) return null;
-            // table layout might might have changed, request new matrix
-            this._fetch_matrix(table);
-            return null;
-        }
         return table;
     } else {
-        if (this._sentinel) return null;
-        if (!table.url) return null;
+        if (this._sentinel) {
+            console.log("network op in progress, can't get ", tableid);
+            return null;
+        }
+        if (!table.url) {
+            console.log("no table url, can't get ", tableid);
+            return null;
+        }
         this._fetch_matrix(table);
         return null;
     }
@@ -82,9 +78,7 @@ function get_list(cb) {
 function set_choices(table, heading, headers) {
     let new_levels = _.clone(table.levels);
     new_levels[heading] = headers;
-    console.log("store levelled", new_levels);
     let new_table = FullTable(table, new_levels);
-    console.log("table renewed", new_table);
     this.tables[table.name] = new_table;
     this._call_listeners();
 }
@@ -109,12 +103,12 @@ function fetch_matrix(table) {
 function populate_tables() {
     // network operation in progress
     if (this._sentinel) return null;
-    //this.tables.test = FullTable(TABLES.test);
-    //this.tables.test.preview = true;
     this._sentinel = true;
     let cb = (data) => {
         _.map(data, (table, index) => {
-            this.tables[table.name] = FullTable(table);
+            let start_table = FullTable(table);
+            let new_levels = get_preview_table_levels(start_table, 15);
+            this.tables[table.name] = FullTable(start_table, new_levels)
         });
         this._sentinel = false;
         this._call_listeners();

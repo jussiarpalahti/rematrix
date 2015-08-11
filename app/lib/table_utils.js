@@ -221,7 +221,6 @@ export function fetch_table_previews(cb) {
         else {
             console.log("fetched some tables", data);
             _.map(data.pxdocs, (table, index) => {
-                table.preview = true;
                 TABLES[table.name] = table;
             });
             cb(data.pxdocs); // this should render the app now that initialization is done
