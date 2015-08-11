@@ -5,18 +5,15 @@ import React from 'react';
 import {get_dispatcher} from '../lib/converser';
 
 let TableSelect = React.createClass({
-    getInitialState : function () {
+    nogetInitialState : function () {
         return {
             chosen_table : this.props.chosen_table
         };
     },
     componentWillReceiveProps: function(nextProps) {
-        this.setState(
-            {chosen_table: nextProps.chosen_table},
-            () => console.log("setting table select state",
-                this.props.chosen_table,
-                nextProps.chosen_table)
-        );
+        console.log("setting table select state",
+            this.props.chosen_table,
+            nextProps.chosen_table)
     },
     chooser: function (tableid, ev) {
         ev.preventDefault();
@@ -30,7 +27,7 @@ let TableSelect = React.createClass({
                      className="pure-menu-item">
                     <a href="#" className="pure-menu-link">
                     <span>
-                        {this.state.chosen_table === tableid ? '\u2713' : ' '} </span>
+                        {this.props.chosen_table === tableid ? '\u2713' : ' '} </span>
                         {table.title}
                 </a>
             </li>);

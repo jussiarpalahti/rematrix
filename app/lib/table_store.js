@@ -6,12 +6,13 @@ import {
     FullTable,
     get_preview_table_levels,
     load_matrix,
-    TABLES
+    TABLES,
 } from './table_utils'
 
 import {
     get_matrix_mask,
-    get_header_from_pos
+    get_header_from_pos,
+    filter_matrix
 } from './matrix_header';
 
 export function TableStore() {
@@ -38,32 +39,24 @@ export function TableStore() {
 function get_table(tableid) {
     let table = this.tables[tableid];
 
-    let row_positions = JSON.stringify(table.stub_mask);
-    let column_positions = JSON.stringify(table.heading_mask);
-    let table_baseurl = table.url.split("?", 1);
-    let new_table_url = table_baseurl + `?rows=${row_positions}&cols=${column_positions}`;
+    let new_table_url = get_table_url(table);
     if (new_table_url === table.url) {
-        console.log("same old table, same old choices", tableid);
         return table;
     } else {
-        console.log("new table, new address ", tableid, new_table_url);
         table.url = new_table_url;
     }
 
-    if (table.matrix) {
-        return table;
-    } else {
-        if (this._sentinel) {
-            console.log("network op in progress, can't get ", tableid);
-            return null;
-        }
-        if (!table.url) {
-            console.log("no table url, can't get ", tableid);
-            return null;
-        }
-        this._fetch_matrix(table);
+    if (this._sentinel) {
+        console.log("network op in progress, can't get ", tableid);
         return null;
     }
+    if (!table.url) {
+        console.log("no table url, can't get ", tableid);
+        return null;
+    }
+    this._fetch_matrix(table);
+    return null;
+
 }
 
 function get_list(cb) {
@@ -89,7 +82,7 @@ function fetch_matrix(table) {
     load_matrix(
         table,
         (data) => {
-            if (data.matrix.length === table.stub_mask.length) {
+            if (data && data.matrix.length === table.stub_mask.length) {
                 this._sentinel = false;
             } else {
                 return null;
@@ -105,10 +98,13 @@ function populate_tables() {
     if (this._sentinel) return null;
     this._sentinel = true;
     let cb = (data) => {
-        _.map(data, (table, index) => {
-            let start_table = FullTable(table);
+        _.map(data, (tablebase, index) => {
+            let start_table = FullTable(tablebase);
             let new_levels = get_preview_table_levels(start_table, 15);
-            this.tables[table.name] = FullTable(start_table, new_levels)
+            let table = FullTable(start_table, new_levels);
+            table.matrix = filter_matrix(table, table.base.matrix)
+            table.url = get_table_url(table);
+            this.tables[table.name] = table;
         });
         this._sentinel = false;
         this._call_listeners();
@@ -124,4 +120,11 @@ function call_listeners() {
     _.map(this._listeners, (listener) => {
         listener()
     });
+}
+
+function get_table_url(table) {
+    let row_positions = JSON.stringify(table.stub_mask);
+    let column_positions = JSON.stringify(table.heading_mask);
+    let table_baseurl = table.url.split("?", 1);
+    return table_baseurl + `?rows=${row_positions}&cols=${column_positions}`;
 }
