@@ -1,15 +1,16 @@
 
 React = require 'react'
-
+d3 = require 'd3'
 lodash = require 'lodash'
 _ = lodash
 
+HEIGTH = 10
 
 VizBase = React.createClass
   displayName: 'VizBase'
   render: ->
     data = if this.props.data then this.props.data else (i for i in [0..4] for j in [1..4])
-    scale = build_scale(this.props.data)
+    scale = build_scale(this.props.data, HEIGTH)
     <div id="viz">{<Box key={index} mover={index} dataset={piece} scale={scale} /> for piece, index in data}</div>
 
 colors =
@@ -25,7 +26,7 @@ Box = React.createClass
       pos = index * 6 + this.props.mover * 1.3
       place =
         width: "0.8em"
-        height: this.props.scale(datum)
+        height: _.floor(this.props.scale(datum), 4) + 'em'
         position: 'absolute'
         left: pos + 'em'
         bottom: 0
@@ -34,18 +35,18 @@ Box = React.createClass
 
       <div style={place} title={datum} key={index} > </div>
 
-    <div style={position:'absolute', height: '10em', width: '30em', top: '1em', left: '1em'}>{boxes}</div>
+    <div style={position:'absolute', height: HEIGTH + 'em', width: '30em', top: '1em', left: '1em'}>{boxes}</div>
 
-build_scale = (dataset) ->
+build_scale = (dataset, height) ->
   all = _.filter(_.map(_.flatten(dataset), (datum) ->
     num = parseInt datum
     if _.isNumber num then num else null
   ))
   min = _.min all
   max = _.max all
-  distance = max - min
-  (datum) ->
-    Math.floor((datum + 1) * 20 * (Math.random() + 0.5), 1) + 'px'
+  console.log("minmax", min, max)
+  d3.scale.linear().domain([min, max]).range([0,10])
+
 
 main = ->
   console.log 'app'
