@@ -42,7 +42,8 @@ let Main = React.createClass({
         return {
             table: null,
             tables: this.props.store.get_list(),
-            chosen_table: null
+            chosen_table: null,
+            vizdata: null
         };
     },
     componentDidMount: function () {
@@ -68,8 +69,11 @@ let Main = React.createClass({
         });
         let table = this.props.store.get_table(tableid);
         if (table) {
+            let vizdata = this.props.store.viz_data(tableid);
+            console.log("chosen stuff", vizdata);
             this.setState({
-                table: table
+                table: table,
+                vizdata: vizdata
             });
         }
     },
@@ -87,6 +91,7 @@ let Main = React.createClass({
             table = <div>
                 <MenuBar table={this.state.table} on_choice={this.on_choice} />
                 <HoppingTable table={this.state.table} />
+                <VizBase data={this.state.vizdata} />
             </div>;
         }
         return <div>
@@ -130,11 +135,9 @@ function main() {
     //let table = helper();
 
     let store = TableStore();
-
     React.render(<div>
         <h1>React Table Viewer</h1>
         <Main store={store} />
-        <VizBase />
     </div>, app);
 
 }

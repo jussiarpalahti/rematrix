@@ -134,8 +134,8 @@ function get_table_url(table) {
     return table_baseurl + `?rows=${row_positions}&cols=${column_positions}`;
 }
 
-function viz_data() {
-    return _.map(_.range(0, 4), () => {
-       return _.range(0, 5);
-    });
+function viz_data(tableid) {
+    let row_index = _.range(0, 4);
+    let col_index = _.range(0, 4);
+    return filter_matrix(row_index, col_index, this.tables[tableid].matrix);
 }
