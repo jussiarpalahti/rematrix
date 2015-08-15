@@ -7,7 +7,7 @@ var TARGET = process.env.TARGET;
 var ROOT_PATH = path.resolve(__dirname);
 
 var common = {
-  entry: [path.resolve(ROOT_PATH, 'app/components/viz')],
+  entry: [path.resolve(ROOT_PATH, 'app/main')],
   resolve: {
     extensions: ['', '.js', '.jsx', '.cjsx', '.coffee']
   },
@@ -17,6 +17,11 @@ var common = {
   },
   module: {
     loaders: [
+      {
+        test: /\.js?$/,
+        loaders: ['babel?optional[]=runtime&stage=0'],
+        include: path.resolve(ROOT_PATH, 'node_modules/js-csp')
+      },
       {
         test: /\.css$/,
         loaders: ['style', 'css']

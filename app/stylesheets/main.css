@@ -43,3 +43,9 @@ for Pure menus
     clear: both;
     max-width: 90%;
 }
+
+#viz {
+    position: absolute;
+    right: 32em;
+    top: 6em;
+}

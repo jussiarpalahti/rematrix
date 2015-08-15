@@ -9,7 +9,7 @@ VizBase = React.createClass
   displayName: 'VizBase'
   render: ->
     data = if this.props.data then this.props.data else (i for i in [0..4] for j in [1..4])
-    <div>{<Box key={index} mover={index} dataset={piece} /> for piece, index in data}</div>
+    <div id="viz">{<Box key={index} mover={index} dataset={piece} /> for piece, index in data}</div>
 
 colors =
   0: 'black'
@@ -45,8 +45,6 @@ main = ->
     app.id = 'app'
   document.body.appendChild app;
   React.render <div><VizBase /></div>, app
-
-main()
 
 module.exports =
     VizBase: VizBase
