@@ -7,9 +7,9 @@ var TARGET = process.env.TARGET;
 var ROOT_PATH = path.resolve(__dirname);
 
 var common = {
-  entry: [path.resolve(ROOT_PATH, 'app/main')],
+  entry: [path.resolve(ROOT_PATH, 'app/components/viz')],
   resolve: {
-    extensions: ['', '.js', '.jsx']
+    extensions: ['', '.js', '.jsx', '.cjsx', '.coffee']
   },
   output: {
     path: path.resolve(ROOT_PATH, 'build'),
@@ -71,6 +71,13 @@ if(TARGET === 'dev') {
           loaders: ['react-hot', 'babel?optional[]=runtime&stage=0'],
           include: path.resolve(ROOT_PATH, 'app'),
         },
+        {
+          test: /\.cjsx$/,
+          loaders: ['react-hot', 'coffee', 'cjsx'],
+          include: path.resolve(ROOT_PATH, 'app'),},
+        { test: /\.coffee$/,
+          loader: 'coffee',
+          include: path.resolve(ROOT_PATH, 'app'),}
       ],
     },
   });
