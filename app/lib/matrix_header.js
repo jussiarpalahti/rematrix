@@ -197,9 +197,9 @@ export function get_header_from_pos (headers, hop) {
     };
 }
 
-export function filter_matrix (table, matrix) {
-    return _.map(table.stub_mask, (row, index) => {
-        return _.map(table.heading_mask, (col) => {
+export function filter_matrix (stub_mask, heading_mask, matrix) {
+    return _.map(stub_mask, (row, index) => {
+        return _.map(heading_mask, (col) => {
             return matrix[row][col];
         });
     });

@@ -51,7 +51,6 @@ export function FullTable(basetable, new_levels) {
         let stub_mask = get_matrix_mask(stub_headers, stub_hops_list);
         table.heading_mask = heading_mask;
         table.stub_mask = stub_mask;
-        //table.matrix = filter_matrix(table, table.base.matrix)
     }
 
     table.heading_hopper = get_heading_hopper(

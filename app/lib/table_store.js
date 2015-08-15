@@ -29,6 +29,8 @@ export function TableStore() {
     obj.get_list = get_list.bind(obj);
     obj.set_choices = set_choices.bind(obj);
     obj.on_change = on_change.bind(obj);
+    obj.viz_data = viz_data.bind(obj);
+
     obj._populate_tablestore = populate_tables.bind(obj);
     obj._fetch_matrix = fetch_matrix.bind(obj);
     obj._call_listeners = call_listeners.bind(obj);
@@ -102,7 +104,10 @@ function populate_tables() {
             let start_table = FullTable(tablebase);
             let new_levels = get_preview_table_levels(start_table, 15);
             let table = FullTable(start_table, new_levels);
-            table.matrix = filter_matrix(table, table.base.matrix)
+            table.matrix = filter_matrix(
+                table.stub_mask,
+                table.heading_mask,
+                table.base.matrix);
             table.url = get_table_url(table);
             this.tables[table.name] = table;
         });
@@ -127,4 +132,10 @@ function get_table_url(table) {
     let column_positions = JSON.stringify(table.heading_mask);
     let table_baseurl = table.url.split("?", 1);
     return table_baseurl + `?rows=${row_positions}&cols=${column_positions}`;
+}
+
+function viz_data() {
+    return _.map(_.range(0, 4), () => {
+       return _.range(0, 5);
+    });
 }
