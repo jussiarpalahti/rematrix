@@ -83,8 +83,8 @@ export function generate_hidden_index(original_headers, visible_headers) {
 
 export function get_header_mask(visible_headers, original_headers, hop, heading_size) {
     /*
-    Based on a given set of visible and original headers, former being a subset of latter,
-    calculate visible index positions on the axis.
+    Based on a given set of visible and original headers, former being a subset of the latter,
+    calculate visible index positions on the headings' axis.
     Given heading size is the amount of cells in the axis that the headers have to fill.
     For top level, all headers together are large enough. Other levels need to cycle through
     their headers as many times till all space is filled.
@@ -95,7 +95,7 @@ export function get_header_mask(visible_headers, original_headers, hop, heading_
     };
 
     // listing all ranges times loop amount
-    let get_header_mask = (loops, offset, size, hop) => {
+    let get_mask = (loops, offset, size, hop) => {
         return _.map(_.range(loops), (loop) => {
             return get_range(get_startpos(loop, offset, size), hop);
         })
@@ -110,7 +110,7 @@ export function get_header_mask(visible_headers, original_headers, hop, heading_
         let size = hop * original_headers.length;
         let loops = heading_size / size;
 
-        return _.flatten(get_header_mask(loops, offset, size, hop));
+        return _.flatten(get_mask(loops, offset, size, hop));
     });
 
     return _.flatten(mask);
