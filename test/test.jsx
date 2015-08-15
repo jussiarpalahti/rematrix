@@ -21,7 +21,7 @@ import {
     get_matrix_mask,
     get_header_from_pos,
     get_heading_hopper,
-    matrix_hider
+    filter_matrix
 } from '../app/lib/matrix_header';
 
 import ManualTable from '../app/components/manual_table';
@@ -1131,6 +1131,10 @@ describe('testing preview level generation', function () {
         let preview = get_preview_table_levels(full_table, 15);
 
         let preview_table = FullTable(_.clone(full_table), preview);
+        preview_table.matrix = filter_matrix(
+            preview_table.heading_mask,
+            preview_table.stub_mask,
+            preview_table.base.matrix);
 
         expect(preview_table.matrix.length).to.be.below(full_table.matrix.length);
         expect(preview_table.stub_mask[0]).to.be.equal(0);
