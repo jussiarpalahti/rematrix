@@ -102,7 +102,7 @@ function populate_tables() {
     let cb = (data) => {
         _.map(data, (tablebase, index) => {
             let start_table = FullTable(tablebase);
-            let new_levels = get_preview_table_levels(start_table, 15);
+            let new_levels = get_preview_table_levels(start_table, 10);
             let table = FullTable(start_table, new_levels);
             table.matrix = filter_matrix(
                 table.stub_mask,

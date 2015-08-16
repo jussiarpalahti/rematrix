@@ -278,6 +278,14 @@ export var HoppingTable = React.createClass({
                 </thead>
                 <tbody>
                 {data}
+                <tr>
+                    <th key={'th1'} colSpan={table.stub.length} />
+                    {_.times(table.meta.heading_size, (index) => {
+                        return <td className="viz"><BoxContainer
+                            col={index} data={table.matrix} /></td>
+                    })}
+                    <td style={{'borderRight':  '1px solid #cbcbcb'}}></td>
+                </tr>
                 </tbody>
             </table></div>;
     }

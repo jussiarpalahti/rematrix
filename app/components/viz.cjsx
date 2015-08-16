@@ -79,7 +79,7 @@ pick_axis = (data, row, col) ->
   if row?
     data[row]
   else if col?
-    (data[row_index][col] for row_index in data)
+    (row_index[col] for row_index in data)
   else
     null
 
