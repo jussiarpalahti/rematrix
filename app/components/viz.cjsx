@@ -49,9 +49,13 @@ Sparkline = React.createClass
   render: ->
     boxes = for datum, index in this.props.dataset
       pos = index * 8
+      if datum? and datum > 0
+        height = _.floor(this.props.scale(datum), 0) + 'px'
+      else
+        height = 0
       place =
         width: '5px'
-        height: _.floor(this.props.scale(datum), 0) + 'px'
+        height: height
         border: '1px solid lightblue'
         background: 'blue'
         position: 'absolute'
@@ -63,14 +67,13 @@ Sparkline = React.createClass
     <div style={position: 'relative', height: HEIGTH + 'px', width: this.props.dataset.length * 8 + 'px'}>{boxes}</div>
 
 build_scale = (dataset, height) ->
-  all = _.filter(_.map(_.flatten(dataset), (datum) ->
+  all = _.map(dataset, (datum) ->
     num = parseInt datum
     if _.isNumber num then num else null
-  ))
+  )
   min = _.min all
   max = _.max all
-  console.log("minmax", min, max)
-  d3.scale.linear().domain([min, max]).range([0,height])
+  d3.scale.linear().domain([min, max]).range([1,height])
 
 pick_axis = (data, row, col) ->
   if row?
