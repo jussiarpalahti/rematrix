@@ -249,13 +249,28 @@ export var HoppingTable = React.createClass({
                             {cell}
                         </td>
                     }),
-                <td style={{'borderRight':  '1px solid #cbcbcb'}}
-                    className="viz">
-                    <BoxContainer row={index} data={table.matrix} />
-                </td>
+                    this.props.colviz
+                    ? <td style={{'borderRight':  '1px solid #cbcbcb'}}
+                          className="viz">
+                      <BoxContainer row={index} data={table.matrix} />
+                      </td>
+                    : null
                 ]
             }</tr>
         });
+        let colviz;
+        if (this.props.viz) {
+            colviz = <tr>
+                <th key={'th1'} colSpan={table.stub.length} />
+                {_.times(table.meta.heading_size, (index) => {
+                    return <td className="viz"><BoxContainer
+                        col={index} data={table.matrix} /></td>
+                })}
+                <td style={{'borderRight':  '1px solid #cbcbcb'}}></td>
+            </tr>;
+        } else {
+            colviz = null;
+        }
 
         return <div id="table">
             <table className="pure-table pure-table-bordered">
@@ -267,8 +282,11 @@ export var HoppingTable = React.createClass({
                                 <th key={'th1'} rowSpan={table.heading.length}
                                     colSpan={table.stub.length} />
                                     {heading}
-                                <th key={'th2'} colSpan={table.stub.length}
-                                    rowSpan={table.heading.length}/>
+                                {this.props.viz
+                                    ? <th key={'th2'}
+                                          colSpan={table.stub.length}
+                                          rowSpan={table.heading.length}/>
+                                    : null}
                             </tr>
                         } else {
                             return <tr key={index}>{heading}</tr>
@@ -278,14 +296,7 @@ export var HoppingTable = React.createClass({
                 </thead>
                 <tbody>
                 {data}
-                <tr>
-                    <th key={'th1'} colSpan={table.stub.length} />
-                    {_.times(table.meta.heading_size, (index) => {
-                        return <td className="viz"><BoxContainer
-                            col={index} data={table.matrix} /></td>
-                    })}
-                    <td style={{'borderRight':  '1px solid #cbcbcb'}}></td>
-                </tr>
+                {colviz}
                 </tbody>
             </table></div>;
     }
