@@ -4,7 +4,7 @@ d3 = require 'd3'
 lodash = require 'lodash'
 _ = lodash
 
-HEIGTH = 10
+HEIGTH = 20
 
 VizBase = React.createClass
   displayName: 'VizBase'
@@ -37,6 +37,31 @@ Box = React.createClass
 
     <div style={position:'absolute', height: HEIGTH + 'em', width: '30em', top: '1em', left: '1em'}>{boxes}</div>
 
+BoxContainer = React.createClass
+  displayName: 'BoxContainer'
+  render: ->
+    selection = pick_axis(this.props.data, this.props.row, this.props.col)
+    scale = build_scale(this.props.data, HEIGTH)
+    <Sparkline dataset={selection} scale={scale}/>
+
+Sparkline = React.createClass
+  displayName: 'Sparkline'
+  render: ->
+    boxes = for datum, index in this.props.dataset
+      pos = index * 6
+      place =
+        width: "5px"
+        height: _.floor(this.props.scale(datum), 4) + 'px'
+        position: 'absolute'
+        left: pos + 'px'
+        bottom: 0
+        border: '2px solid ' + colors[2]
+        display: 'block'
+
+      <div style={place} title={datum} key={index} > </div>
+
+    <div style={position:'relative', height: HEIGTH + 'px'}>{boxes}</div>
+
 build_scale = (dataset, height) ->
   all = _.filter(_.map(_.flatten(dataset), (datum) ->
     num = parseInt datum
@@ -47,6 +72,13 @@ build_scale = (dataset, height) ->
   console.log("minmax", min, max)
   d3.scale.linear().domain([min, max]).range([0,10])
 
+pick_axis = (data, row, col) ->
+  if row?
+    data[row]
+  else if col?
+    (data[row_index][col] for row_index in data)
+  else
+    null
 
 main = ->
   console.log 'app'
@@ -60,3 +92,5 @@ main = ->
 
 module.exports =
     VizBase: VizBase
+    Box: Box
+    BoxContainer: BoxContainer

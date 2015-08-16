@@ -35,7 +35,6 @@ import {build, handle_visibility, get_table} from './lib/table_utils';
 import {register_dispatch, get_dispatcher, del_dispatcher} from './lib/converser';
 import {TABLES, fetch_table_previews, FullTable, get_preview_table_levels} from './lib/table_utils';
 import {TableStore} from './lib/table_store';
-import {VizBase} from './components/viz';
 
 let Main = React.createClass({
     getInitialState : function () {
@@ -91,7 +90,6 @@ let Main = React.createClass({
             table = <div>
                 <MenuBar table={this.state.table} on_choice={this.on_choice} />
                 <HoppingTable table={this.state.table} />
-                <VizBase data={this.state.vizdata} />
             </div>;
         }
         return <div>

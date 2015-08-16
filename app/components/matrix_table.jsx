@@ -3,6 +3,7 @@ var _ = lodash;
 
 import React from 'react';
 import {generate_headers, PositionChecker} from '../lib/utils';
+import {BoxContainer} from './viz';
 
 export class MatrixTable extends React.Component {
 
@@ -247,7 +248,8 @@ export var HoppingTable = React.createClass({
                         return <td key={index + '_' + cindex}>
                             {cell}
                         </td>
-                    })
+                    }),
+                <td><BoxContainer row={index} data={table.matrix} /></td>
                 ]
             }</tr>
         });
@@ -262,6 +264,8 @@ export var HoppingTable = React.createClass({
                                 <th rowSpan={table.heading.length}
                                     colSpan={table.stub.length} />
                                     {heading}
+                                <th colSpan={table.stub.length}
+                                    rowSpan={table.heading.length}/>
                             </tr>
                         } else {
                             return <tr key={index}>{heading}</tr>
