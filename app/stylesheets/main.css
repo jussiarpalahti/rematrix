@@ -34,6 +34,10 @@ for Pure menus
     border: 1px solid #cbcbcb;
 }
 
+.pure-table-bordered {
+    border-right: 1px solid #cbcbcb;
+}
+
 .pure-table-bordered tbody th {
     text-align: left;
 }
@@ -47,8 +51,6 @@ Pure menus end
     max-width: 90%;
 }
 
-#viz {
-    position: absolute;
-    right: 32em;
-    top: 6em;
+.viz {
+    vertical-align: bottom;
 }
