@@ -211,6 +211,19 @@ export class HiddenTable extends React.Component {
 
 export var HoppingTable = React.createClass({
 
+    getInitialState: function () {
+      return {viz: false};
+    },
+
+    toggle_spark: function() {
+        console.log('state of viz', this.state.viz);
+        if (this.state.viz) {
+            this.setState({viz:false});
+        } else {
+            this.setState({viz:true});
+        }
+    },
+
     render: function () {
         let table = this.props.table;
 
@@ -249,7 +262,7 @@ export var HoppingTable = React.createClass({
                             {cell}
                         </td>
                     }),
-                    this.props.colviz
+                    this.state.viz
                     ? <td style={{'borderRight':  '1px solid #cbcbcb'}}
                           className="viz">
                       <BoxContainer row={index} data={table.matrix} />
@@ -259,7 +272,7 @@ export var HoppingTable = React.createClass({
             }</tr>
         });
         let colviz;
-        if (this.props.viz) {
+        if (this.state.viz) {
             colviz = <tr>
                 <th key={'th1'} colSpan={table.stub.length} />
                 {_.times(table.meta.heading_size, (index) => {
@@ -279,10 +292,17 @@ export var HoppingTable = React.createClass({
                     columns.map((heading, index) => {
                         if (index==0) {
                             return <tr key={index}>
-                                <th key={'th1'} rowSpan={table.heading.length}
-                                    colSpan={table.stub.length} />
-                                    {heading}
-                                {this.props.viz
+                                <th className="centered"
+                                    key={'th1'} rowSpan={table.heading.length}
+                                    colSpan={table.stub.length}>
+                                    <button
+                                        className="pure-button, pure-button-primary"
+                                        onClick={this.toggle_spark}>
+                                         Sparklines
+                                    </button>
+                                </th>
+                                {heading}
+                                {this.state.viz
                                     ? <th key={'th2'}
                                           colSpan={table.stub.length}
                                           rowSpan={table.heading.length}/>

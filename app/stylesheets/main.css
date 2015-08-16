@@ -54,3 +54,8 @@ Pure menus end
 .viz {
     vertical-align: bottom;
 }
+
+.centered {
+    text-align: center;
+    vertical-align: middle;
+}
