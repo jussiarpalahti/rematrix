@@ -296,9 +296,11 @@ export var HoppingTable = React.createClass({
                                     key={'th1'} rowSpan={table.heading.length}
                                     colSpan={table.stub.length}>
                                     <button
-                                        className="pure-button, pure-button-primary"
+                                        className={[
+                                            'pure-button', 'pure-button-primary', this.state.viz ? 'button-active' : null
+                                            ].join(' ')}
                                         onClick={this.toggle_spark}>
-                                         Sparklines
+                                        Sparklines
                                     </button>
                                 </th>
                                 {heading}

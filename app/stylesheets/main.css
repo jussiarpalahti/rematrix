@@ -59,3 +59,11 @@ Pure menus end
     text-align: center;
     vertical-align: middle;
 }
+
+.button-active {
+    border: 1px inset black;
+}
+
+#app {
+
+}
