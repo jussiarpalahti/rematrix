@@ -133,7 +133,7 @@ function main() {
     //let table = helper();
 
     let store = TableStore();
-    React.render(<div>
+    React.render(<div id="app">
         <h1>React Table Viewer</h1>
         <Main store={store} />
     </div>, app);
