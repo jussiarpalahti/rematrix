@@ -45,12 +45,6 @@ for Pure menus
 Pure menus end
 */
 
-#table {
-    padding: 1em 0;
-    clear: both;
-    max-width: 90%;
-}
-
 .viz {
     vertical-align: bottom;
 }
@@ -66,4 +60,12 @@ Pure menus end
 
 #app {
     margin: 1em;
+}
+
+#datatable {
+    padding: 1em 0;
+    clear: both;
+    width: 100vh;
+    max-height: 80vh;
+    overflow: scroll;
 }

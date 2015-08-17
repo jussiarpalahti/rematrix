@@ -285,7 +285,7 @@ export var HoppingTable = React.createClass({
             colviz = null;
         }
 
-        return <div id="table">
+        return <div id="datatable">
             <table className="pure-table pure-table-bordered">
                 <thead>
                 {
