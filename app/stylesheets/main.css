@@ -40,6 +40,7 @@ for Pure menus
 
 .pure-table-bordered tbody th {
     text-align: left;
+    background-color: #e0e0e0;
 }
 /*
 Pure menus end
@@ -65,7 +66,7 @@ Pure menus end
 #datatable {
     padding: 1em 0;
     clear: both;
-    width: 100vh;
-    max-height: 80vh;
+    max-width: 110vh;
+    max-height: 70vh;
     overflow: scroll;
 }
