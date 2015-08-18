@@ -25,17 +25,12 @@
             z-index: 1;
         }
 
-        #scroller {
-            z-index: 20;
-            visibility: hidden;
-        }
-
         td {
             border: 1px solid grey;
             background: none;
         }
         td.ots, table.ots {
-            background: grey;
+            background: lightseagreen;
         }
         #console {
             position: absolute;
@@ -69,8 +64,20 @@
             <td class="ots">hih</td>
             <td class="ots">hih</td>
             <td class="ots">hih</td>
+            <td class="ots">hih</td>
+            <td class="ots">hih</td>
+            <td class="ots">hih</td>
+            <td class="ots">hih</td>
+            <td class="ots">hih</td>
+            <td class="ots">hih</td>
+            <td class="ots">hih</td>
+            <td class="ots">hih</td>
+            <td class="ots">hih</td>
         </tr>
     </thead>
+    <tbody>
+    <tr><td class="ots">heh</td><td>hah</td><td>hah</td><td>hah</td><td>hah</td><td>hah</td><td>hah</td><td>hah</td><td>hah</td><td>hah</td><td>hah</td><td>hah</td><td>hah</td><td>hah</td><td>hah</td><td>hah</td><td>hah</td><td>hah</td><td>hah</td><td>hah</td><td>hah</td><td>hah</td><td>hah</td><td>hah</td><td>hah</td><td>hah</td><td>hah</td><td>hah</td><td>hah</td><td>hah</td><td>hah</td><td>hah</td><td>hah</td><td>hah</td><td>hah</td><td>hah</td></tr>
+    </tbody>
     </table></div>
 <div class="pos" id="stub">
 <table class="ots">
@@ -227,10 +234,18 @@
 </table>
 </div>
 <script>
+
+    function fix_size(elems, target_elems) {
+        for (var i=0; i<elems.length; i++) {
+
+        }
+    }
+
     $('#cells').scroll(function (ev) {
         var log = $('#console textarea');
         var heading = $('#heading');
         var stub = $('#stub');
+
 
         var f = function (ev) {
 
