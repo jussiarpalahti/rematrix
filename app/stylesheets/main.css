@@ -75,10 +75,11 @@ Pure menus end
     position: absolute;
     left: 1em;
     top: 20em;
-    max-width: 80em;
-    max-height: 70em;
+    max-width: 70em;
+    max-height: 50em;
     overflow: scroll;
 }
+
 #heading {
     z-index: 10;
 }
@@ -90,3 +91,5 @@ Pure menus end
 #cells {
     z-index: 1;
 }
+
+.pure-table img {margin:0; padding: 0; display: inline; line-height: 1; float:left;}

@@ -25,7 +25,6 @@ export var FixedHeadersTable = React.createClass({
             <div id="heading" className="pos">
                 <table className="pure-table pure-table-bordered">
                     <ColumnHeaders table={table} />
-
                 </table></div>
             <div id="stub" className="pos">
                 <table className="pure-table pure-table-bordered">
@@ -54,7 +53,9 @@ export var ColumnHeaders = React.createClass({
                 (heading, thindex) => {
                     if (heading) {
                         columns[thindex].push(<th key={col_index + '_' + thindex}
-                                                  colSpan={heading.hop}>{heading.header}</th>);
+                                                  colSpan={heading.hop}>{heading.header}
+                            <img src="/app/stylesheets/empty.png" />
+                            </th>);
                     }
                 });
         }
@@ -66,6 +67,7 @@ export var ColumnHeaders = React.createClass({
                     <th className="centered"
                         key={'th1'} rowSpan={table.heading.length}
                         colSpan={table.stub.length}>
+                        <img src="/app/stylesheets/empty.png" />
                     </th>
                     {heading}
                 </tr>
@@ -85,7 +87,9 @@ let RowHeader = function (table, index) {
             if (heading) {
                 return <th key={index + '_' + thindex}
                            rowSpan={heading.hop}>
-                    {heading.header}</th>;}
+                    {heading.header}
+                    <img src="/app/stylesheets/empty.png" />
+                </th>;}
             else return null;
         });
 };

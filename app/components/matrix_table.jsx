@@ -214,16 +214,13 @@ export var HoppingTable = React.createClass({
     getInitialState: function () {
       return {viz: false};
     },
-
     toggle_spark: function() {
-        console.log('state of viz', this.state.viz);
         if (this.state.viz) {
             this.setState({viz:false});
         } else {
             this.setState({viz:true});
         }
     },
-
     render: function () {
         let table = this.props.table;
 
