@@ -18,6 +18,41 @@ export var FullTable = React.createClass({
     }
 });
 
+export var FixedHeadersTable = React.createClass({
+    render: function () {
+        let table = this.props.table;
+        return <div>
+            <div id="heading" className="pos">
+                <table className="pure-table pure-table-bordered">
+                    <thead>
+                        <ColumnHeaders table={table} />
+                    </thead>
+                    <tbody>
+                        <DataCells table={table} skip_data={true} />
+                    </tbody>
+                </table></div>
+            <div id="stub" className="pos">
+                <table className="pure-table pure-table-bordered">
+                    <thead>
+                        <ColumnHeaders table={table} />
+                    </thead>
+                    <tbody>
+                        <DataCells table={table} skip_data={true} />
+                    </tbody>
+                </table></div>
+            <div id="cells" className="pos">
+            <table className="pure-table pure-table-bordered">
+                <thead>
+                    <ColumnHeaders table={table} />
+                </thead>
+                <tbody>
+                    <DataCells table={table} />
+                </tbody>
+            </table></div>
+            </div>;
+    }
+});
+
 export var ColumnHeaders = React.createClass({
     render: function () {
         let table = this.props.table;
@@ -75,11 +110,12 @@ export var DataCells = React.createClass({
             return <tr className={(index % 2) != 0 ? "pure-table-odd" : ""} key={index}>{
                 [
                     <RowHeader table={table} index={index} />,
-                    row.map((cell, cindex) => {
+                    this.props.skip_data
+                    ? null
+                    : row.map((cell, cindex) => {
                         return <td key={index + '_' + cindex}>
                             {cell}
-                        </td>
-                    })
+                        </td>})
                 ]
             }</tr>
         });
