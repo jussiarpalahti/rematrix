@@ -86,7 +86,11 @@ let RowHeader = function (table, index) {
         (heading, thindex) => {
             if (heading) {
                 return <th key={index + '_' + thindex}
-                           rowSpan={heading.hop}>
+                           rowSpan={heading.hop}
+                            ref={function(component){
+                                let node = React.findDOMNode(component);
+                                (node!==null) && (node.style!==null) ? console.log(get_dimensions(node)) : '';}
+                            }>
                     {heading.header}
                     <img src="/app/stylesheets/empty.png" />
                 </th>;}
@@ -114,3 +118,11 @@ export var DataCells = React.createClass({
         }</tbody>;
     }
 });
+
+let get_dimensions = (node) => {
+    let styles = window.getComputedStyle(node);
+    return {
+        height: styles.getPropertyValue('height'),
+        width: styles.getPropertyValue('width')
+    };
+};
