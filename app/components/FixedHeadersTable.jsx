@@ -3,25 +3,18 @@ var _ = lodash;
 
 import React from 'react';
 
-export var FixedHeadersTable = React.createClass({
-
+export var FullTable = React.createClass({
     render: function () {
-
-    }
-
-});
-
-let RowHeader = React.createClass({
-    render: function () {
-        return _.map(
-            this.props.table.stub_hopper(this.props.index),
-            (heading, thindex) => {
-                if (heading) {
-                    return <th key={index + '_' + thindex}
-                               rowSpan={heading.hop}>
-                        {heading.header}</th>;}
-                else return null;
-        });
+        let table = this.props.table;
+        return <div id="datatable">
+            <table className="pure-table pure-table-bordered">
+                <thead>
+                <ColumnHeaders table={table} />
+                </thead>
+                <tbody>
+                <DataCells table={table} />
+                </tbody>
+            </table></div>;
     }
 });
 
@@ -43,7 +36,35 @@ export var ColumnHeaders = React.createClass({
                     }
                 });
         }
-        return columns;
+
+        return columns.map((heading, index) => {
+            if (index==0) {
+                return <tr key={index}>
+                    <th className="centered"
+                        key={'th1'} rowSpan={table.heading.length}
+                        colSpan={table.stub.length}>
+                    </th>
+                    {heading}
+                </tr>
+            } else {
+                return <tr key={index}>{heading}</tr>
+            }
+        });
+
+    }
+});
+
+let RowHeader = React.createClass({
+    render: function () {
+        return _.map(
+            this.props.table.stub_hopper(this.props.index),
+            (heading, thindex) => {
+                if (heading) {
+                    return <th key={index + '_' + thindex}
+                               rowSpan={heading.hop}>
+                        {heading.header}</th>;}
+                else return null;
+            });
     }
 });
 
