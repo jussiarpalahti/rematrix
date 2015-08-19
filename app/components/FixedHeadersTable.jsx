@@ -24,30 +24,17 @@ export var FixedHeadersTable = React.createClass({
         return <div>
             <div id="heading" className="pos">
                 <table className="pure-table pure-table-bordered">
-                    <thead>
-                        <ColumnHeaders table={table} />
-                    </thead>
-                    <tbody>
-                        <DataCells table={table} skip_data={true} />
-                    </tbody>
+                    <ColumnHeaders table={table} />
+
                 </table></div>
             <div id="stub" className="pos">
                 <table className="pure-table pure-table-bordered">
-                    <thead>
-                        <ColumnHeaders table={table} />
-                    </thead>
-                    <tbody>
-                        <DataCells table={table} skip_data={true} />
-                    </tbody>
+                    <DataCells table={table} skip_data={true} />
                 </table></div>
             <div id="cells" className="pos">
             <table className="pure-table pure-table-bordered">
-                <thead>
-                    <ColumnHeaders table={table} />
-                </thead>
-                <tbody>
-                    <DataCells table={table} />
-                </tbody>
+                <ColumnHeaders table={table} />
+                <DataCells table={table} />
             </table></div>
             </div>;
     }
@@ -72,7 +59,8 @@ export var ColumnHeaders = React.createClass({
                 });
         }
 
-        return columns.map((heading, index) => {
+        return <thead>{
+            columns.map((heading, index) => {
             if (index==0) {
                 return <tr key={index}>
                     <th className="centered"
@@ -84,32 +72,32 @@ export var ColumnHeaders = React.createClass({
             } else {
                 return <tr key={index}>{heading}</tr>
             }
+            })
+        }</thead>;
+
+    }
+});
+
+let RowHeader = function (table, index) {
+    return _.map(
+        table.stub_hopper(index),
+        (heading, thindex) => {
+            if (heading) {
+                return <th key={index + '_' + thindex}
+                           rowSpan={heading.hop}>
+                    {heading.header}</th>;}
+            else return null;
         });
-
-    }
-});
-
-let RowHeader = React.createClass({
-    render: function () {
-        return _.map(
-            this.props.table.stub_hopper(this.props.index),
-            (heading, thindex) => {
-                if (heading) {
-                    return <th key={index + '_' + thindex}
-                               rowSpan={heading.hop}>
-                        {heading.header}</th>;}
-                else return null;
-            });
-    }
-});
+};
 
 export var DataCells = React.createClass({
     render: function () {
         let table = this.props.table;
-        return table.matrix.map((row, index) => {
+        return <tbody>{
+            table.matrix.map((row, index) => {
             return <tr className={(index % 2) != 0 ? "pure-table-odd" : ""} key={index}>{
                 [
-                    <RowHeader table={table} index={index} />,
+                    RowHeader(table, index),
                     this.props.skip_data
                     ? null
                     : row.map((cell, cindex) => {
@@ -118,6 +106,7 @@ export var DataCells = React.createClass({
                         </td>})
                 ]
             }</tr>
-        });
+            })
+        }</tbody>;
     }
 });

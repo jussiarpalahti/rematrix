@@ -12,7 +12,8 @@ import {
 } from './components/matrix_table.jsx';
 import App from './components/App.jsx'
 import Menu from './components/Menu.jsx';
-import TableSelect from './components/TableSelect.jsx'
+import TableSelect from './components/TableSelect.jsx';
+import {FixedHeadersTable} from './components/FixedHeadersTable';
 
 import lodash from 'lodash';
 var _ = lodash;
@@ -89,7 +90,7 @@ let Main = React.createClass({
         if (this.state.table) {
             table = <div>
                 <MenuBar table={this.state.table} on_choice={this.on_choice} />
-                <HoppingTable table={this.state.table} />
+                <FixedHeadersTable table={this.state.table} />
             </div>;
         }
         return <div>

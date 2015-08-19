@@ -70,3 +70,23 @@ Pure menus end
     max-height: 70vh;
     overflow: scroll;
 }
+
+.pos {
+    position: absolute;
+    left: 1em;
+    top: 20em;
+    max-width: 80em;
+    max-height: 70em;
+    overflow: scroll;
+}
+#heading {
+    z-index: 10;
+}
+
+#stub {
+    z-index: 5;
+}
+
+#cells {
+    z-index: 1;
+}
