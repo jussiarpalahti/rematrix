@@ -53,7 +53,12 @@ export var ColumnHeaders = React.createClass({
                 (heading, thindex) => {
                     if (heading) {
                         columns[thindex].push(<th key={col_index + '_' + thindex}
-                                                  colSpan={heading.hop}>{heading.header}
+                                                  colSpan={heading.hop}
+                                                  ref={
+                                                  function(component){
+                                        let node = React.findDOMNode(component);
+                                        (node!==null) && (node.style!==null) ? console.log(get_dimensions(node)) : '';}
+                            }>{heading.header}
                             <img src="/app/stylesheets/empty.png" />
                             </th>);
                     }
@@ -122,6 +127,11 @@ export var DataCells = React.createClass({
 let get_dimensions = (node) => {
     let styles = window.getComputedStyle(node);
     return {
+        node: node,
+        rows: node.rows,
+        cells: node.cells,
+        row_index: node.rowIndex,
+        cell_index: node.cellIndex,
         height: styles.getPropertyValue('height'),
         width: styles.getPropertyValue('width')
     };
