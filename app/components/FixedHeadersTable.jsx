@@ -3,6 +3,8 @@ var _ = lodash;
 
 import React from 'react';
 
+require('css.escape');
+
 export var FullTable = React.createClass({
     render: function () {
         let table = this.props.table;
@@ -20,16 +22,49 @@ export var FullTable = React.createClass({
 
 export var FixedHeadersTable = React.createClass({
 
+    place: function () {
+        let places = {};
+        return (key, val) => {
+            if (key) {
+                places[key] = val;
+                return places;
+            }
+            else return places;
+        }
+    }(),
+
+
+    componentDidUpdate: function () {
+
+    },
+
+    componentDidMount:  function () {
+
+    },
+
     save_dimensions: function(node, heading, index, thindex, axis) {
+
         let styles = window.getComputedStyle(node);
-        console.log({
-            axis: axis,
-            heading: heading.heading,
-            header: heading.header,
-            index: index,
-            thindex: thindex,
-            node: node,
-            cell_index: node.cellIndex,
+
+        let key = `${axis}_${heading.heading}_${heading.header}_${index}_${thindex}`;
+
+        let escaped_key = CSS.escape(key);
+        node.id = escaped_key;
+
+        //console.log({
+        //    axis: axis,
+        //    heading: heading.heading,
+        //    header: heading.header,
+        //    index: index,
+        //    thindex: thindex,
+        //    node: node,
+        //    cell_index: node.cellIndex,
+        //    height: styles.getPropertyValue('height'),
+        //    width: styles.getPropertyValue('width'),
+        //    place: this.place().length
+        //});
+
+        this.place(escaped_key, {
             height: styles.getPropertyValue('height'),
             width: styles.getPropertyValue('width')
         });
