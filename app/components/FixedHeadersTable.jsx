@@ -5,6 +5,9 @@ import React from 'react';
 
 require('css.escape');
 
+import jQuery from 'jquery';
+var $ = jQuery;
+
 export var FullTable = React.createClass({
     render: function () {
         let table = this.props.table;
@@ -33,13 +36,16 @@ export var FixedHeadersTable = React.createClass({
         }
     }(),
 
-
-    componentDidUpdate: function () {
-
+    componentDidMount:  function () {
+        let style = $('#places');
+        if (style) style.text("h1 { color: yellow; }");
+        else $('head').append('<div id="mystyle"><style>h1 { color:green; }</style></div>')
     },
 
-    componentDidMount:  function () {
-
+    componentDidUpdate: function () {
+        let style = $('#places');
+        if (style) style.text("h1 { color:red; }");
+        else $('head').append('<div id="mystyle"><style>h1 { color:blue; }</style></div>')
     },
 
     save_dimensions: function(node, heading, index, thindex, axis) {

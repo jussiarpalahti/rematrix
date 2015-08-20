@@ -41,6 +41,7 @@
     "babel-runtime": "^5.8.12",
     "css.escape": "^0.2.1",
     "d3": "^3.5.6",
+    "jquery": "^2.1.4",
     "js-csp": "^0.5.0",
     "lodash": "^3.10.0",
     "queue-async": "^1.0.7",
