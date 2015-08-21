@@ -40,7 +40,9 @@ for Pure menus
 
 .pure-table-bordered tbody th {
     text-align: left;
+    background-color: #e0e0e0;
 }
+
 /*
 Pure menus end
 */

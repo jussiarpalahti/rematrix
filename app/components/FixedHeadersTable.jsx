@@ -50,6 +50,7 @@ export var FixedHeadersTable = React.createClass({
     }(),
 
     componentDidMount:  function () {
+        console.log("component mounted");
         let style = $('#places');
         let places = [];
         _.forOwn(this.place(), (dimensions, key) => {
@@ -58,11 +59,17 @@ export var FixedHeadersTable = React.createClass({
             places.push(`#${key} div {${width} ${height} }\n`);
             places.push(`#${key} {${width} ${height} }\n`);
         });
-        //let actual_topleftcorner
+        let base_topleftcorner = $('#cells .topleftcorner');
+        let base_width = base_topleftcorner.width();
+        let base_height = base_topleftcorner.height();
+        places.push(
+            `#heading .topleftcorner div, #stub .topleftcorner div {width: ${base_width}px; height: ${base_height}px;}`
+        );
         if (style) style.text(places.join(" "));
     },
 
     componentDidUpdate: function () {
+        console.log("component update");
         let style = $('#places');
         let places = [];
         _.forOwn(this.place(), (dimensions, key) => {
@@ -71,6 +78,12 @@ export var FixedHeadersTable = React.createClass({
             places.push(`#${key} div {${width} ${height} }\n`);
             places.push(`#${key} {${width} ${height} }\n`);
         });
+        let base_topleftcorner = $('#cells .topleftcorner');
+        let base_width = base_topleftcorner.width();
+        let base_height = base_topleftcorner.height();
+        places.push(
+            `#heading .topleftcorner div, #stub .topleftcorner div {width: ${base_width}px; height: ${base_height}px;}`
+        );
         if (style) style.text(places.join(" "));
     },
 
@@ -106,7 +119,10 @@ export var FixedHeadersTable = React.createClass({
                 </table></div>
             <div id="stub" className="pos">
                 <table className="pure-table pure-table-bordered">
-                    <ColumnHeaders table={table} skip_data={true} />
+                    <thead><tr><th className="topleftcorner centered"
+                                         key={'stub_th1'} rowSpan={table.heading.length}
+                                         colSpan={table.stub.length}><div>placeholder</div></th></tr>
+                    </thead>
                     <DataCells table={table} skip_data={true} />
                 </table></div>
             <div id="cells" className="pos">
@@ -144,7 +160,7 @@ export var ColumnHeaders = React.createClass({
                                     node, heading, col_index, thindex, 'heading', key)
                                 : '';
                                 }
-                            }>{heading.header}
+                            }><div>{heading.header}</div>
                             </th>
                         } else {
                             col = <th
@@ -192,7 +208,7 @@ let RowHeader = function (table, index, save_dimensions, spaces) {
                         ? save_dimensions(node, heading, index, thindex, 'stub', key)
                         : '';
                         }}>
-                        {heading.header}
+                        <div>{heading.header}</div>
                     </th>;
                 } else {
                     return <th
@@ -210,7 +226,8 @@ let RowHeader = function (table, index, save_dimensions, spaces) {
 export var DataCells = React.createClass({
     render: function () {
         let table = this.props.table;
-        return <tbody>{
+        return <tbody>
+            {
             table.matrix.map((row, index) => {
             return <tr
                 className={(index % 2) != 0 ? "pure-table-odd" : ""}
