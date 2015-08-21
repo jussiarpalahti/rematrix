@@ -40,11 +40,16 @@ for Pure menus
 
 .pure-table-bordered tbody th {
     text-align: left;
-    background-color: #e0e0e0;
 }
 /*
 Pure menus end
 */
+
+#table {
+    padding: 1em 0;
+    clear: both;
+    max-width: 85%;
+}
 
 .viz {
     vertical-align: bottom;
@@ -63,23 +68,14 @@ Pure menus end
     margin: 1em;
 }
 
-#datatable {
-    padding: 1em 0;
-    clear: both;
-    max-width: 110vh;
-    max-height: 70vh;
-    overflow: scroll;
-}
-
 .pos {
     position: absolute;
     left: 1em;
-    top: 20em;
-    max-width: 70em;
-    max-height: 50em;
+    top: 22em;
+    max-width: 70vh;
+    max-height: 50vh;
     overflow: scroll;
 }
-
 #heading {
     z-index: 10;
 }
@@ -91,5 +87,3 @@ Pure menus end
 #cells {
     z-index: 1;
 }
-
-.pure-table img {margin:0; padding: 0; display: inline; line-height: 1; float:left;}

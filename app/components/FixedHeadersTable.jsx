@@ -48,14 +48,9 @@ export var FixedHeadersTable = React.createClass({
         else $('head').append('<div id="mystyle"><style>h1 { color:blue; }</style></div>')
     },
 
-    save_dimensions: function(node, heading, index, thindex, axis) {
+    save_dimensions: function(node, heading, index, thindex, axis, key) {
 
         let styles = window.getComputedStyle(node);
-
-        let key = `${axis}_${heading.heading}_${heading.header}_${index}_${thindex}`;
-
-        let escaped_key = CSS.escape(key);
-        node.id = escaped_key;
 
         //console.log({
         //    axis: axis,
@@ -70,7 +65,7 @@ export var FixedHeadersTable = React.createClass({
         //    place: this.place().length
         //});
 
-        this.place(escaped_key, {
+        this.place(key, {
             height: styles.getPropertyValue('height'),
             width: styles.getPropertyValue('width')
         });
@@ -110,6 +105,7 @@ export var ColumnHeaders = React.createClass({
                 (heading, thindex) => {
                     if (heading) {
                         let col;
+                        let key = CSS.escape(`stub_${heading.heading}_${heading.header}_${col_index}_${thindex}`);
                         if (this.props.save_dimensions) {
                             col = <th key={col_index + '_' + thindex}
                                 colSpan={heading.hop}
@@ -118,15 +114,17 @@ export var ColumnHeaders = React.createClass({
                                 let node = React.findDOMNode(component);
                                 (node!==null) && (node.style!==null)
                                 ? this.props.save_dimensions(
-                                    node, heading, col_index, thindex, 'heading')
+                                    node, heading, col_index, thindex, 'heading', key)
                                 : '';
                                 }
                             }>{heading.header}
                                 <Dimension table={table} spaces={this.props.spaces} />
                             </th>
                         } else {
-                            col = <th key={col_index + '_' + thindex}
-                                      colSpan={heading.hop}>
+                            col = <th
+                                id={key}
+                                key={col_index + '_' + thindex}
+                                colSpan={heading.hop}>
                                 {heading.header}
                                 </th>
                         }
@@ -138,7 +136,7 @@ export var ColumnHeaders = React.createClass({
             columns.map((heading, index) => {
             if (index==0) {
                 return <tr key={index}>
-                    <th className="centered"
+                    <th id="topleftcorner" className="centered"
                         key={'th1'} rowSpan={table.heading.length}
                         colSpan={table.stub.length}>
                         <img src="/app/stylesheets/empty.png" />
@@ -158,6 +156,7 @@ let RowHeader = function (table, index, save_dimensions, spaces) {
         table.stub_hopper(index),
         (heading, thindex) => {
             if (heading) {
+                let key = CSS.escape(`stub_${heading.heading}_${heading.header}_${index}_${thindex}`);
                 if (save_dimensions) {
                     return <th
                         key={index + '_' + thindex}
@@ -165,7 +164,7 @@ let RowHeader = function (table, index, save_dimensions, spaces) {
                         ref={function(component){
                         let node = React.findDOMNode(component);
                         (node!==null) && (node.style!==null)
-                        ? save_dimensions(node, heading, index, thindex, 'stub')
+                        ? save_dimensions(node, heading, index, thindex, 'stub', key)
                         : '';
                         }}>
                         {heading.header}
@@ -173,6 +172,7 @@ let RowHeader = function (table, index, save_dimensions, spaces) {
                     </th>;
                 } else {
                     return <th
+                        id={key}
                         key={index + '_' + thindex}
                         rowSpan={heading.hop}>
                         {heading.header}
