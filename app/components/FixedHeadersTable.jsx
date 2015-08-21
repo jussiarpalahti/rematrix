@@ -58,6 +58,7 @@ export var FixedHeadersTable = React.createClass({
             places.push(`#${key} div {${width} ${height} }\n`);
             places.push(`#${key} {${width} ${height} }\n`);
         });
+        //let actual_topleftcorner
         if (style) style.text(places.join(" "));
     },
 
@@ -105,6 +106,7 @@ export var FixedHeadersTable = React.createClass({
                 </table></div>
             <div id="stub" className="pos">
                 <table className="pure-table pure-table-bordered">
+                    <ColumnHeaders table={table} skip_data={true} />
                     <DataCells table={table} skip_data={true} />
                 </table></div>
             <div id="cells" className="pos">
@@ -160,9 +162,9 @@ export var ColumnHeaders = React.createClass({
             columns.map((heading, index) => {
             if (index==0) {
                 return <tr key={index}>
-                    <th id="topleftcorner" className="centered"
+                    <th className="topleftcorner centered"
                         key={'th1'} rowSpan={table.heading.length}
-                        colSpan={table.stub.length}>
+                        colSpan={table.stub.length}><div></div>
                     </th>
                     {heading}
                 </tr>
