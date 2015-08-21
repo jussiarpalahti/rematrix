@@ -69,9 +69,9 @@ Pure menus end
 }
 
 .pos {
-    position: absolute;
-    left: 1em;
-    top: 22em;
+    /*position: absolute;*/
+    /*left: 1em;*/
+    /*top: 22em;*/
     max-width: 70vh;
     max-height: 50vh;
     overflow: scroll;

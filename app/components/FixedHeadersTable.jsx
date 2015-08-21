@@ -3,10 +3,23 @@ var _ = lodash;
 
 import React from 'react';
 
-require('css.escape');
-
 import jQuery from 'jquery';
 var $ = jQuery;
+
+let hashCode = function(s) {
+    let hash = 0, i, chr, len;
+    if (s.length == 0) return hash;
+    for (i = 0, len = s.length; i < len; i++) {
+        chr   = s.charCodeAt(i);
+        hash  = ((hash << 5) - hash) + chr;
+        hash |= 0; // Convert to 32bit integer
+    }
+    return hash;
+};
+let get_key = function (heading, index, thindex) {
+    let basekey = `stub_${heading.heading}_${heading.header}_${index}_${thindex}`
+    return 'key_' + hashCode(basekey);
+};
 
 export var FullTable = React.createClass({
     render: function () {
@@ -38,14 +51,26 @@ export var FixedHeadersTable = React.createClass({
 
     componentDidMount:  function () {
         let style = $('#places');
-        if (style) style.text("h1 { color: yellow; }");
-        else $('head').append('<div id="mystyle"><style>h1 { color:green; }</style></div>')
+        let places = [];
+        _.forOwn(this.place(), (dimensions, key) => {
+            let width = dimensions.width ? `max-width: ${dimensions.width};` : '';
+            let height = dimensions.height ? `max-height: ${dimensions.height};` : '';
+            places.push(`#${key} div {${width} ${height} }\n`);
+            places.push(`#${key} {${width} ${height} }\n`);
+        });
+        if (style) style.text(places.join(" "));
     },
 
     componentDidUpdate: function () {
         let style = $('#places');
-        if (style) style.text("h1 { color:red; }");
-        else $('head').append('<div id="mystyle"><style>h1 { color:blue; }</style></div>')
+        let places = [];
+        _.forOwn(this.place(), (dimensions, key) => {
+            let width = dimensions.width ? `width: ${dimensions.width};` : '';
+            let height = dimensions.height ? `height: ${dimensions.height};` : '';
+            places.push(`#${key} div {${width} ${height} }\n`);
+            places.push(`#${key} {${width} ${height} }\n`);
+        });
+        if (style) style.text(places.join(" "));
     },
 
     save_dimensions: function(node, heading, index, thindex, axis, key) {
@@ -105,7 +130,7 @@ export var ColumnHeaders = React.createClass({
                 (heading, thindex) => {
                     if (heading) {
                         let col;
-                        let key = CSS.escape(`stub_${heading.heading}_${heading.header}_${col_index}_${thindex}`);
+                        let key = get_key(heading, col_index, thindex);
                         if (this.props.save_dimensions) {
                             col = <th key={col_index + '_' + thindex}
                                 colSpan={heading.hop}
@@ -118,14 +143,13 @@ export var ColumnHeaders = React.createClass({
                                 : '';
                                 }
                             }>{heading.header}
-                                <Dimension table={table} spaces={this.props.spaces} />
                             </th>
                         } else {
                             col = <th
                                 id={key}
                                 key={col_index + '_' + thindex}
                                 colSpan={heading.hop}>
-                                {heading.header}
+                                <div>{heading.header}</div>
                                 </th>
                         }
                         columns[thindex].push(col);
@@ -139,7 +163,6 @@ export var ColumnHeaders = React.createClass({
                     <th id="topleftcorner" className="centered"
                         key={'th1'} rowSpan={table.heading.length}
                         colSpan={table.stub.length}>
-                        <img src="/app/stylesheets/empty.png" />
                     </th>
                     {heading}
                 </tr>
@@ -156,7 +179,7 @@ let RowHeader = function (table, index, save_dimensions, spaces) {
         table.stub_hopper(index),
         (heading, thindex) => {
             if (heading) {
-                let key = CSS.escape(`stub_${heading.heading}_${heading.header}_${index}_${thindex}`);
+                let key = get_key(heading, index, thindex);
                 if (save_dimensions) {
                     return <th
                         key={index + '_' + thindex}
@@ -168,14 +191,13 @@ let RowHeader = function (table, index, save_dimensions, spaces) {
                         : '';
                         }}>
                         {heading.header}
-                        <Dimension table={table} spaces={spaces} />
                     </th>;
                 } else {
                     return <th
                         id={key}
                         key={index + '_' + thindex}
                         rowSpan={heading.hop}>
-                        {heading.header}
+                        <div>{heading.header}</div>
                         </th>;
                 }
             }
