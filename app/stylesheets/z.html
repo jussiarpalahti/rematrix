@@ -6,13 +6,15 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
     <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/base-min.css">
     <style>
+        td {background: white;}
+
         .pos {
-            position: absolute;
+            position: fixed;
             left: 1em;
             top: 1em;
             max-width: 20em;
             max-height: 20em;
-            overflow: scroll;
+            overflow: hidden;
         }
         #heading {
             z-index: 10;
@@ -28,7 +30,7 @@
 
         td {
             border: 1px solid grey;
-            background: none;
+            background: white;
             padding: 5px;
         }
 
@@ -37,8 +39,9 @@
         }
 
         #console {
-            position: absolute;
+            position: fixed;
             right: 10em;
+            top: 10em;
         }
 
         #heading {border: none; margin: 0; padding: 0;}
@@ -264,33 +267,39 @@
     </tbody>
 </table>
 </div>
-<script>
+<script type="text/javascript">
+    var width = $('#cells table').width();
+    var height = $('#cells table').height();
+    console.log(width, height);
+    $('body').append('<div id="tablesizer"></div>').css({
+        width: width,
+        height: height,
+        background: 'blue',
+        'z-index' : 0
+    });
 
-    function fix_size(elems, target_elems) {
-        for (var i=0; i<elems.length; i++) {
+    console.log($('#tablesizer'));
 
-        }
-    }
-
-    $('#cells').scroll(function (ev) {
+    $(window).scroll(function (ev) {
         var log = $('#console textarea');
         var heading = $('#heading');
         var stub = $('#stub');
-
+        var cells = $('#cells');
         var f = function (ev) {
-
-            var top = ev.currentTarget.scrollTop;
-            var left = ev.currentTarget.scrollLeft;
-
+            var top = ev.currentTarget.scrollY;
+            var left = ev.currentTarget.scrollX;
+//            var top = ev.currentTarget.scrollTop;
+//            var left = ev.currentTarget.scrollLeft;
+            log.text(log.text() + top + ':' + left + '\n');
             requestAnimationFrame(function() {
                 heading.scrollLeft(left);
                 stub.scrollTop(top);
+                cells.scrollTop(top).scrollLeft(left);
             });
         };
 
         return f;
     }());
-
 </script>
 </body>
 </html>
