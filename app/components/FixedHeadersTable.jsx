@@ -68,10 +68,11 @@ export var FixedHeadersTable = React.createClass({
             places.push(`#${key} {${width} ${height} }\n`);
         });
         let base_topleftcorner = $('#cells .topleftcorner');
-        let base_width = base_topleftcorner.width();
-        let base_height = base_topleftcorner.height();
+        let styles = window.getComputedStyle(base_topleftcorner[0]);
+        let width_prop = styles.getPropertyValue('width');
+        let height_prop = styles.getPropertyValue('height');
         places.push(
-            `#heading .topleftcorner div, #stub .topleftcorner div {width: ${base_width}px; height: ${base_height}px;}`
+            `#heading .topleftcorner div, #stub .topleftcorner div {width: ${width_prop}; height: ${height_prop};}`
         );
         if (style) style.text(places.join(" "));
     },
