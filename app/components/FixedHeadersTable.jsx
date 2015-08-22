@@ -102,7 +102,9 @@ export var FixedHeadersTable = React.createClass({
         let width_prop = styles.getPropertyValue('width');
         let height_prop = styles.getPropertyValue('height');
         places.push(
-            `#heading .topleftcorner div, #stub .topleftcorner div {width: ${width_prop}; height: ${height_prop};}`
+            `#heading .topleftcorner div, #stub .topleftcorner div, #topleft_hider div {
+            width: ${width_prop}; height: ${height_prop};
+            }`
         );
 
         // Apply dimensions as document level style element
@@ -176,6 +178,15 @@ export var FixedHeadersTable = React.createClass({
     render: function () {
         let table = this.props.table;
         return <div>
+            <div id="topleft_hider" className="pos">
+                <table className="pure-table pure-table-bordered">
+                    <thead><tr><th className="topleftcorner centered"
+                                   key={'stub_th1'}
+                                   rowSpan={table.heading.length}
+                                   colSpan={table.stub.length}>
+                        <div> </div>
+                    </th></tr>
+                    </thead><tbody></tbody></table></div>
             <div id="cells" className="pos">
                 <table className="pure-table pure-table-bordered">
                     <ColumnHeaders table={table} save_dimensions={this.save_dimensions} />

@@ -86,6 +86,7 @@ Pure menus end
     max-height: 67vh;
     overflow: hidden;
 }
+
 #heading {
     z-index: 10;
 }
@@ -96,6 +97,10 @@ Pure menus end
 
 #cells {
     z-index: 1;
+}
+
+#topleft_hider {
+    z-index: 20;
 }
 
 .pure-table-bordered tbody th div {
