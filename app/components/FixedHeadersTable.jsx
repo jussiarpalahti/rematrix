@@ -49,13 +49,21 @@ export var FixedHeadersTable = React.createClass({
         }
     }(),
 
-    componentDidMount:  function () {
-        console.log("component mounted");
+    update_dimensions: function () {
+        console.log('update dimensions');
         let style = $('#places');
         let places = [];
-        _.forOwn(this.place(), (dimensions, key) => {
-            let width = dimensions.width ? `max-width: ${dimensions.width};` : '';
-            let height = dimensions.height ? `max-height: ${dimensions.height};` : '';
+        let log = $('#console textarea');
+        _.forOwn(this.place(), (val, key) => {
+            let node = document.getElementById('cell_' + key);
+            let styles = window.getComputedStyle(node);
+            let width_prop = styles.getPropertyValue('width');
+            let height_prop = styles.getPropertyValue('height');
+            let width = width_prop ? `width: ${width_prop};` : '';
+            let height = height_prop ? `height: ${height_prop};` : '';
+
+            log.text(log.text() + `${key} ${width_prop} ${height_prop}\n`)
+
             places.push(`#${key} div {${width} ${height} }\n`);
             places.push(`#${key} {${width} ${height} }\n`);
         });
@@ -66,30 +74,19 @@ export var FixedHeadersTable = React.createClass({
             `#heading .topleftcorner div, #stub .topleftcorner div {width: ${base_width}px; height: ${base_height}px;}`
         );
         if (style) style.text(places.join(" "));
+    },
+
+    componentDidMount:  function () {
+        console.log("component mounted");
+        window.requestAnimationFrame(() => this.update_dimensions());
     },
 
     componentDidUpdate: function () {
         console.log("component update");
-        let style = $('#places');
-        let places = [];
-        _.forOwn(this.place(), (dimensions, key) => {
-            let width = dimensions.width ? `width: ${dimensions.width};` : '';
-            let height = dimensions.height ? `height: ${dimensions.height};` : '';
-            places.push(`#${key} div {${width} ${height} }\n`);
-            places.push(`#${key} {${width} ${height} }\n`);
-        });
-        let base_topleftcorner = $('#cells .topleftcorner');
-        let base_width = base_topleftcorner.width();
-        let base_height = base_topleftcorner.height();
-        places.push(
-            `#heading .topleftcorner div, #stub .topleftcorner div {width: ${base_width}px; height: ${base_height}px;}`
-        );
-        if (style) style.text(places.join(" "));
+        window.requestAnimationFrame(() => this.update_dimensions());
     },
 
     save_dimensions: function(node, heading, index, thindex, axis, key) {
-
-        let styles = window.getComputedStyle(node);
 
         //console.log({
         //    axis: axis,
@@ -104,10 +101,7 @@ export var FixedHeadersTable = React.createClass({
         //    place: this.place().length
         //});
 
-        this.place(key, {
-            height: styles.getPropertyValue('height'),
-            width: styles.getPropertyValue('width')
-        });
+        this.place(key, node);
     },
 
     render: function () {
@@ -150,15 +144,17 @@ export var ColumnHeaders = React.createClass({
                         let col;
                         let key = get_key(heading, col_index, thindex);
                         if (this.props.save_dimensions) {
-                            col = <th key={col_index + '_' + thindex}
+                            col = <th
+                                key={col_index + '_' + thindex}
+                                id={'cell_' + key}
                                 colSpan={heading.hop}
                                 ref={
-                                (component) => {
-                                let node = React.findDOMNode(component);
-                                (node!==null) && (node.style!==null)
-                                ? this.props.save_dimensions(
-                                    node, heading, col_index, thindex, 'heading', key)
-                                : '';
+                                    (component) => {
+                                    let node = React.findDOMNode(component);
+                                    (node!==null) && (node.style!==null)
+                                    ? this.props.save_dimensions(
+                                        node, heading, col_index, thindex, 'heading', key)
+                                    : '';
                                 }
                             }><div>{heading.header}</div>
                             </th>
@@ -200,6 +196,7 @@ let RowHeader = function (table, index, save_dimensions, spaces) {
                 let key = get_key(heading, index, thindex);
                 if (save_dimensions) {
                     return <th
+                        id={'cell_' + key}
                         key={index + '_' + thindex}
                         rowSpan={heading.hop}
                         ref={function(component){

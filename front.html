@@ -4,13 +4,20 @@
 <head>
     <meta charset="UTF-8">
     <title>React Table Viewer</title>
-
-
+    <script src="node_modules/jquery/dist/jquery.min.js"></script>
+    <style>
+        #console {
+            position: absolute;
+            bottom: 1em;
+            left: 1em;
+        }
+    </style>
 </head>
 <body>
 
 <script src="bundle.js"></script>
 
+<div id="console"><textarea id="write" cols="50" rows="20"></textarea></div>
 <style id="places"></style>
 </body>
 </html>
