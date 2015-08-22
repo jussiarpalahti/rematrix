@@ -46,6 +46,10 @@ export var FixedHeadersTable = React.createClass({
     place: function () {
         let places = {};
         return (key, val) => {
+            if (key==='reset') {
+                places = {};
+                return;
+            }
             if (key) {
                 places[key] = val;
                 return places;
@@ -74,14 +78,12 @@ export var FixedHeadersTable = React.createClass({
 
     update_dimensions: function () {
         console.log('update dimensions');
-
         // Stretch document to data table's dimensions
         this.stretch_window();
 
         // Get sizes for th elements and push them to style list
         let style = $('#places');
         let places = [];
-        let log = $('#console textarea');
         _.forOwn(this.place(), (val, key) => {
             let node = document.getElementById('cell_' + key);
             let styles = window.getComputedStyle(node);
@@ -89,8 +91,6 @@ export var FixedHeadersTable = React.createClass({
             let height_prop = styles.getPropertyValue('height');
             let width = width_prop ? `width: ${width_prop};` : '';
             let height = height_prop ? `height: ${height_prop};` : '';
-
-            //log.text(log.text() + `${key} ${width_prop} ${height_prop}\n`);
 
             places.push(`#${key} div {${width} ${height} }\n`);
             places.push(`#${key} {${width} ${height} }\n`);
@@ -107,6 +107,14 @@ export var FixedHeadersTable = React.createClass({
 
         // Apply dimensions as document level style element
         if (style) style.text(places.join(" "));
+    },
+
+    componentWillMount: function () {
+        this.place('reset');
+    },
+
+    componentWillUpdate: function () {
+        this.place('reset');
     },
 
     componentDidMount:  function () {
@@ -168,6 +176,11 @@ export var FixedHeadersTable = React.createClass({
     render: function () {
         let table = this.props.table;
         return <div>
+            <div id="cells" className="pos">
+                <table className="pure-table pure-table-bordered">
+                    <ColumnHeaders table={table} save_dimensions={this.save_dimensions} />
+                    <DataCells table={table} save_dimensions={this.save_dimensions} />
+                </table></div>
             <div id="heading" className="pos">
                 <table className="pure-table pure-table-bordered">
                     <ColumnHeaders table={table} skip_data={true} />
@@ -183,11 +196,6 @@ export var FixedHeadersTable = React.createClass({
                     </thead>
                     <DataCells table={table} skip_data={true} />
                 </table></div>
-            <div id="cells" className="pos">
-            <table className="pure-table pure-table-bordered">
-                <ColumnHeaders table={table} save_dimensions={this.save_dimensions} />
-                <DataCells table={table} save_dimensions={this.save_dimensions} />
-            </table></div>
             </div>;
     }
 });
