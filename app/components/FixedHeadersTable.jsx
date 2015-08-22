@@ -38,6 +38,11 @@ export var FullTable = React.createClass({
 
 export var FixedHeadersTable = React.createClass({
 
+    componentWillReceiveProps: function(nextProps) {
+        console.log('table changed, stretching');
+        this.stretch_window();
+    },
+
     place: function () {
         let places = {};
         return (key, val) => {
@@ -61,8 +66,8 @@ export var FixedHeadersTable = React.createClass({
         stretch_width = table_width + window_width - visible_width;
         stretch_height = table_height + window_height - visible_height;
         $('#tablesizer').css({
-            width: stretch_width,
-            height: stretch_height,
+            width: stretch_width + 5,
+            height: stretch_height + 5,
             'z-index' : 0
         });
     },
