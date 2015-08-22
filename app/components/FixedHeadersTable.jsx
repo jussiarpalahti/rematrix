@@ -49,8 +49,31 @@ export var FixedHeadersTable = React.createClass({
         }
     }(),
 
+    stretch_window: function () {
+        let stretch_width;
+        let stretch_height;
+        let table_width = $('#cells table').width();
+        let table_height = $('#cells table').height();
+        let window_height = $(window).height();
+        let window_width = $(window).width();
+        let visible_width = $('#cells').width();
+        let visible_height = $('#cells').height();
+        stretch_width = table_width + window_width - visible_width;
+        stretch_height = table_height + window_height - visible_height;
+        $('#tablesizer').css({
+            width: stretch_width,
+            height: stretch_height,
+            'z-index' : 0
+        });
+    },
+
     update_dimensions: function () {
         console.log('update dimensions');
+
+        // Stretch document to data table's dimensions
+        this.stretch_window();
+
+        // Get sizes for th elements and push them to style list
         let style = $('#places');
         let places = [];
         let log = $('#console textarea');
@@ -67,6 +90,8 @@ export var FixedHeadersTable = React.createClass({
             places.push(`#${key} div {${width} ${height} }\n`);
             places.push(`#${key} {${width} ${height} }\n`);
         });
+
+        // Table's empty top left corner size needs to be identical also
         let base_topleftcorner = $('#cells .topleftcorner');
         let styles = window.getComputedStyle(base_topleftcorner[0]);
         let width_prop = styles.getPropertyValue('width');
@@ -74,6 +99,8 @@ export var FixedHeadersTable = React.createClass({
         places.push(
             `#heading .topleftcorner div, #stub .topleftcorner div {width: ${width_prop}; height: ${height_prop};}`
         );
+
+        // Apply dimensions as document level style element
         if (style) style.text(places.join(" "));
     },
 
@@ -94,20 +121,25 @@ export var FixedHeadersTable = React.createClass({
     },
 
     mount_scroller: function () {
-        $('#cells').
-            off('scroll').
-            scroll(function (ev) {
-                let heading = $('#heading');
-                let stub = $('#stub');
-                return (ev) => {
-                    var top = ev.currentTarget.scrollTop;
-                    var left = ev.currentTarget.scrollLeft;
-                    requestAnimationFrame(() => {
-                        heading.scrollLeft(left);
-                        stub.scrollTop(top);
-                    });
-                };
-            }());
+        $(window).off('scroll');
+        $(window).scroll(function (ev) {
+            let heading = $('#heading');
+            let stub = $('#stub');
+            let cells = $('#cells');
+            return (ev) => {
+                var top = ev.currentTarget.scrollY;
+                var left = ev.currentTarget.scrollX;
+                requestAnimationFrame(() => {
+                    heading.scrollLeft(left);
+                    stub.scrollTop(top);
+                    cells.scrollTop(top).scrollLeft(left);
+                });
+            };
+        }());
+        $(window).off('resize');
+        $(window).resize((ev) => {
+            this.stretch_window();
+        });
     },
 
     save_dimensions: function(node, heading, index, thindex, axis, key) {
@@ -138,8 +170,11 @@ export var FixedHeadersTable = React.createClass({
             <div id="stub" className="pos">
                 <table className="pure-table pure-table-bordered">
                     <thead><tr><th className="topleftcorner centered"
-                                         key={'stub_th1'} rowSpan={table.heading.length}
-                                         colSpan={table.stub.length}><div>placeholder</div></th></tr>
+                                   key={'stub_th1'}
+                                   rowSpan={table.heading.length}
+                                   colSpan={table.stub.length}>
+                        <div>placeholder</div>
+                    </th></tr>
                     </thead>
                     <DataCells table={table} skip_data={true} />
                 </table></div>
