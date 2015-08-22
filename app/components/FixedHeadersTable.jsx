@@ -62,7 +62,7 @@ export var FixedHeadersTable = React.createClass({
             let width = width_prop ? `width: ${width_prop};` : '';
             let height = height_prop ? `height: ${height_prop};` : '';
 
-            log.text(log.text() + `${key} ${width_prop} ${height_prop}\n`)
+            //log.text(log.text() + `${key} ${width_prop} ${height_prop}\n`);
 
             places.push(`#${key} div {${width} ${height} }\n`);
             places.push(`#${key} {${width} ${height} }\n`);
@@ -79,12 +79,35 @@ export var FixedHeadersTable = React.createClass({
 
     componentDidMount:  function () {
         console.log("component mounted");
-        window.requestAnimationFrame(() => this.update_dimensions());
+        window.requestAnimationFrame(() => {
+            this.mount_scroller();
+            this.update_dimensions()
+        });
     },
 
     componentDidUpdate: function () {
         console.log("component update");
-        window.requestAnimationFrame(() => this.update_dimensions());
+        window.requestAnimationFrame(() => {
+            this.mount_scroller();
+            this.update_dimensions()
+        });
+    },
+
+    mount_scroller: function () {
+        $('#cells').
+            off('scroll').
+            scroll(function (ev) {
+                let heading = $('#heading');
+                let stub = $('#stub');
+                return (ev) => {
+                    var top = ev.currentTarget.scrollTop;
+                    var left = ev.currentTarget.scrollLeft;
+                    requestAnimationFrame(() => {
+                        heading.scrollLeft(left);
+                        stub.scrollTop(top);
+                    });
+                };
+            }());
     },
 
     save_dimensions: function(node, heading, index, thindex, axis, key) {
