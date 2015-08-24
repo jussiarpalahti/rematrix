@@ -82,7 +82,7 @@ Pure menus end
     position: fixed;
     left: 1em;
     top: 22em;
-    max-width: 110vh;
+    max-width: 95vw;
     max-height: 67vh;
     overflow: hidden;
 }
