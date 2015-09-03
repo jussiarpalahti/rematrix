@@ -90,7 +90,7 @@ let Main = React.createClass({
         if (this.state.table) {
             table = <div>
                 <MenuBar table={this.state.table} on_choice={this.on_choice} />
-                <FixedHeadersTable table={this.state.table} />
+                <HoppingTable table={this.state.table} />
             </div>;
         }
         return <div>

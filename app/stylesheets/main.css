@@ -66,19 +66,19 @@ Pure menus end
     border: 1px inset black;
 }
 
-#app {
+#fixedtable #app {
     margin: 1em;
     position: fixed;
     z-index: 1;
 }
 
-#tablesizer {
+#fixedtable #tablesizer {
     position: absolute;
     left: 0;
     top: 0;
 }
 
-.pos {
+#fixedtable .pos {
     position: fixed;
     left: 1em;
     top: 22em;
