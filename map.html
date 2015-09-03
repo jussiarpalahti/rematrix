@@ -19,17 +19,17 @@
 </head>
 <body>
 <script>
-    var width = 960, height = 960;
+    var width = 500, height = 500;
     // bounds: 24.84361944657656 60.09501195353504 25.094444747734432 60.263533967929554 (spherical)
     var projection = d3.geo
             .mercator()
             .center([24.9414000, 60.1719000])
             .scale(100000)
-            .translate([(width / 2)-200, (height / 2) + 100]);
+            .translate([(width / 2) - 50, (height / 2) + 100]);
 
     var path = d3.geo.path().projection(projection);
 
-    var svg = d3.select("body").append("svg").attr("width",width).attr("height",height);
+    var svg = d3.select("body").append("svg").attr("width",width).attr("height",height).attr('style', 'border: 1px solid grey;');
 
     d3.json("/data/helsinki_without_sea_epsg4326.geojson", function(json) {
 
@@ -39,8 +39,10 @@
 //                        json, json.objects.helsinki_without_sea_epsg4326))
         svg.selectAll("path").data(json.features).enter().append("path")
             .attr("d", path)
-            .attr("class", 'p');
-
+            .attr("class", 'p')
+            .text(function (d) {
+                console.log(d);
+            });
     });
 </script>
 </body>
