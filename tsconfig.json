@@ -1,0 +1,12 @@
+
+{
+  "compilerOptions": {
+    "target": "es6",
+    "jsx": "react"
+  },
+  "files": [
+    "typings/tsd.d.ts",
+    "typings/react/react.d.ts",
+    "typings/react/react-global.d.ts"
+  ]
+}

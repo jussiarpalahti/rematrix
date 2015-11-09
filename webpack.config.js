@@ -5,9 +5,9 @@ var merge = require('webpack-merge');
 
 var TARGET = process.env.TARGET;
 var ROOT_PATH = path.resolve(__dirname);
+var BUILD, DEV;
 
 var common = {
-  entry: [path.resolve(ROOT_PATH, 'app/main')],
   resolve: {
     extensions: ['', '.js', '.jsx', '.cjsx', '.coffee']
   },
@@ -36,7 +36,7 @@ var common = {
 };
 
 if(TARGET === 'build') {
-  module.exports = merge(common, {
+  BUILD = merge(common, {
     devtool: 'source-map',
     module: {
       loaders: [
@@ -63,27 +63,45 @@ if(TARGET === 'build') {
   });
 }
 
-if(TARGET === 'dev') {
-  module.exports = merge(common, {
+DEV = merge(common, {
     devtool: 'eval-source-map',
     entry: [
-      'webpack/hot/dev-server'
+        'webpack/hot/dev-server'
     ],
     module: {
-      loaders: [
-        {
-          test: /\.jsx?$/,
-          loaders: ['react-hot', 'babel?optional[]=runtime&stage=0'],
-          include: path.resolve(ROOT_PATH, 'app'),
-        },
-        {
-          test: /\.cjsx$/,
-          loaders: ['react-hot', 'coffee', 'cjsx'],
-          include: path.resolve(ROOT_PATH, 'app'),},
-        { test: /\.coffee$/,
-          loader: 'coffee',
-          include: path.resolve(ROOT_PATH, 'app'),}
-      ],
-    },
-  });
+        loaders: [
+            {
+                test: /\.jsx?$/,
+                loaders: ['react-hot', 'babel?optional[]=runtime&stage=0'],
+                include: path.resolve(ROOT_PATH, 'app'),
+            },
+            {
+                test: /\.cjsx$/,
+                loaders: ['react-hot', 'coffee', 'cjsx'],
+                include: path.resolve(ROOT_PATH, 'app')
+            },
+            {
+                test: /\.coffee$/,
+                loader: 'coffee',
+                include: path.resolve(ROOT_PATH, 'app')
+            },
+            {
+                test: /\.tsx?$/,
+                loaders: ['react-hot', 'babel?optional[]=runtime&stage=0', 'ts-loader'],
+                include: path.resolve(ROOT_PATH, 'app')
+            }
+        ]
+    }
+});
+
+if(TARGET === 'dev') {
+    DEV.entry = [path.resolve(ROOT_PATH, 'app/main')];
+    module.exports = DEV;
+} else if (TARGET === 'build') {
+    BUILD.entry = [path.resolve(ROOT_PATH, 'app/main')];
+    module.exports = BUILD;
+} else if(TARGET === 'typed') {
+    module.exports = merge(DEV, {
+        entry: [path.resolve(ROOT_PATH, 'app/remain.tsx')]
+    })
 }
