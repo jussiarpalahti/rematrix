@@ -1,1 +1,0 @@
-/Users/jussiarpalahti/env/exp/soft/typescript-ramda/ramda.d.ts
