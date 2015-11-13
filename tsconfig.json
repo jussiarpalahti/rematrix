@@ -5,9 +5,12 @@
     "jsx": "react"
   },
   "files": [
+    "app/remain.tsx",
+    "app/lib/piper.js",
     "typings/tsd.d.ts",
     "typings/react/react.d.ts",
     "typings/react/react-global.d.ts",
-    "typings/ramda.d.ts"
+    "typings/ramda.d.ts",
+    "typings/vendor.d.ts"
   ]
 }

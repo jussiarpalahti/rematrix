@@ -2,12 +2,17 @@
 
 //import React from 'react';
 import * as React from "react";
+
 import {get_data, piping} from "./lib/piper.js";
+
+//import piper = require('piper');
+//let {piping} = piper;
+
 
 interface Props {
     foo: string;
     arg: number;
-    piper: Function
+    pipe: Function
 }
 
 interface data {
@@ -17,8 +22,9 @@ interface data {
 export class Tyyppi extends React.Component<Props, {}> {
 
     handler() {
-        this.props.piper();
+        this.props.pipe();
     }
+
 
     render() {
         return <div>
@@ -35,18 +41,10 @@ export class Main extends React.Component<any, {}> {
         let data = this.props.data;
         return <div>
             <h1>React Typed Table Viewer</h1>
-            <div><Tyyppi arg={data.arg} foo={data.foo} piper={data.my_pipe} /></div>
+            <div><Tyyppi arg={data.arg} foo={data.foo} pipe={data.my_pipe} /></div>
         </div>
     }
 }
-
-const piper = function () {
-    console.log("pipe started");
-    get_data((data) => {
-        return null;
-    });
-    console.log("piped");
-};
 
 function main() {
     var app = document.getElementById('app');
