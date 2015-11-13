@@ -1,9 +1,9 @@
-/// <reference path="../typings/ramda.d.ts" />
+/// reference path="../typings/ramda.d.ts"
 
 //import React from 'react';
 import * as React from "react";
 
-import {get_data, piping} from "./lib/piper.js";
+import {get_data, piping} from "./lib/piper";
 
 //import piper = require('piper');
 //let {piping} = piper;

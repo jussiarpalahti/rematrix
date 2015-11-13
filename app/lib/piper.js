@@ -1,7 +1,7 @@
 
 import R from "ramda";
 
-export function get_data (callback) {
+function get_data (callback) {
     let url = 'http://localhost:8000/';
     console.log("piper called");
     var f = R.pipeP(
@@ -15,7 +15,7 @@ export function get_data (callback) {
     f();
 }
 
-export function piping (start, callback) {
+function piping (start, callback) {
     console.log("pipe started");
     var f = R.pipe(
         (data) => data,
@@ -27,3 +27,6 @@ export function piping (start, callback) {
     f(start, callback);
     console.log("piped");
 }
+
+exports.get_data = get_data;
+exports.piping = piping;
