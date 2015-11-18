@@ -108,3 +108,9 @@ Pure menus end
     align-items: center;
     justify-content: left;
 }
+
+.hidable {
+    position: absolute;
+    z-index: 1;
+    background: white;
+}
