@@ -1,4 +1,6 @@
 
+var classNames = require('classnames');
+
 import R from "ramda";
 
 function get_data (callback) {
@@ -28,5 +30,11 @@ function piping (start, callback) {
     console.log("piped");
 }
 
+function clsnames(...args) {
+    return classNames(args);
+}
+
+
 exports.get_data = get_data;
 exports.piping = piping;
+exports.clsnames = clsnames;

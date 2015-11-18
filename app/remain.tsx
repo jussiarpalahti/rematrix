@@ -5,7 +5,7 @@ import './stylesheets/main.css';
 
 import * as React from "react";
 
-import {get_data, piping} from "./lib/piper";
+import {get_data, piping, clsnames} from "./lib/piper";
 
 
 interface Props {
@@ -47,16 +47,19 @@ export class DataList extends React.Component<{}, {hideList:boolean}> {
     }
 
     render() {
+
+        let css = clsnames("modal", {hidden: this.state.hideList});
+
         return <div className="top_header">
             <h2>Datalist</h2>
             <button onClick={this.onClick.bind(this)}>Show</button>
-            <div className={this.state.hideList ? 'hidden' : ''}>
-            <ul>
-                <li>List of stuff</li>
-                <li>Not very long</li>
-                <li>Not very long</li>
-                <li>Not very long</li>
-            </ul>
+            <div className={css}>
+                <ul className="hidable">
+                    <li>List of stuff</li>
+                    <li>Not very long</li>
+                    <li>Not very long</li>
+                    <li>Not very long</li>
+                </ul>
             </div>
         </div>
     }
