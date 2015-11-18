@@ -1,12 +1,11 @@
 /// reference path="../typings/ramda.d.ts"
 
-//import React from 'react';
+import './stylesheets/pure/pure-min.css';
+import './stylesheets/main.css';
+
 import * as React from "react";
 
 import {get_data, piping} from "./lib/piper";
-
-//import piper = require('piper');
-//let {piping} = piper;
 
 
 interface Props {
@@ -28,12 +27,69 @@ export class Tyyppi extends React.Component<Props, {}> {
 
     render() {
         return <div>
-            <div><button onClick={this.handler.bind(this)}>Fetch data</button></div>
+            <div><button onClick={() => this.handler() }>Fetch data</button></div>
             <div><span>Rendered with types: {this.props.foo}</span></div>
             <div>Data: {this.props.arg}</div>
         </div>
     }
 }
+
+
+export class DataList extends React.Component<{}, {hideList:boolean}> {
+
+    constructor(props) {
+        super(props);
+        this.state = { hideList: true };
+    }
+
+    onClick() {
+        this.setState({ hideList: !this.state.hideList });
+    }
+
+    render() {
+        return <div className="top_header">
+            <h2>Datalist</h2>
+            <button onClick={this.onClick.bind(this)}>Show</button>
+            <div className={this.state.hideList ? 'hidden' : ''}>
+            <ul>
+                <li>List of stuff</li>
+                <li>Not very long</li>
+                <li>Not very long</li>
+                <li>Not very long</li>
+            </ul>
+            </div>
+        </div>
+    }
+
+}
+
+
+export class VariableSelection extends React.Component<{}, {}> {
+
+    render() {
+        return <div>Variables</div>
+    }
+
+}
+
+
+export class TableView extends React.Component<{}, {}> {
+
+    render() {
+        return <div>Table</div>
+    }
+
+}
+
+
+export class DataView extends React.Component<{}, {}> {
+
+    render() {
+        return <div>Data</div>
+    }
+
+}
+
 
 export class Main extends React.Component<any, {}> {
 
@@ -41,7 +97,10 @@ export class Main extends React.Component<any, {}> {
         let data = this.props.data;
         return <div>
             <h1>React Typed Table Viewer</h1>
-            <div><Tyyppi arg={data.arg} foo={data.foo} pipe={data.my_pipe} /></div>
+            <DataList />
+            <VariableSelection />
+            <TableView />
+            <DataView />
         </div>
     }
 }
