@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>New table algorithm</title>
+</head>
+<body>
+<script>
+
+    function create_header_hopper(headers, hop, limit) {
+        /*
+
+        Creates a function that returns either header or null
+        for given position index.
+
+        If limit is reached, returns null.
+
+        */
+
+        var index = 0;
+        var headers_size = headers.length;
+
+        return function header_hopper(pos) {
+
+            if (pos < 0 || pos >= limit) {
+                return null;
+            }
+
+            else if (pos % hop === 0) {
+
+                if (index >= headers_size) {
+                    index = 0;
+                }
+                if (pos % hop === 0) {
+                    index += 1;
+                    return headers[index - 1];
+                }
+
+            }
+            else {
+                return null;
+            }
+
+        }
+    }
+
+    function shape (headers) {
+        /*
+
+        Calculate table shape from list of header lists:
+           hop: header size in cells
+           loop: how many times to loop all headers
+           size: full axis size in cells
+
+         */
+
+        var res = [];
+
+        var ret = headers.reduce(
+                function reducer (prev, next, index, all) {
+                    var acc;
+
+                    if (!prev) {
+                        res.push(1)
+                        return 1;
+                    } else {
+                        acc = all[index - 1].length * prev
+                        res.push(acc)
+                        return acc;
+                    }
+                },
+                null);
+
+        // Full size is accumulated level size times last level's size
+        var size = ret * headers[headers.length - 1].length;
+
+        return {
+            size: size,
+            hops: res,
+            loop: res.reverse()
+        };
+    }
+
+    // Test part
+
+    start = [
+        [1,2,3],
+        [4,5],
+        [6,7,8,9]];
+
+    table = shape(start);
+
+    f3 = create_header_hopper(start[0], table.loop[0], table.hops[0], table.size)
+    f2 = create_header_hopper(start[1], table.loop[1], table.hops[1], table.size)
+    f = create_header_hopper(start[2], table.loop[2], table.hops[2], table.size)
+
+    resp = [];
+    for (var i=0; i < table.size; i++) {
+        header = f(i);
+        resp.push(header ? header : 0)
+    }
+    console.log(resp)
+
+    resp = [];
+    for (var i=0; i < table.size; i++) {
+        header = f2(i);
+        resp.push(header ? header : 0)
+    }
+    console.log(resp);
+
+    resp = [];
+    for (var i=0; i < table.size; i++) {
+        header = f3(i);
+        resp.push(header ? header : 0)
+    }
+    console.log(resp)
+
+</script>
+</body>
+</html>
