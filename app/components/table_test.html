@@ -11,36 +11,40 @@
         /*
 
         Creates a function that returns either header or null
-        for given position index.
+        based on hop size and limit, starting from zero index position.
 
         If limit is reached, returns null.
 
         */
 
         var index = 0;
+        var pos = 0;
         var headers_size = headers.length;
 
-        return function header_hopper(pos) {
+        return function header_hopper() {
 
-            if (pos < 0 || pos >= limit) {
+            var header;
+
+            if (pos >= limit) {
+                // cell position advanced beyond limit
                 return null;
             }
 
-            else if (pos % hop === 0) {
-
-                if (index >= headers_size) {
-                    index = 0;
-                }
-                if (pos % hop === 0) {
-                    index += 1;
-                    return headers[index - 1];
-                }
-
-            }
-            else {
-                return null;
+            if (index >= headers_size) {
+                // headers exhausted, start over
+                index = 0;
             }
 
+            if (pos % hop === 0) {
+                // time to show a header
+                header = headers[index];
+                index += 1;
+            }
+
+            // advance to next cell position
+            pos += 1;
+
+            return header ? header : null;
         }
     }
 
@@ -100,21 +104,21 @@
 
     resp = [];
     for (var i=0; i < table.size; i++) {
-        header = f(i);
+        header = f();
         resp.push(header ? header : 0)
     }
     console.log(resp)
 
     resp = [];
     for (var i=0; i < table.size; i++) {
-        header = f2(i);
+        header = f2();
         resp.push(header ? header : 0)
     }
     console.log(resp);
 
     resp = [];
     for (var i=0; i < table.size; i++) {
-        header = f3(i);
+        header = f3();
         resp.push(header ? header : 0)
     }
     console.log(resp)
