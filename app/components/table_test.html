@@ -77,12 +77,13 @@
         return {
             size: size,
             hops: res,
-            loop: res.reverse()
+            loop: res.slice().reverse()
         };
     }
 
     // Test part
 
+    // Level order lowest to highest, most repeating to only once printed
     start = [
         [1,2,3],
         [4,5],
@@ -90,9 +91,12 @@
 
     table = shape(start);
 
-    f3 = create_header_hopper(start[0], table.loop[0], table.hops[0], table.size)
-    f2 = create_header_hopper(start[1], table.loop[1], table.hops[1], table.size)
-    f = create_header_hopper(start[2], table.loop[2], table.hops[2], table.size)
+    console.log(table.size, table.hops, table.loop)
+
+    // Regular rendering order is top to bottom
+    f3 = create_header_hopper(start[0], table.hops[0], table.size)
+    f2 = create_header_hopper(start[1], table.hops[1], table.size)
+    f = create_header_hopper(start[2], table.hops[2], table.size)
 
     resp = [];
     for (var i=0; i < table.size; i++) {
