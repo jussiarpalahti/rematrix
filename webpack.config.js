@@ -9,7 +9,7 @@ var BUILD, DEV;
 
 var common = {
   resolve: {
-    extensions: ['', '.js', '.jsx', '.cjsx', '.coffee']
+    extensions: ['', '.js', '.jsx', '.cjsx', '.coffee', '.ts', '.tsx']
   },
   output: {
     path: path.resolve(ROOT_PATH, 'build'),
