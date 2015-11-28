@@ -6,6 +6,7 @@
   },
   "files": [
     "app/remain.tsx",
+    "app/components/Table.tsx",
     "app/lib/piper.d.ts",
     "typings/tsd.d.ts",
     "typings/react/react.d.ts",

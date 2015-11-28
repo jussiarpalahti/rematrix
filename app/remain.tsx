@@ -6,6 +6,7 @@ import './stylesheets/main.css';
 import * as React from "react";
 
 import {get_data, piping, clsnames} from "./lib/piper";
+import {HierarchicalTable} from "./components/Table.tsx";
 
 
 interface Props {
@@ -79,7 +80,7 @@ export class VariableSelection extends React.Component<{}, {}> {
 export class TableView extends React.Component<{}, {}> {
 
     render() {
-        return <div>Table</div>
+        return <div><Table /></div>
     }
 
 }

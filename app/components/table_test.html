@@ -65,9 +65,11 @@
                     var acc;
 
                     if (!prev) {
+                        // Bottom level is a special case: every header corresponds to 1 cell
                         res.push(1)
                         return 1;
                     } else {
+                        // Levels other than bottom have cell size accumulated from previous levels' sizes
                         acc = all[index - 1].length * prev
                         res.push(acc)
                         return acc;
@@ -75,13 +77,13 @@
                 },
                 null);
 
-        // Full size is accumulated level size times last level's size
+        // Full size is accumulated size below last level times its own size
         var size = ret * headers[headers.length - 1].length;
 
         return {
             size: size,
             hops: res,
-            loop: res.slice().reverse()
+            loop: res.slice().reverse() // repeat loop for level's headers is inverse of its hop size
         };
     }
 
@@ -103,21 +105,21 @@
     f = create_header_hopper(start[2], table.hops[2], table.size)
 
     resp = [];
-    for (var i=0; i < table.size; i++) {
+    for (let i=0; i < table.size; i++) {
         header = f();
         resp.push(header ? header : 0)
     }
     console.log(resp)
 
     resp = [];
-    for (var i=0; i < table.size; i++) {
+    for (let i=0; i < table.size; i++) {
         header = f2();
         resp.push(header ? header : 0)
     }
     console.log(resp);
 
     resp = [];
-    for (var i=0; i < table.size; i++) {
+    for (let i=0; i < table.size; i++) {
         header = f3();
         resp.push(header ? header : 0)
     }
