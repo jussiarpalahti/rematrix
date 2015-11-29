@@ -68,6 +68,8 @@ export function get_table_shape (headers: Headers): Table {
 
     let res:number[] = [];
 
+    // Bottom level starts first in size accumulation
+    headers.reverse();
     let ret = headers.reduce(
         function reducer (prev:number, next, index, all) {
             let acc;
@@ -89,11 +91,11 @@ export function get_table_shape (headers: Headers): Table {
     let last = headers[headers.length - 1];
     console.log("ret, last", ret, last);
     var size:number = ret * last.length;
-
+    headers.reverse();
     return {
         size: size,
-        hops: res,
-        loop: res.slice().reverse() // repeat loop for level's headers is inverse of its hop size
+        hops: res.reverse(),
+        loop: res.slice() // repeat loop for level's headers is inverse of its hop size
     };
 }
 
@@ -102,7 +104,6 @@ export function get_table (headers: Headers): Table {
     /*
     Generates a Table object from headers
      */
-
     let shape = get_table_shape(headers);
     shape.headers = headers;
     shape.hoppers = headers.map(

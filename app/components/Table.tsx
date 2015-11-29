@@ -18,7 +18,6 @@ let start = [
 
 let TABLE = get_table(start);
 
-
 class TableHead extends React.Component<TableProps, {}> {
     render () {
         let table = this.props.table;
@@ -30,13 +29,13 @@ class TableHead extends React.Component<TableProps, {}> {
                     if (header) row.push(
                         <th colSpan={table.hops[index]}>{header}</th>)
                     }
-                if (index == table.headers.length - 1) {
+                if (index == 0) {
                     return <tr><th rowSpan={table.headers.length}>space</th>{row}</tr>
                 } else {
                     return <tr>{row}</tr>;
                 }
             });
-        resp.reverse();
+
         return <thead>{resp}</thead>;
     }
 }
