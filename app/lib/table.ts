@@ -1,9 +1,17 @@
 
+type Header = string | number;
+
 interface Headers extends Array {
-    [index: number]: [number|string];
+    [index: number]: [Header];
 }
 
-type Header = string | number;
+interface Table {
+    size: number;
+    hops: number;
+    loop: number;
+    hoppers?: [Function],
+    headers?: Headers
+}
 
 export function create_header_hopper(headers: Headers, hop: number, limit: number): Function {
     /*
@@ -46,7 +54,7 @@ export function create_header_hopper(headers: Headers, hop: number, limit: numbe
     }
 }
 
-export function get_table_shape (headers: Headers) {
+export function get_table_shape (headers: Headers): Table {
     /*
 
      Calculate table shape from list of header lists:
@@ -56,7 +64,7 @@ export function get_table_shape (headers: Headers) {
 
      */
 
-    let res = [];
+    let res:[number] = [];
 
     let ret = headers.reduce(
         function reducer (prev, next, index, all) {
@@ -77,7 +85,7 @@ export function get_table_shape (headers: Headers) {
 
     // Full size is accumulated size below last level times its own size
     let last = headers[headers.length - 1];
-    var size = ret * last.length;
+    var size:number = ret * last.length;
 
     return {
         size: size,
@@ -86,11 +94,19 @@ export function get_table_shape (headers: Headers) {
     };
 }
 
-export function Table (headers: Headers) {
+
+export function get_table (headers: Headers): Table {
+    /*
+    Generates a Table object from headers
+     */
 
     let shape = get_table_shape(headers);
-
-    for (let header:Header in headers) {
-
-    }
+    shape.headers = headers;
+    shape.hoppers = headers.forEach(
+        (headings, index) => create_header_hopper(
+            headings,
+            shape.hops[index],
+            shape.size)
+    );
+    return shape;
 }
