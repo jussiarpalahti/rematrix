@@ -3,6 +3,8 @@ interface Headers extends Array {
     [index: number]: [number|string];
 }
 
+type Header = string | number;
+
 export function create_header_hopper(headers: Headers, hop: number, limit: number): Function {
     /*
 
@@ -17,7 +19,7 @@ export function create_header_hopper(headers: Headers, hop: number, limit: numbe
     var pos = 0;
     var headers_size = headers.length;
 
-    return function header_hopper() {
+    return function header_hopper(): Header {
 
         var header;
 
@@ -44,7 +46,7 @@ export function create_header_hopper(headers: Headers, hop: number, limit: numbe
     }
 }
 
-export function shape (headers: Headers) {
+export function get_table_shape (headers: Headers) {
     /*
 
      Calculate table shape from list of header lists:
@@ -54,20 +56,20 @@ export function shape (headers: Headers) {
 
      */
 
-    var res = [];
+    let res = [];
 
-    var ret = headers.reduce(
+    let ret = headers.reduce(
         function reducer (prev, next, index, all) {
-            var acc;
+            let acc;
 
             if (!prev) {
                 // Bottom level is a special case: every header corresponds to 1 cell
-                res.push(1)
+                res.push(1);
                 return 1;
             } else {
                 // Levels other than bottom have cell size accumulated from previous levels' sizes
                 acc = all[index - 1].length * prev
-                res.push(acc)
+                res.push(acc);
                 return acc;
             }
         },
@@ -82,4 +84,13 @@ export function shape (headers: Headers) {
         hops: res,
         loop: res.slice().reverse() // repeat loop for level's headers is inverse of its hop size
     };
+}
+
+export function Table (headers: Headers) {
+
+    let shape = get_table_shape(headers);
+
+    for (let header:Header in headers) {
+
+    }
 }
