@@ -1,19 +1,21 @@
 
+// Header is a string or number
 type Header = string | number;
 
-interface Headers extends Array {
-    [index: number]: [Header];
-}
+type Heading = Header[]
+
+// Headers is a list of lists containing one Header or more
+type Headers = Heading[];
 
 interface Table {
     size: number;
-    hops: number;
-    loop: number;
-    hoppers?: [Function],
+    hops: number[];
+    loop: number[];
+    hoppers?: Function[],
     headers?: Headers
 }
 
-export function create_header_hopper(headers: Headers, hop: number, limit: number): Function {
+export function create_header_hopper(headers: Header[], hop: number, limit: number): Function {
     /*
 
      Creates a function that returns either header or null
@@ -64,10 +66,10 @@ export function get_table_shape (headers: Headers): Table {
 
      */
 
-    let res:[number] = [];
+    let res:number[] = [];
 
     let ret = headers.reduce(
-        function reducer (prev, next, index, all) {
+        function reducer (prev:number, next, index, all) {
             let acc;
 
             if (!prev) {
@@ -76,7 +78,7 @@ export function get_table_shape (headers: Headers): Table {
                 return 1;
             } else {
                 // Levels other than bottom have cell size accumulated from previous levels' sizes
-                acc = all[index - 1].length * prev
+                acc = all[index - 1].length * prev;
                 res.push(acc);
                 return acc;
             }
@@ -85,6 +87,7 @@ export function get_table_shape (headers: Headers): Table {
 
     // Full size is accumulated size below last level times its own size
     let last = headers[headers.length - 1];
+    console.log("ret, last", ret, last);
     var size:number = ret * last.length;
 
     return {
@@ -102,11 +105,10 @@ export function get_table (headers: Headers): Table {
 
     let shape = get_table_shape(headers);
     shape.headers = headers;
-    shape.hoppers = headers.forEach(
+    shape.hoppers = headers.map(
         (headings, index) => create_header_hopper(
-            headings,
-            shape.hops[index],
-            shape.size)
-    );
+                headings,
+                shape.hops[index],
+                shape.size));
     return shape;
 }

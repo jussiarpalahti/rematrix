@@ -1,21 +1,53 @@
 
 import * as React from "react";
+import {get_table} from "../lib/table";
 
 interface Props {
     [name: string]: string,
 }
 
+interface TableProps {
+    table: any;
+}
 
-export class TableHead extends React.Component<Props, {}> {
+let start = [
+    [1,2,3],
+    [4,5],
+    [6,7,8,9]
+];
+
+let TABLE = get_table(start);
+
+
+class TableHead extends React.Component<TableProps, {}> {
     render () {
-        return <tr><th>Jee</th></tr>
+        let table = this.props.table;
+        let resp = table.hoppers.map(
+            (hopper, index) => {
+                let row = [];
+                for (let i=0; i < table.size; i++) {
+                    let header = hopper();
+                    if (header) row.push(
+                        <th colSpan={table.hops[index]}>{header}</th>)
+                    }
+                if (index == table.headers.length - 1) {
+                    return <tr><th rowSpan={table.headers.length}>space</th>{row}</tr>
+                } else {
+                    return <tr>{row}</tr>;
+                }
+            });
+        resp.reverse();
+        return <thead>{resp}</thead>;
     }
 }
 
 
-export class TableBody extends React.Component<Props, {}> {
+class TableBody extends React.Component<Props, {}> {
     render () {
-        return <tr><td>Jee</td></tr>
+        return <tr>
+            <th>Row header</th>
+            <td>Data</td>
+        </tr>
     }
 }
 
@@ -24,11 +56,8 @@ export class HierarchicalTable extends React.Component<Props, {}> {
     render() {
         return <div id="datatable">
             <table className="pure-table pure-table-bordered">
-                <thead>
-                    <TableHead />
-                </thead>
+                <TableHead table={TABLE} />
                 <tbody>
-                    <TableBody />
                 </tbody>
                 </table>
         </div>
