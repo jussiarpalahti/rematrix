@@ -80,7 +80,9 @@ export class VariableSelection extends React.Component<{}, {}> {
 export class TableView extends React.Component<{}, {}> {
 
     render() {
-        return <div><HierarchicalTable /></div>
+        return <div>A table:
+            <HierarchicalTable />
+        </div>
     }
 
 }

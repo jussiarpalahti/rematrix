@@ -7,15 +7,21 @@ type Heading = Header[]
 // Headers is a list of lists containing one Header or more
 type Headers = Heading[];
 
-interface Table {
+interface TableAxis {
     size: number;
     hops: number[];
     loop: number[];
-    hoppers?: Function[],
+    hop?: Function[],
     headers?: Headers
 }
 
-export function create_header_hopper(headers: Header[], hop: number, limit: number): Function {
+interface Table {
+    stub: TableAxis;
+    heading: TableAxis;
+    size: number;
+}
+
+function create_header_hopper(headers: Header[], hop: number, limit: number): Function {
     /*
 
      Creates a function that returns either header or null
@@ -56,7 +62,7 @@ export function create_header_hopper(headers: Header[], hop: number, limit: numb
     }
 }
 
-export function get_table_shape (headers: Headers): Table {
+function get_axis_shape (headers: Headers): TableAxis {
     /*
 
      Calculate table shape from list of header lists:
@@ -65,7 +71,6 @@ export function get_table_shape (headers: Headers): Table {
      size: full axis size in cells
 
      */
-
     let res:number[] = [];
 
     // Bottom level starts first in size accumulation
@@ -94,22 +99,35 @@ export function get_table_shape (headers: Headers): Table {
     headers.reverse();
     return {
         size: size,
-        hops: res.reverse(),
-        loop: res.slice() // repeat loop for level's headers is inverse of its hop size
+        // repeat loop for level's headers is inverse of its hop size
+        loop: res.slice(),
+        hops: res.reverse()
     };
 }
 
 
-export function get_table (headers: Headers): Table {
+export function get_table (heading: Headers, stub: Headers): Table {
     /*
     Generates a Table object from headers
      */
-    let shape = get_table_shape(headers);
-    shape.headers = headers;
-    shape.hoppers = headers.map(
-        (headings, index) => create_header_hopper(
-                headings,
-                shape.hops[index],
-                shape.size));
-    return shape;
+    let headings = get_axis_shape(heading);
+    headings.headers = heading;
+    headings.hop = heading.map(
+        (headers, index) => create_header_hopper(
+                headers,
+                headings.hops[index],
+                headings.size));
+    let stubs = get_axis_shape(stub);
+    stubs.headers = heading;
+    stubs.hop = heading.map(
+        (headers, index) => create_header_hopper(
+            headers,
+            stubs.hops[index],
+            stubs.size));
+
+    return {
+        stub: stubs,
+        heading: headings,
+        size: stubs.size * headings.size
+    };
 }

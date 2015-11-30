@@ -10,32 +10,36 @@ interface TableProps {
     table: any;
 }
 
-let start = [
+let heading = [
     [1,2,3],
     [4,5],
     [6,7,8,9]
 ];
 
-let TABLE = get_table(start);
+let stub = [
+    ['a', 'b', 'c'],
+    ['x', 'y']
+];
+
+let TABLE = get_table(heading, stub);
 
 class TableHead extends React.Component<TableProps, {}> {
     render () {
         let table = this.props.table;
-        let resp = table.hoppers.map(
+        let resp = table.heading.hop.map(
             (hopper, index) => {
                 let row = [];
                 for (let i=0; i < table.size; i++) {
                     let header = hopper();
                     if (header) row.push(
-                        <th colSpan={table.hops[index]}>{header}</th>)
+                        <th colSpan={table.heading.hops[index]}>{header}</th>)
                     }
                 if (index == 0) {
-                    return <tr><th rowSpan={table.headers.length}>space</th>{row}</tr>
+                    return <tr><th rowSpan={table.heading.headers.length}>space</th>{row}</tr>
                 } else {
                     return <tr>{row}</tr>;
                 }
             });
-
         return <thead>{resp}</thead>;
     }
 }
