@@ -7,7 +7,7 @@ import * as React from "react";
 
 import {get_data, piping, clsnames} from "./lib/piper";
 import {HierarchicalTable} from "./components/Table";
-
+import {get_table} from "./lib/table";
 
 interface Props {
     foo: string;
@@ -77,11 +77,12 @@ export class VariableSelection extends React.Component<{}, {}> {
 }
 
 
-export class TableView extends React.Component<{}, {}> {
+export class TableView extends React.Component<any, {}> {
 
     render() {
+        let {table, matrix} = this.props;
         return <div>A table:
-            <HierarchicalTable />
+            <HierarchicalTable table={table} matrix={matrix} />
         </div>
     }
 
@@ -91,7 +92,7 @@ export class TableView extends React.Component<{}, {}> {
 export class DataView extends React.Component<{}, {}> {
 
     render() {
-        return <div>Data</div>
+        return <div> </div>
     }
 
 }
@@ -105,7 +106,7 @@ export class Main extends React.Component<any, {}> {
             <h1>React Typed Table Viewer</h1>
             <DataList />
             <VariableSelection />
-            <TableView />
+            <TableView {...data} />
             <DataView />
         </div>
     }
@@ -122,6 +123,8 @@ function main() {
     var reapp;
 
     let data = {
+        table: TABLE,
+        matrix: MATRIX,
         arg: 0,
         foo: "hoh hoo",
         my_pipe: function () {
@@ -144,5 +147,26 @@ function main() {
             <Main data={data} />
         </div>, app);
 }
+
+
+let stub = [
+    [1,2,3],
+    [4,5],
+    [6,7]
+];
+
+let heading = [
+    ['a', 'b', 'c', 'd'],
+    ['x', 'y', 'z']
+];
+
+
+// test table
+let TABLE = get_table(heading, stub);
+
+// Test matrix
+let MATRIX = Array.apply(null, Array(TABLE.stub.size)).map((_, i) => {
+    return Array.apply(null, Array(TABLE.heading.size)).map((_, j) => j * i);
+});
 
 main();

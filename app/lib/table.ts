@@ -130,3 +130,11 @@ export function get_table (heading: Headers, stub: Headers): Table {
         size: stubs.size * headings.size
     };
 }
+
+let keys = [];
+
+export function get_key() {
+    let key = keys.length;
+    keys.push(key);
+    return key;
+}
