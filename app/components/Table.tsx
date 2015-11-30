@@ -21,7 +21,15 @@ let stub = [
     ['x', 'y']
 ];
 
+
+// test table
 let TABLE = get_table(heading, stub);
+
+// Test matrix
+let MATRIX = Array.apply(null, Array(TABLE.stub.size)).map((_, i) => {
+    return Array.apply(null, Array(TABLE.heading.size)).map((_, j) => j * i);
+});
+console.log(MATRIX);
 
 class TableHead extends React.Component<TableProps, {}> {
     render () {
@@ -45,12 +53,25 @@ class TableHead extends React.Component<TableProps, {}> {
 }
 
 
-class TableBody extends React.Component<Props, {}> {
+class TableBody extends React.Component<TableProps, {}> {
     render () {
-        return <tr>
-            <th>Row header</th>
-            <td>Data</td>
-        </tr>
+        let table = this.props.table;
+        let resp = [];
+        for (let row=0; row < table.stub.size; row++) {
+            let data = [];
+            for (let col=0; col < table.heading.size; col++) {
+                data.push(
+                    <td>{MATRIX[row][col]}</td>
+                );
+            }
+            resp.push(<tr>
+                <th>Row header</th>
+                {data}
+            </tr>);
+        }
+        return <tbody>
+            {resp}
+        </tbody>
     }
 }
 
@@ -60,8 +81,7 @@ export class HierarchicalTable extends React.Component<Props, {}> {
         return <div id="datatable">
             <table className="pure-table pure-table-bordered">
                 <TableHead table={TABLE} />
-                <tbody>
-                </tbody>
+                <TableBody table={TABLE} />
                 </table>
         </div>
     }

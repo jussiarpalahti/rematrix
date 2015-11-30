@@ -94,7 +94,6 @@ function get_axis_shape (headers: Headers): TableAxis {
 
     // Full size is accumulated size below last level times its own size
     let last = headers[headers.length - 1];
-    console.log("ret, last", ret, last);
     var size:number = ret * last.length;
     headers.reverse();
     return {
