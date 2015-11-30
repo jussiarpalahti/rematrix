@@ -117,8 +117,8 @@ export function get_table (heading: Headers, stub: Headers): Table {
                 headings.hops[index],
                 headings.size));
     let stubs = get_axis_shape(stub);
-    stubs.headers = heading;
-    stubs.hop = heading.map(
+    stubs.headers = stub;
+    stubs.hop = stub.map(
         (headers, index) => create_header_hopper(
             headers,
             stubs.hops[index],

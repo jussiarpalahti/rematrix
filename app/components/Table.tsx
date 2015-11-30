@@ -10,15 +10,15 @@ interface TableProps {
     table: any;
 }
 
-let heading = [
+let stub = [
     [1,2,3],
     [4,5],
-    [6,7,8,9]
+    [6,7]
 ];
 
-let stub = [
-    ['a', 'b', 'c'],
-    ['x', 'y']
+let heading = [
+    ['a', 'b', 'c', 'd'],
+    ['x', 'y', 'z']
 ];
 
 
@@ -43,13 +43,33 @@ class TableHead extends React.Component<TableProps, {}> {
                         <th colSpan={table.heading.hops[index]}>{header}</th>)
                     }
                 if (index == 0) {
-                    return <tr><th rowSpan={table.heading.headers.length}>space</th>{row}</tr>
+                    return <tr>
+                        <th
+                            colSpan={table.stub.headers.length}
+                            rowSpan={table.heading.headers.length}>
+                            space
+                        </th>
+                        {row}
+                    </tr>
                 } else {
                     return <tr>{row}</tr>;
                 }
             });
         return <thead>{resp}</thead>;
     }
+}
+
+function get_row_headers (stub){
+    let resp = [];
+    stub.hop.map((hopper, index) => {
+        let header = hopper();
+        if (header) {
+            resp.push(
+                <th rowSpan={stub.hops[index]}>{header}</th>
+            );
+        }
+    });
+    return resp;
 }
 
 
@@ -65,7 +85,7 @@ class TableBody extends React.Component<TableProps, {}> {
                 );
             }
             resp.push(<tr>
-                <th>Row header</th>
+                {get_row_headers(table.stub)}
                 {data}
             </tr>);
         }
