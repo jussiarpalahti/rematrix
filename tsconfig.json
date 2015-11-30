@@ -5,8 +5,6 @@
     "jsx": "react"
   },
   "files": [
-    "app/**/*.ts",
-    "app/**/*.tsx",
     "typings/tsd.d.ts",
     "typings/react/react.d.ts",
     "typings/react/react-global.d.ts",

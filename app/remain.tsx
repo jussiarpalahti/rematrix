@@ -97,11 +97,29 @@ export class DataView extends React.Component<{}, {}> {
 
 }
 
+function reset (table) {
+    /*
+    Since heading cell span calculator functions keep their state around,
+    their counters need to be reset for every render cycle anew.
+
+    Functional approach would use cell position, but that's more involved
+    calculation. Decisions decisions.
+
+    TODO: With proper fetch data + render cycle this will can be removed
+     */
+
+    table.heading.hop.map((hopper) => hopper(true));
+    table.stub.hop.map((hopper) => hopper(true));
+
+}
 
 export class Main extends React.Component<any, {}> {
 
     render() {
         let data = this.props.data;
+
+        // TODO: we reset since React Hot Loader regards hoppers as state to be preserved
+        reset(data.table);
         return <div>
             <h1>React Typed Table Viewer</h1>
             <DataList />
@@ -121,6 +139,14 @@ function main() {
     }
 
     var reapp;
+
+    // test table
+    let TABLE = get_table(heading, stub);
+
+    // Test matrix
+    let MATRIX = Array.apply(null, Array(TABLE.stub.size)).map((_, i) => {
+        return Array.apply(null, Array(TABLE.heading.size)).map((_, j) => j * i);
+    });
 
     let data = {
         table: TABLE,
@@ -159,14 +185,5 @@ let heading = [
     ['a', 'b', 'c', 'd'],
     ['x', 'y', 'z']
 ];
-
-
-// test table
-let TABLE = get_table(heading, stub);
-
-// Test matrix
-let MATRIX = Array.apply(null, Array(TABLE.stub.size)).map((_, i) => {
-    return Array.apply(null, Array(TABLE.heading.size)).map((_, j) => j * i);
-});
 
 main();

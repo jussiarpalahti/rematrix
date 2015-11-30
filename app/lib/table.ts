@@ -35,7 +35,13 @@ function create_header_hopper(headers: Header[], hop: number, limit: number): Fu
     var pos = 0;
     var headers_size = headers.length;
 
-    return function header_hopper(): Header {
+    return function header_hopper(reset:boolean): Header {
+
+        if (reset) {
+            index = 0;
+            pos = 0;
+            return;
+        }
 
         var header;
 
