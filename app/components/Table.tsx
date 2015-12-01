@@ -1,6 +1,6 @@
 
 import * as React from "react";
-import {get_table, get_key} from "../lib/table";
+import {get_table} from "../lib/table";
 
 interface Props {
     [name: string]: string,

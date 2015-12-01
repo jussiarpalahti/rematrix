@@ -50,6 +50,13 @@ export class DataList extends React.Component<any, {hideList:boolean}> {
         this.setState({ hideList: !this.state.hideList });
     }
 
+    select_dataset(dset) {
+        if (dset.name !== this.props.chosen_table) {
+            console.log("dataset selected", dset);
+            this.props.select_table(dset.name);
+        }
+    }
+
     render() {
 
         let css = clsnames("modal", {hidden: this.state.hideList});
@@ -60,7 +67,10 @@ export class DataList extends React.Component<any, {hideList:boolean}> {
             <div className={css}>
                 {this.props.datasets.length > 0 ? <ul className="hidable datasetlist">
                     {this.props.datasets.map((dset, i) => {
-                            return <li key={i}>{dset.title}</li>
+                            return <li key={i} onClick={() => this.select_dataset(dset)}>
+                                <span>{this.props.chosen_table == dset.name ? '\u2713' : ' '} </span>
+                                {dset.title}
+                            </li>
                         })
                     }
                 </ul> : null}
@@ -146,8 +156,8 @@ function reset (table) {
     TODO: With proper fetch data + render cycle this will can be removed
      */
 
-    table.heading.hop.map((hopper) => hopper(true));
-    table.stub.hop.map((hopper) => hopper(true));
+    table.heading.hop.forEach((hopper) => hopper(true));
+    table.stub.hop.forEach((hopper) => hopper(true));
 
 }
 
@@ -183,8 +193,17 @@ function main() {
         return Array.apply(null, Array(TABLE.heading.size)).map((_, j) => j * i);
     });
 
+    let rerender = () => {
+        reapp = React.render(
+            <div>
+                <Main data={data} />
+            </div>, app);
+        console.log("re-rendering");
+    };
+
     let data = {
         datasets: [],
+        chosen_table: null,
         table: TABLE,
         matrix: MATRIX,
         arg: 0,
@@ -192,13 +211,13 @@ function main() {
             get_data(
                 (res) => {
                     data.datasets = res.pxdocs;
-                    reapp = React.render(
-                        <div>
-                            <Main data={data} />
-                        </div>, app);
-                    console.log("re-rendering");
+                    rerender();
                 }
             );
+        },
+        select_table: (name) => {
+            data.chosen_table = name;
+            rerender();
         }
     };
 
