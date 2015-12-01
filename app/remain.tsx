@@ -58,13 +58,12 @@ export class DataList extends React.Component<any, {hideList:boolean}> {
             <h2>Taulukot</h2>
             <button onClick={this.onClick.bind(this)}>Datasetit</button>
             <div className={css}>
-                <ul className="hidable datasetlist">
-                    {
-                        this.props.datasets.map((dset, i) => {
+                {this.props.datasets.length > 0 ? <ul className="hidable datasetlist">
+                    {this.props.datasets.map((dset, i) => {
                             return <li key={i}>{dset.title}</li>
                         })
                     }
-                </ul>
+                </ul> : null}
             </div>
         </div>
     }
