@@ -36,7 +36,7 @@ export class Tyyppi extends React.Component<Props, {}> {
 }
 
 
-export class DataList extends React.Component<{}, {hideList:boolean}> {
+export class DataList extends React.Component<any, {hideList:boolean}> {
 
     constructor(props) {
         super(props);
@@ -44,6 +44,7 @@ export class DataList extends React.Component<{}, {hideList:boolean}> {
     }
 
     onClick() {
+        this.props.my_pipe();
         this.setState({ hideList: !this.state.hideList });
     }
 
@@ -121,7 +122,7 @@ export class Main extends React.Component<any, {}> {
         let data = this.props.data;
         return <div>
             <h1>React Typed Table Viewer</h1>
-            <DataList />
+            <DataList {...data} />
             <VariableSelection />
             <TableView {...data} />
             <DataView />
@@ -148,17 +149,17 @@ function main() {
     });
 
     let data = {
+        datasets: null,
         table: TABLE,
         matrix: MATRIX,
         arg: 0,
         foo: "hoh hoo",
         my_pipe: function () {
-            piping(
-                data,
-                (data) => {
-                    console.log("called back with ", data);
+            get_data(
+                (res) => {
+                    console.log("called back with ", res);
                     reapp = React.render(
-                        <div id="app">
+                        <div>
                             <Main data={data} />
                         </div>, app);
                     console.log("re-rendering");
@@ -168,7 +169,7 @@ function main() {
     };
 
     reapp = React.render(
-        <div id="app">
+        <div>
             <Main data={data} />
         </div>, app);
 }
