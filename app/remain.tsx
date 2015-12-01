@@ -85,8 +85,9 @@ export class VariableSelection extends React.Component<any, {hideList:boolean}> 
 
     render() {
 
-        let css = clsnames("modal", {hidden: this.state.hideList});
         let res = [];
+
+        let css = clsnames("modal", {hidden: this.state.hideList});
 
         if (!this.state.hideList) {
             if (this.props.datasets.length > 0) {
@@ -94,6 +95,8 @@ export class VariableSelection extends React.Component<any, {hideList:boolean}> 
                 for (let heading in dataset.levels) {
                     res.push(<li>{heading}</li>);
                 }
+            } else {
+                res.push(<div>Valitse ensin taulukko</div>);
             }
         }
 
