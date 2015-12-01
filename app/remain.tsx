@@ -92,10 +92,10 @@ export class VariableSelection extends React.Component<any, {hideList:boolean}> 
             if (this.props.datasets.length > 0) {
                 let dataset = this.props.datasets[0];
                 for (let heading in dataset.levels) {
-                    res.push(<li>{heading}</li>);
+                    res.push(<li key={res.length}>{heading}</li>);
                 }
             } else {
-                res.push(<div>Valitse ensin taulukko</div>);
+                res.push(<div key={res.length}>Valitse ensin taulukko</div>);
             }
         }
 

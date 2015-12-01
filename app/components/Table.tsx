@@ -25,7 +25,7 @@ class TableHead extends React.Component<TableProps, {}> {
                     }
                     }
                 if (index == 0) {
-                    return <tr>
+                    return <tr key={index}>
                         <th
                             className="centered"
                             colSpan={table.stub.headers.length}
@@ -35,7 +35,7 @@ class TableHead extends React.Component<TableProps, {}> {
                         {row}
                     </tr>
                 } else {
-                    return <tr>{row}</tr>;
+                    return <tr key={index}>{row}</tr>;
                 }
             });
         return <thead>{resp}</thead>;
@@ -67,7 +67,7 @@ class TableBody extends React.Component<TableProps, {}> {
                     <td key={"heading" + row + col}>{matrix[row][col]}</td>
                 );
             }
-            resp.push(<tr>
+            resp.push(<tr key={row}>
                 {get_row_headers(table.stub)}
                 {data}
             </tr>);
