@@ -55,10 +55,10 @@ export class DataList extends React.Component<any, {hideList:boolean}> {
         let css = clsnames("modal", {hidden: this.state.hideList});
 
         return <div className="top_header">
-            <h2>Datalist</h2>
-            <button onClick={this.onClick.bind(this)}>Show</button>
+            <h2>Taulukot</h2>
+            <button onClick={this.onClick.bind(this)}>Datasetit</button>
             <div className={css}>
-                <ul className="hidable">
+                <ul className="hidable datasetlist">
                     {
                         this.props.datasets.map((dset, i) => {
                             return <li key={i}>{dset.title}</li>
@@ -72,10 +72,40 @@ export class DataList extends React.Component<any, {hideList:boolean}> {
 }
 
 
-export class VariableSelection extends React.Component<{}, {}> {
+export class VariableSelection extends React.Component<any, {hideList:boolean}> {
+
+    constructor(props) {
+        super(props);
+        this.state = { hideList: true };
+    }
+
+    onClick() {
+        this.setState({ hideList: !this.state.hideList });
+    }
 
     render() {
-        return <div>Variables</div>
+
+        let css = clsnames("modal", {hidden: this.state.hideList});
+        let res = [];
+
+        if (!this.state.hideList) {
+            if (this.props.datasets.length > 0) {
+                let dataset = this.props.datasets[0];
+                for (let heading in dataset.levels) {
+                    res.push(<li>{heading}</li>);
+                }
+            }
+        }
+
+        return <div className="top_header">
+            <h2>Muuttujat</h2>
+            <button onClick={this.onClick.bind(this)}>Muuttujat</button>
+            <div className={css}>
+                <ul className="hidable datasetlist">
+                    {res ? res : null}
+                </ul>
+            </div>
+        </div>
     }
 
 }
@@ -126,7 +156,7 @@ export class Main extends React.Component<any, {}> {
         return <div>
             <h1>React Typed Table Viewer</h1>
             <DataList {...data} />
-            <VariableSelection />
+            <VariableSelection {...data} />
             <TableView {...data} />
             <DataView />
         </div>
@@ -156,7 +186,6 @@ function main() {
         table: TABLE,
         matrix: MATRIX,
         arg: 0,
-        foo: "hoh hoo",
         my_pipe: function () {
             get_data(
                 (res) => {
