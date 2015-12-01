@@ -137,10 +137,40 @@ export function get_table (heading: Headers, stub: Headers): Table {
     };
 }
 
-let keys = [];
 
-export function get_key() {
-    let key = keys.length;
-    keys.push(key);
-    return key;
+export function get_preview_table(table: Table, size?: number) {
+    /*
+
+     */
+
+    if (!size) size = 10;
+
+    // TODO: make hop creator a function factory factory
+    table.heading.hop.forEach((hopper) => hopper(true));
+    table.stub.hop.forEach((hopper) => hopper(true));
+
+    let heading = [];
+    for (let index=0; index < size; index++) {
+        table.heading.hop.map((hopper) => {
+            let header = hopper();
+            if (header) {
+                heading.push(header);
+            }
+        });
+    }
+
+    let stub = [];
+    for (let index=0; index < size; index++) {
+        table.stub.hop.map((hopper) => {
+            let header = hopper();
+            if (header) {
+                stub.push(header);
+            }
+        });
+    }
+
+    console.log('preview levels', heading, stub);
+
+    return get_table(heading, stub);
 }
+
