@@ -52,7 +52,7 @@ export class DataList extends React.Component<any, {hideList:boolean}> {
 
     select_dataset(dset) {
         if (dset.name !== this.props.chosen_table) {
-            console.log("dataset selected", dset);
+            console.log("dataset selected: ", dset.name);
             this.props.select_table(dset.name);
         }
     }
@@ -68,7 +68,7 @@ export class DataList extends React.Component<any, {hideList:boolean}> {
                 {this.props.datasets.length > 0 ? <ul className="hidable datasetlist">
                     {this.props.datasets.map((dset, i) => {
                             return <li key={i} onClick={() => this.select_dataset(dset)}>
-                                <span>{this.props.chosen_table == dset.name ? '\u2713' : ' '} </span>
+                                <span className="selectmark">{this.props.chosen_table == dset.name ? '\u2713' : ' '} </span>
                                 {dset.title}
                             </li>
                         })

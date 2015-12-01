@@ -115,10 +115,22 @@ Pure menus end
     z-index: 1;
     background-color: white;
     margin: 0;
+    padding: 1em 0;
+}
+
+.datasetlist {
+    margin: 0;
     padding: 1em;
 }
 
 .datasetlist li {
     padding: 0.4em;
-    margin-left: 1em;
+    list-style-type: none;
+}
+
+.selectmark {
+    min-width: 1em;
+    border: 1px solid white;
+    display: block;
+    float: left;
 }
