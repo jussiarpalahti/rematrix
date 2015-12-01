@@ -17,7 +17,7 @@ class TableHead extends React.Component<TableProps, {}> {
         let resp = table.heading.hop.map(
             (hopper, index) => {
                 let row = [];
-                for (let i=0; i < table.size; i++) {
+                for (let i=0; i < this.props.matrix[0].length; i++) {
                     let header = hopper();
                     if (header) {
                         row.push(
@@ -60,9 +60,9 @@ class TableBody extends React.Component<TableProps, {}> {
     render () {
         let {table, matrix} = this.props;
         let resp = [];
-        for (let row=0; row < table.stub.size; row++) {
+        for (let row=0; row < this.props.matrix.length; row++) {
             let data = [];
-            for (let col=0; col < table.heading.size; col++) {
+            for (let col=0; col < matrix[0].length; col++) {
                 data.push(
                     <td key={"heading" + row + col}>{matrix[row][col]}</td>
                 );
@@ -84,7 +84,7 @@ export class HierarchicalTable extends React.Component<Props, {}> {
         let {table, matrix} = this.props;
         return <div id="datatable">
             <table className="pure-table pure-table-bordered">
-                <TableHead table={table} />
+                <TableHead table={table} matrix={matrix} />
                 <TableBody table={table} matrix={matrix} />
             </table>
         </div>

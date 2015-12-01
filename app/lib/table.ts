@@ -138,7 +138,7 @@ export function get_table (heading: Headers, stub: Headers): Table {
 }
 
 
-export function get_preview_table(table: Table, size?: number) {
+export function get_preview_table(table: Table, size: number): Table {
     /*
 
      */

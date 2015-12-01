@@ -5,9 +5,9 @@ import './stylesheets/main.css';
 
 import * as React from "react";
 
-import {get_data, piping, clsnames} from "./lib/piper";
+import {get_data, piping, clsnames, get_chosen} from "./lib/piper";
 import {HierarchicalTable} from "./components/Table";
-import {get_table} from "./lib/table";
+import {get_table, get_preview_table} from "./lib/table";
 
 interface Props {
     foo: string;
@@ -210,6 +210,7 @@ function main() {
         my_pipe: function () {
             get_data(
                 (res) => {
+                    console.log("select", res.pxdocs);
                     data.datasets = res.pxdocs;
                     rerender();
                 }
@@ -217,6 +218,19 @@ function main() {
         },
         select_table: (name) => {
             data.chosen_table = name;
+
+            let chosen = get_chosen(data.datasets, name);
+
+            if (chosen) {
+                let {heading, stub} = transform_table(chosen);
+                let table = get_table(heading, stub);
+                console.log("full", table);
+                //let prev_table = get_preview_table(table, 30);
+                //console.log("prev", prev_table);
+                data.table = table;
+                data.matrix = chosen.matrix;
+            }
+
             rerender();
         }
     };
@@ -225,6 +239,27 @@ function main() {
         <div>
             <Main data={data} />
         </div>, app);
+}
+
+function transform_table(dset): any {
+    /*
+
+     PX Style table has all headings in one object and list of heading keys
+     separate for column and row headers.
+
+     This function creates a list of lists containing headers
+     for heading and stub separately.
+
+     */
+    let heading = [];
+    for (let headings of dset.heading) {
+        heading.push(dset.levels[headings]);
+    }
+    let stub = [];
+    for (let headings of dset.stub) {
+        stub.push(dset.levels[headings]);
+    }
+    return {heading, stub};
 }
 
 
