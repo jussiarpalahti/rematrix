@@ -11,13 +11,26 @@ interface TableProps {
     matrix?: any;
 }
 
+function get_dimensions(table, matrix): any {
+    /*
+    Available data determines table size
+    */
+    let width = matrix[0].length < table.heading.size ? matrix[0].length : table.heading.size;
+    let height = matrix.length < table.stub.size ? matrix.length : table.stub.size;
+
+    return {height, width};
+}
+
 class TableHead extends React.Component<TableProps, {}> {
     render () {
-        let table = this.props.table;
+        let {table, matrix} = this.props;
+
+        let {_, width} = get_dimensions(table, matrix);
+
         let resp = table.heading.hop.map(
             (hopper, index) => {
                 let row = [];
-                for (let i=0; i < this.props.matrix[0].length; i++) {
+                for (let i=0; i < width; i++) {
                     let header = hopper();
                     if (header) {
                         row.push(
@@ -60,9 +73,12 @@ class TableBody extends React.Component<TableProps, {}> {
     render () {
         let {table, matrix} = this.props;
         let resp = [];
-        for (let row=0; row < this.props.matrix.length; row++) {
+
+        let {height, width} = get_dimensions(table, matrix);
+
+        for (let row=0; row < height; row++) {
             let data = [];
-            for (let col=0; col < matrix[0].length; col++) {
+            for (let col=0; col < width; col++) {
                 data.push(
                     <td key={"heading" + row + col}>{matrix[row][col]}</td>
                 );

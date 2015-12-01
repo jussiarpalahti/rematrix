@@ -138,7 +138,7 @@ export function get_table (heading: Headers, stub: Headers): Table {
 }
 
 
-export function get_preview_table(table: Table, size: number): Table {
+export function get_preview_table(table: Table, size?: number): Table {
     /*
 
      */
@@ -149,28 +149,25 @@ export function get_preview_table(table: Table, size: number): Table {
     table.heading.hop.forEach((hopper) => hopper(true));
     table.stub.hop.forEach((hopper) => hopper(true));
 
-    let heading = [];
+    let heading = Array.apply(null, Array(table.heading.headers.length)).map((_, i) => []);
     for (let index=0; index < size; index++) {
-        table.heading.hop.map((hopper) => {
+        table.heading.hop.forEach((hopper, pos) => {
             let header = hopper();
             if (header) {
-                heading.push(header);
+                heading[pos].push(header);
             }
         });
     }
 
-    let stub = [];
+    let stub = Array.apply(null, Array(table.stub.headers.length)).map((_, i) => []);
     for (let index=0; index < size; index++) {
-        table.stub.hop.map((hopper) => {
+        table.stub.hop.map((hopper, pos) => {
             let header = hopper();
             if (header) {
-                stub.push(header);
+                stub[pos].push(header);
             }
         });
     }
-
-    console.log('preview levels', heading, stub);
-
     return get_table(heading, stub);
 }
 

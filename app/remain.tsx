@@ -224,10 +224,9 @@ function main() {
             if (chosen) {
                 let {heading, stub} = transform_table(chosen);
                 let table = get_table(heading, stub);
-                console.log("full", table);
-                //let prev_table = get_preview_table(table, 30);
-                //console.log("prev", prev_table);
-                data.table = table;
+                let prev_table = get_preview_table(table);
+
+                data.table = prev_table;
                 data.matrix = chosen.matrix;
             }
 
