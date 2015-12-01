@@ -15,7 +15,7 @@ function get_data (callback) {
             callback(data);
         }
     );
-    f().catch((error) => console.log('virhe ', error));
+    f().catch((error) => console.log('problem in pipe promise', error));
 }
 
 

@@ -44,7 +44,9 @@ export class DataList extends React.Component<any, {hideList:boolean}> {
     }
 
     onClick() {
-        this.props.my_pipe();
+        if (this.props.datasets.length == 0) {
+            this.props.my_pipe();
+        }
         this.setState({ hideList: !this.state.hideList });
     }
 
@@ -57,10 +59,11 @@ export class DataList extends React.Component<any, {hideList:boolean}> {
             <button onClick={this.onClick.bind(this)}>Show</button>
             <div className={css}>
                 <ul className="hidable">
-                    <li>List of stuff</li>
-                    <li>Not very long</li>
-                    <li>Not very long</li>
-                    <li>Not very long</li>
+                    {
+                        this.props.datasets.map((dset, i) => {
+                            return <li key={i}>{dset.title}</li>
+                        })
+                    }
                 </ul>
             </div>
         </div>
@@ -149,7 +152,7 @@ function main() {
     });
 
     let data = {
-        datasets: null,
+        datasets: [],
         table: TABLE,
         matrix: MATRIX,
         arg: 0,
@@ -157,7 +160,7 @@ function main() {
         my_pipe: function () {
             get_data(
                 (res) => {
-                    console.log("called back with ", res);
+                    data.datasets = res.pxdocs;
                     reapp = React.render(
                         <div>
                             <Main data={data} />
