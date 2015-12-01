@@ -38,6 +38,11 @@ function clsnames(...args) {
 }
 
 
+function get_chosen(datasets, name) {
+    return R.find(R.whereEq({name: name}), datasets);
+}
+
 exports.get_data = get_data;
 exports.piping = piping;
 exports.clsnames = clsnames;
+exports.get_chosen = get_chosen;
