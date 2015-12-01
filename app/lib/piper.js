@@ -3,6 +3,7 @@ var classNames = require('classnames');
 
 import R from "ramda";
 
+
 function get_data (callback) {
     let url = 'http://localhost:8000/';
     console.log("piper called");
@@ -14,8 +15,9 @@ function get_data (callback) {
             callback(data);
         }
     );
-    f();
+    f().catch((error) => console.log('virhe ', error));
 }
+
 
 function piping (start, callback) {
     console.log("pipe started");
@@ -29,6 +31,7 @@ function piping (start, callback) {
     f(start, callback);
     console.log("piped");
 }
+
 
 function clsnames(...args) {
     return classNames(args);
