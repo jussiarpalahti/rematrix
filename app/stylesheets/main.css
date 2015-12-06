@@ -134,3 +134,8 @@ Pure menus end
     display: block;
     float: left;
 }
+
+#plots {
+    width: 30em;
+    height: 25em;
+}
