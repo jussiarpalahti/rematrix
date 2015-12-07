@@ -69,6 +69,9 @@ DEV = merge(common, {
         'webpack/hot/dev-server'
     ],
     module: {
+        noParse: [
+            /plotly\.js$/
+        ],
         loaders: [
             {
                 test: /\.jsx?$/,
