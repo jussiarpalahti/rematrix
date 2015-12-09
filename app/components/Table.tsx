@@ -11,6 +11,7 @@ interface Props {
 interface TableProps {
     table: any;
     matrix?: any;
+    selector?: Function
 }
 
 function get_dimensions(table, matrix): any {
@@ -100,7 +101,7 @@ class TableBody extends React.Component<TableProps, {}> {
 export class HierarchicalTable extends React.Component<TableProps, {}> {
 
     clicker(e) {
-        select_data(e, this.props.matrix);
+        this.props.selector(select_data(e, this.props.matrix));
     }
 
     render() {

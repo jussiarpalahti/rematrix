@@ -126,11 +126,11 @@ export class VariableSelection extends React.Component<any, {hideList:boolean}> 
 export class TableView extends React.Component<any, {}> {
 
     render() {
-        let {table, matrix} = this.props;
+        let {table, matrix, selector} = this.props;
         // TODO: we reset since React Hot Loader regards hoppers as state to be preserved
         reset(table);
         return <div>A table:
-            <HierarchicalTable table={table} matrix={matrix} />
+            <HierarchicalTable table={table} matrix={matrix} selector={selector} />
         </div>
     }
 
@@ -231,6 +231,9 @@ function main() {
             }
 
             rerender();
+        },
+        selector: (data) => {
+            console.log("selected", data);
         }
     };
 

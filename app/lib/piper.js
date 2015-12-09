@@ -52,6 +52,9 @@ function picker(list, picks) {
 
 
 function pick_columns(rows, picks) {
+    /*
+    For each row pick elements according to picks
+    */
     return rows.map((row) => picker(row, picks));
 }
 
@@ -79,7 +82,12 @@ function select_data(e, matrix) {
         data = picker(matrix, R.range(begin, end));
     }
 
-    console.log(route, axis_index, span, begin, end, data);
+    //console.log(route, axis_index, span, begin, end, el.textContent, data);
+
+    return {
+        data: data,
+        heading: el.textContent
+    }
 }
 
 
