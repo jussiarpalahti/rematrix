@@ -36,7 +36,7 @@ class TableHead extends React.Component<TableProps, {}> {
                     let header = hopper();
                     if (header) {
                         row.push(
-                            <th key={"head" + index + i} data-id={["head", i]} colSpan={table.heading.hops[index]}>{header}</th>)
+                            <th key={"head" + index + i} data-id={["heading", i]} colSpan={table.heading.hops[index]}>{header}</th>)
                     }
                     }
                 if (index == 0) {
@@ -63,7 +63,7 @@ function get_row_headers (stub, row_idx){
         let header = hopper();
         if (header) {
             resp.push(
-                <th data-id={["header", row_idx]} key={"header" + index} rowSpan={stub.hops[index]}>{header}</th>
+                <th data-id={["stub", row_idx]} key={"header" + index} rowSpan={stub.hops[index]}>{header}</th>
             );
         }
     });
@@ -97,10 +97,10 @@ class TableBody extends React.Component<TableProps, {}> {
 }
 
 
-export class HierarchicalTable extends React.Component<Props, {}> {
+export class HierarchicalTable extends React.Component<TableProps, {}> {
 
     clicker(e) {
-        select_data(e);
+        select_data(e, this.props.matrix);
     }
 
     render() {

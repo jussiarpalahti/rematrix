@@ -42,8 +42,25 @@ function get_chosen(datasets, name) {
     return R.find(R.whereEq({name: name}), datasets);
 }
 
-function select_data(e) {
 
+function picker(list, picks) {
+    /*
+    Pick elements from list according to list of indexes.
+    */
+    return picks.map((i) => list[i]);
+}
+
+
+function pick_columns(rows, picks) {
+    return rows.map((row) => picker(row, picks));
+}
+
+
+function select_data(e, matrix) {
+    /*
+    Selects list of lists rows or columns from matrix
+    according to clicked header's position and span
+    */
     if (!e.target.dataset.id) return null;
 
     let ids = e.target.dataset.id.split(',');
@@ -51,11 +68,18 @@ function select_data(e) {
     let axis_index = parseInt(ids[1]);
     let el = e.target;
 
-    let span = route === 'head' ? parseInt(el.getAttribute('colspan')) : parseInt(el.getAttribute('rowspan'));
+    let span = route === 'heading' ? parseInt(el.getAttribute('colspan')) : parseInt(el.getAttribute('rowspan'));
     let begin = axis_index;
     let end = begin + span;
 
-    console.log(route, axis_index, span, begin, end, R.range(begin, end));
+    let data = [];
+    if (route === 'heading') {
+        data = pick_columns(matrix, R.range(begin, end));
+    } else if (route === 'stub') {
+        data = picker(matrix, R.range(begin, end));
+    }
+
+    console.log(route, axis_index, span, begin, end, data);
 }
 
 
