@@ -37,7 +37,9 @@ let PViz = React.createClass({
     }
 });
 
-export default PViz;
+//export default PViz;
+
+exports.PViz = PViz;
 
 function main() {
     var app = document.getElementById('app');

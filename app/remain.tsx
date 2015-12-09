@@ -7,6 +7,7 @@ import * as React from "react";
 
 import {get_data, piping, clsnames, get_chosen} from "./lib/piper";
 import {HierarchicalTable} from "./components/Table";
+import {PViz} from "./components/plotlygraph";
 import {get_table, get_preview_table} from "./lib/table";
 
 interface Props {
@@ -137,10 +138,27 @@ export class TableView extends React.Component<any, {}> {
 }
 
 
-export class DataView extends React.Component<{}, {}> {
+export class DataView extends React.Component<any, {}> {
 
     render() {
-        return <div> </div>
+
+        var data = {
+            x: [1, 2, 3, 4, 5, 6],
+            y: [10, 15, 12, 5, 7, 14],
+            name: 'eka',
+            type: 'bar'
+        };
+
+        var data2 = {
+            x: [1, 2, 3, 4, 5, 6],
+            y: [9, 15, 10, 5, 8, 14],
+            name: 'toka',
+            type: 'bar'
+        };
+
+        var all_data = [data, data2];
+
+        return <div><PViz data={all_data} /></div>
     }
 
 }
@@ -170,7 +188,7 @@ export class Main extends React.Component<any, {}> {
             <DataList {...data} />
             <VariableSelection {...data} />
             <TableView {...data} />
-            <DataView />
+            <DataView {...data} />
         </div>
     }
 }
