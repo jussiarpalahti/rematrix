@@ -2,7 +2,7 @@
 var classNames = require('classnames');
 
 import R from "ramda";
-
+import * as _ from "lodash";
 
 function get_data (callback) {
     let url = 'http://localhost:8000/';
@@ -54,8 +54,9 @@ function picker(list, picks) {
 function pick_columns(rows, picks) {
     /*
     For each row pick elements according to picks
+    creating a list of lists each having columns elements
     */
-    return rows.map((row) => picker(row, picks));
+    return _.zip(...rows.map((row) => picker(row, picks)));
 }
 
 
