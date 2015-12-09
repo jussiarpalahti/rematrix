@@ -1,6 +1,8 @@
 
+import * as $ from "jquery";
 import * as React from "react";
 import {get_table} from "../lib/table";
+import {select_data} from "../lib/piper"
 
 interface Props {
     [name: string]: string,
@@ -34,7 +36,7 @@ class TableHead extends React.Component<TableProps, {}> {
                     let header = hopper();
                     if (header) {
                         row.push(
-                            <th key={"head" + index + i} colSpan={table.heading.hops[index]}>{header}</th>)
+                            <th key={"head" + index + i} data-id={["head", i]} colSpan={table.heading.hops[index]}>{header}</th>)
                     }
                     }
                 if (index == 0) {
@@ -55,13 +57,13 @@ class TableHead extends React.Component<TableProps, {}> {
     }
 }
 
-function get_row_headers (stub){
+function get_row_headers (stub, row_idx){
     let resp = [];
     stub.hop.map((hopper, index) => {
         let header = hopper();
         if (header) {
             resp.push(
-                <th key={"header" + index} rowSpan={stub.hops[index]}>{header}</th>
+                <th data-id={["header", row_idx]} key={"header" + index} rowSpan={stub.hops[index]}>{header}</th>
             );
         }
     });
@@ -84,7 +86,7 @@ class TableBody extends React.Component<TableProps, {}> {
                 );
             }
             resp.push(<tr key={row}>
-                {get_row_headers(table.stub)}
+                {get_row_headers(table.stub, row)}
                 {data}
             </tr>);
         }
@@ -96,10 +98,15 @@ class TableBody extends React.Component<TableProps, {}> {
 
 
 export class HierarchicalTable extends React.Component<Props, {}> {
+
+    clicker(e) {
+        select_data(e);
+    }
+
     render() {
         let {table, matrix} = this.props;
         return <div id="datatable">
-            <table className="pure-table pure-table-bordered">
+            <table className="pure-table pure-table-bordered" onClick={this.clicker.bind(this)}>
                 <TableHead table={table} matrix={matrix} />
                 <TableBody table={table} matrix={matrix} />
             </table>

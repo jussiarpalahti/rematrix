@@ -8,6 +8,7 @@ declare module piper {
     export function piping (start:Object, callback: DataHandlerCallback): void;
     export function clsnames (...all: any[]): any;
     export function get_chosen (...all: any[]): any;
+    export function select_data (e:any): any;
 }
 
 export = piper;
