@@ -14,22 +14,32 @@ var layout = {
 
 let PViz = React.createClass({
 
+    is_plot: false,
+
+    create_plot: function (data) {
+        if (data) {
+            if (!this.is_plot) {
+                Plotly.newPlot(
+                    this.refs.viz.getDOMNode(), data, layout
+                );
+                this.refs.viz.getDOMNode().on('plotly_click', function(data){
+                    console.log("event with plotly", data);
+                });
+                this.is_plot = true;
+            } else {
+
+                this.refs.viz.getDOMNode().data = data;
+                Plotly.redraw(this.refs.viz.getDOMNode());
+            }
+        }
+    },
+
     componentDidMount: function() {
-        Plotly.newPlot(
-            this.refs.viz.getDOMNode(), this.props.data, layout
-        );
-        this.refs.viz.getDOMNode().on('plotly_click', function(data){
-            console.log("event with plotly", data);
-        });
+        this.create_plot(this.props.data);
     },
 
     componentWillReceiveProps: function (nextProps) {
-        Plotly.redraw(this.refs.viz.getDOMNode());
-    },
-
-    shouldComponentUpdate: function() {
-        // Let's just never update this component again.
-        return false;
+        this.create_plot(nextProps.data);
     },
 
     render: function () {
@@ -85,5 +95,3 @@ function main() {
     };
     rerender();
 }
-
-main();

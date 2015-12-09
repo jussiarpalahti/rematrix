@@ -141,24 +141,24 @@ export class TableView extends React.Component<any, {}> {
 export class DataView extends React.Component<any, {}> {
 
     render() {
+        // name: 'eka',
+        //    type: 'bar'
+        let data;
+        if (this.props.chosen_data) {
+            data = this.props.chosen_data.data.map((y, index) => {
+                return {
+                    x: Array.apply(null, Array(this.props.chosen_data.data[0].length)).map((_, i) => i),
+                    y: y,
+                    name: index,
+                    type: 'bar'
+                };
+            });
+        } else {
+            data = null;
+        }
+        if (data) return <div><PViz data={data} /></div>;
+        else return <div> </div>;
 
-        var data = {
-            x: [1, 2, 3, 4, 5, 6],
-            y: [10, 15, 12, 5, 7, 14],
-            name: 'eka',
-            type: 'bar'
-        };
-
-        var data2 = {
-            x: [1, 2, 3, 4, 5, 6],
-            y: [9, 15, 10, 5, 8, 14],
-            name: 'toka',
-            type: 'bar'
-        };
-
-        var all_data = [data, data2];
-
-        return <div><PViz data={all_data} /></div>
     }
 
 }
@@ -222,20 +222,23 @@ function main() {
     let data = {
         datasets: [],
         chosen_table: null,
+        chosen_data: null,
         table: TABLE,
         matrix: MATRIX,
         arg: 0,
         my_pipe: function () {
             get_data(
                 (res) => {
-                    console.log("select", res.pxdocs);
+                    console.log("dataset select", res.pxdocs);
                     data.datasets = res.pxdocs;
                     rerender();
                 }
             );
         },
         select_table: (name) => {
+            console.log("table select");
             data.chosen_table = name;
+            data.chosen_data = null;
 
             let chosen = get_chosen(data.datasets, name);
 
@@ -250,8 +253,10 @@ function main() {
 
             rerender();
         },
-        selector: (data) => {
-            console.log("selected", data);
+        selector: (selected_data) => {
+            console.log("data select");
+            data.chosen_data = selected_data;
+            rerender();
         }
     };
 
