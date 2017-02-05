@@ -6,6 +6,34 @@ import mimetypes
 import json
 import opendata.px_reader as px
 
+def nullify_codes(px_doc, heading):
+    try:
+        return px_doc.codes[heading]
+    except KeyError:
+        return [None] * len(px_doc.values[heading])
+
+def get_values(px_doc):
+    # TODO: get codes if available
+    
+    levels = {}
+    for heading in px_doc.heading:
+        levels[heading] = [
+        {
+            "name": name,
+            "code": code
+        } 
+        for name in px_doc.values[heading] for code in nullify_codes(px_doc, heading)
+        ]
+    for heading in px_doc.stub:
+        levels[heading] = [
+        {
+            "name": name,
+            "code": code
+        } 
+        for name in px_doc.values[heading] for code in nullify_codes(px_doc, heading)
+        ]
+    return levels
+
 
 def get_px(path, data=False, meta=False, sample=False):
     root = Path(settings.DATA_ROOT)
@@ -21,7 +49,7 @@ def get_px(path, data=False, meta=False, sample=False):
         resp.update({
             'stub': px_doc.stub,
             'heading': px_doc.heading,
-            'levels': px_doc.values})
+            'levels': get_values(px_doc)})
     if data:
         resp['matrix'] = px_doc.data
     if sample:
@@ -77,7 +105,7 @@ def data(request, path):
     rows = json.loads(request.GET.get("rows"))
     cols = json.loads(request.GET.get("cols"))
     matrix = filter_matrix(resp["matrix"], rows, cols)
-    print len(matrix), len(matrix[0])
+    print(len(matrix), len(matrix[0]))
     return JsonResponse({"matrix" : matrix})
 
 
