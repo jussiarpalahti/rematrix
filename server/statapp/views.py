@@ -21,17 +21,15 @@ def get_values(px_doc):
         {
             "name": name,
             "code": code
-        } 
-        for name in px_doc.values[heading] for code in nullify_codes(px_doc, heading)
-        ]
+        }
+        for name, code in zip(px_doc.values[heading], nullify_codes(px_doc, heading))]
     for heading in px_doc.stub:
         levels[heading] = [
         {
             "name": name,
             "code": code
         } 
-        for name in px_doc.values[heading] for code in nullify_codes(px_doc, heading)
-        ]
+        for name, code in zip(px_doc.values[heading], nullify_codes(px_doc, heading))]
     return levels
 
 
